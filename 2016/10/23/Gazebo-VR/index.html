@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Gazebo VR | Robotic Telepresence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="It turns out that the Gazebo Simulator supports Oculus Rift DK1 and DK2!I still can’t get this to work with the Vive (yet) unless I use Gazebo under Windows, and even then…As far as I can tell, it jus">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gazebo VR">
+<meta property="og:url" content="https://celynwalters.github.io/Robotic-Telepresence/2016/10/23/Gazebo-VR/index.html">
+<meta property="og:site_name" content="Robotic Telepresence">
+<meta property="og:description" content="It turns out that the Gazebo Simulator supports Oculus Rift DK1 and DK2!I still can’t get this to work with the Vive (yet) unless I use Gazebo under Windows, and even then…As far as I can tell, it jus">
+<meta property="og:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/23/Gazebo-VR/Gazebo Test.png">
+<meta property="og:updated_time" content="2016-11-09T00:29:12.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Gazebo VR">
+<meta name="twitter:description" content="It turns out that the Gazebo Simulator supports Oculus Rift DK1 and DK2!I still can’t get this to work with the Vive (yet) unless I use Gazebo under Windows, and even then…As far as I can tell, it jus">
+<meta name="twitter:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/23/Gazebo-VR/Gazebo Test.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Robotic Telepresence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/Robotic-Telepresence/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-87037949-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/Robotic-Telepresence/" id="logo">Robotic Telepresence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/Robotic-Telepresence/" id="subtitle">Year 3 project notes/blog</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/">Home</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/Project-objectives">Project Objectives</a>
+        
+          <a class="main-nav-link" href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1">Gantt Chart</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://celynwalters.github.io/Robotic-Telepresence"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Gazebo-VR" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Gazebo VR
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/10/23/Gazebo-VR/" class="article-date">
+  <time datetime="2016-10-23T16:02:34.000Z" itemprop="datePublished">Sun 23/10/2016 17:02</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>It turns out that the <a href="http://gazebosim.org/" target="_blank" rel="external">Gazebo Simulator</a> supports <a href="http://gazebosim.org/tutorials?tut=oculus" target="_blank" rel="external">Oculus Rift DK1 and DK2</a>!<br>I still can’t get this to work with the Vive (yet) unless I use Gazebo under Windows, and even then…<br>As far as I can tell, it just acts as a <a href="https://github.com/MohitShridhar/oculus_gazebo_navigator" target="_blank" rel="external">navigator</a>.<br>Although this is here, I still think it would be easier and possibly more useful to continue with Unity for now.</p>
+<p>As it’s already installed, I check out Gazebo, and the shading isn’t awful:<br><img src="/Robotic-Telepresence/2016/10/23/Gazebo-VR/Gazebo Test.png" alt="The only models I could find easily"></p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/23/Gazebo-VR/" data-id="cizleq1jm0007x49rp3dbtlny" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/Robotic-Telepresence/2016/10/25/ROS-tutorials/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          ROS tutorials
+        
+      </div>
+    </a>
+  
+  
+    <a href="/Robotic-Telepresence/2016/10/23/Robot-models/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Robot models</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        <!-- MANUALLY ADDED FOR GANTT CHART -->
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Celyn Walters<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/Robotic-Telepresence/" class="mobile-nav-link">Home</a>
+  
+    <a href="/Robotic-Telepresence/Project-objectives" class="mobile-nav-link">Project Objectives</a>
+  
+    <a href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1" class="mobile-nav-link">Gantt Chart</a>
+  
+    <a href="/Robotic-Telepresence/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/Robotic-Telepresence/fancybox/jquery.fancybox.css">
+  <script src="/Robotic-Telepresence/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/Robotic-Telepresence/js/script.js"></script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Project meeting 6 | Robotic Telepresence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Discussion about the previous week’s workI tried to explain the problems I was having with .dlls.I had some potentially useful tips about how to get them to work with arrays. I should look into marsha">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Project meeting 6">
+<meta property="og:url" content="https://celynwalters.github.io/Robotic-Telepresence/2016/12/01/Project-meeting-6/index.html">
+<meta property="og:site_name" content="Robotic Telepresence">
+<meta property="og:description" content="Discussion about the previous week’s workI tried to explain the problems I was having with .dlls.I had some potentially useful tips about how to get them to work with arrays. I should look into marsha">
+<meta property="og:updated_time" content="2016-12-01T18:12:54.053Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Project meeting 6">
+<meta name="twitter:description" content="Discussion about the previous week’s workI tried to explain the problems I was having with .dlls.I had some potentially useful tips about how to get them to work with arrays. I should look into marsha">
+  
+    <link rel="alternate" href="/atom.xml" title="Robotic Telepresence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/Robotic-Telepresence/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-87037949-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/Robotic-Telepresence/" id="logo">Robotic Telepresence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/Robotic-Telepresence/" id="subtitle">Year 3 project notes/blog</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/">Home</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/Project-objectives">Project Objectives</a>
+        
+          <a class="main-nav-link" href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1">Gantt Chart</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://celynwalters.github.io/Robotic-Telepresence"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Project-meeting-6" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Project meeting 6
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/12/01/Project-meeting-6/" class="article-date">
+  <time datetime="2016-12-01T16:57:35.000Z" itemprop="datePublished">Thu 01/12/2016 16:57</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <h5 id="Discussion-about-the-previous-week’s-work"><a href="#Discussion-about-the-previous-week’s-work" class="headerlink" title="Discussion about the previous week’s work"></a>Discussion about the previous week’s work</h5><p>I tried to explain the problems I was having with <code>.dlls</code>.<br>I had some potentially useful tips about how to get them to work with arrays. I should look into <a href="https://msdn.microsoft.com/en-us/library/system.runtime.interopservices.marshal.aspx" target="_blank" rel="external">marshal functions</a> and <a href="https://msdn.microsoft.com/en-us/library/04fy9ya1.aspx" target="_blank" rel="external">interop</a>.<br>To analyse the extent of ‘name mangling’, I can put the <code>.dll</code> through <a href="http://www.dependencywalker.com/" target="_blank" rel="external">Dependency Walker</a>.<br>I came across these in the past week, I think I should have more experience and knowledge with C# besides Unity scripting for this to be successful.</p>
+<p>We have decided it would be much better to move away from compiling <code>.dlls</code> as Unity plugins, and instead use a compiled console application in Windows to receive the messages into RAM, and get Unity to poll the most recent values.<br>I have been talking to James, who is trying to implement UDP communication in Unity with ROS.</p>
+<p>In terms of the networking layout, the VR PC will be subscribing directly from Baxter (who has an internal ROS publisher) and publishing to the linux computer connected to Baxter, which will be calculating the inverse kinematics from the hand target positions.<br>We thing a position and a pose is required for this, so I will need the quaternions of the rotations of each hand.<br>Unity works with quaternions so this doesn’t sound too much of a challenge, but to start with I might well fix the pose to have the hands facing forwards.</p>
+<p>I wasn’t able to filter the joints that were in the public <code>urdf</code> and those in the <code>rosbag</code>. Maybe Baxter’s urdf is a previous verion?<br>I was also strange that the gripper messages were arriving separately.</p>
+<h5 id="Interim-report"><a href="#Interim-report" class="headerlink" title="Interim report"></a>Interim report</h5><p>The same examiner(s) who marks this will mark the final dissertation.<br>Therefore, don’t commit to work which is unlikely to come to fruition. Light exaggeration could back me into a corner.<br>Also, there will be some overlap between the interim report and the final submission. They have to exist as separate entities, but maybe not a total copy.</p>
+<p>I have two weeks left before Christmas. If I want any useful feedback (I do) I should have a report structure by <a href="/Robotic-Telepresence/2016/12/13/Project-meeting-7/">next meeting</a>.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Project-meeting-6/" data-id="cizleq1kt000zx49r2phzcp5m" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Data to Unity from RAM
+        
+      </div>
+    </a>
+  
+  
+    <a href="/Robotic-Telepresence/2016/11/28/Rosbag-communication/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Rosbag communication</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        <!-- MANUALLY ADDED FOR GANTT CHART -->
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Celyn Walters<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/Robotic-Telepresence/" class="mobile-nav-link">Home</a>
+  
+    <a href="/Robotic-Telepresence/Project-objectives" class="mobile-nav-link">Project Objectives</a>
+  
+    <a href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1" class="mobile-nav-link">Gantt Chart</a>
+  
+    <a href="/Robotic-Telepresence/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/Robotic-Telepresence/fancybox/jquery.fancybox.css">
+  <script src="/Robotic-Telepresence/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/Robotic-Telepresence/js/script.js"></script>
+
+  </div>
+</body>
+</html>

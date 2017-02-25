@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Point cloud from actual data | Robotic Telepresence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="There were some errors in the previous post.There were 9,830,400 individual numbers in a single frame of the point cloud in the rosbag.Looking at the documentation for the message type, and the header">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Point cloud from actual data">
+<meta property="og:url" content="https://celynwalters.github.io/Robotic-Telepresence/2016/12/07/Point-cloud-from-actual-data/index.html">
+<meta property="og:site_name" content="Robotic Telepresence">
+<meta property="og:description" content="There were some errors in the previous post.There were 9,830,400 individual numbers in a single frame of the point cloud in the rosbag.Looking at the documentation for the message type, and the header">
+<meta property="og:updated_time" content="2017-02-25T13:11:59.081Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Point cloud from actual data">
+<meta name="twitter:description" content="There were some errors in the previous post.There were 9,830,400 individual numbers in a single frame of the point cloud in the rosbag.Looking at the documentation for the message type, and the header">
+  
+    <link rel="alternate" href="/atom.xml" title="Robotic Telepresence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/Robotic-Telepresence/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-87037949-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/Robotic-Telepresence/" id="logo">Robotic Telepresence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/Robotic-Telepresence/" id="subtitle">Year 3 project notes/blog</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/">Home</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/Project-objectives">Project Objectives</a>
+        
+          <a class="main-nav-link" href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1">Gantt Chart</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://celynwalters.github.io/Robotic-Telepresence"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Point-cloud-from-actual-data" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Point cloud from actual data
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/12/07/Point-cloud-from-actual-data/" class="article-date">
+  <time datetime="2016-12-07T13:03:08.000Z" itemprop="datePublished">Wed 07/12/2016 13:03</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>There were some errors in the <a href="/Robotic-Telepresence/2016/12/05/Point-Clouds-in-Unity/">previous post</a>.<br>There were 9,830,400 individual numbers in a single frame of the point cloud in the <code>rosbag</code>.<br>Looking at the <a href="http://docs.ros.org/api/sensor_msgs/html/msg/PointCloud2.html" target="_blank" rel="external">documentation</a> for the message type, and the header of the message, the number of points is far fewer.<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$ rostopic <span class="built_in">echo</span> --noarr --nostr /camera/depth_registered/points</div><div class="line">header: </div><div class="line">  seq: 16832</div><div class="line">  stamp: </div><div class="line">    secs: 1479833365</div><div class="line">    nsecs: 438671766</div><div class="line">height: 480</div><div class="line">width: 640</div><div class="line">is_bigendian: False</div><div class="line">point_step: 32</div><div class="line">row_step: 20480</div><div class="line">is_dense: False</div><div class="line">---</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><figcaption><span>Message header</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">fields: </div><div class="line">  - </div><div class="line">    name: x</div><div class="line">    offset: 0</div><div class="line">    datatype: 7</div><div class="line">    count: 1</div><div class="line">  - </div><div class="line">    name: y</div><div class="line">    offset: 4</div><div class="line">    datatype: 7</div><div class="line">    count: 1</div><div class="line">  - </div><div class="line">    name: z</div><div class="line">    offset: 8</div><div class="line">    datatype: 7</div><div class="line">    count: 1</div><div class="line">  - </div><div class="line">    name: rgb</div><div class="line">    offset: 16</div><div class="line">    datatype: 7</div><div class="line">    count: 1</div></pre></td></tr></table></figure>
+<p>The width and height of the cloud from the Kinect 1 is 640x480, with 32 bytes for each point.<br><code>9830400 / (640 * 480) = 32</code><br>According to the documentation for the <a href="http://docs.ros.org/api/sensor_msgs/html/msg/PointField.html" target="_blank" rel="external">PointField</a> message, each datum uses <code>datatype: 7</code>, which is a <code>FLOAT32</code>. This means 32 bits, or 4 bytes.<br>The data values in the PointCloud2 message are of type <code>uint8</code>, which uses 8 bits, or 1 byte.<br>This means that for each point in the message, there’s space for 8x <code>float32</code>.</p>
+<p>Examining the first 32 bytes of the first message, the fields described in the message header are visible:<br><figure class="highlight plain"><figcaption><span>First point in first message</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">0 0 192 127 //x</div><div class="line">0 0 192 127 //y</div><div class="line">0 0 192 127 //z</div><div class="line">0 0 0 0</div><div class="line">131 115 115 255 //rgb</div><div class="line">0 0 0 0</div><div class="line">0 0 0 0</div><div class="line">0 0 0 0</div></pre></td></tr></table></figure></p>
+<p>For some reason, playing the rosbag with a windows listener subscribed to the point cloud, causes the <code>socket_node</code> to hang, even on one message, with network activity dropping to zero.<br>This happens even when minimally changed from subscribing to <code>JointStates</code>, (which works perfectly), and not storing or printing the output.<br>The same happens with octomap, which has significatnly smaller messages.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/07/Point-cloud-from-actual-data/" data-id="cizleq1ki000px49rgxhu76u9" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/Robotic-Telepresence/2016/12/07/Converting-point-clouds/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Converting point clouds
+        
+      </div>
+    </a>
+  
+  
+    <a href="/Robotic-Telepresence/2016/12/05/Point-clouds-in-Unity/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Point clouds in Unity</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        <!-- MANUALLY ADDED FOR GANTT CHART -->
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Celyn Walters<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/Robotic-Telepresence/" class="mobile-nav-link">Home</a>
+  
+    <a href="/Robotic-Telepresence/Project-objectives" class="mobile-nav-link">Project Objectives</a>
+  
+    <a href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1" class="mobile-nav-link">Gantt Chart</a>
+  
+    <a href="/Robotic-Telepresence/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/Robotic-Telepresence/fancybox/jquery.fancybox.css">
+  <script src="/Robotic-Telepresence/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/Robotic-Telepresence/js/script.js"></script>
+
+  </div>
+</body>
+</html>

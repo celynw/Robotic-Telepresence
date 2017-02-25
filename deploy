@@ -1,0 +1,10 @@
+#!/bin/bash
+hexo clean
+hexo generate
+if test -d public/posts_backup
+then
+    rm -rf public/posts_backup
+fi
+cp -r source/ public/posts_backup
+cp ./deploy public/
+hexo deploy

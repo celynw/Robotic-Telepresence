@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Final structure | Robotic Telepresence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="I’ve started to write what could be the final few files, in terms of the main data communication functionality.
+Console applicationThis will be the ROS node, which connects to a serial server (socket)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Final structure">
+<meta property="og:url" content="https://celynwalters.github.io/Robotic-Telepresence/2017/01/31/Final-structure/index.html">
+<meta property="og:site_name" content="Robotic Telepresence">
+<meta property="og:description" content="I’ve started to write what could be the final few files, in terms of the main data communication functionality.
+Console applicationThis will be the ROS node, which connects to a serial server (socket)">
+<meta property="og:updated_time" content="2017-02-01T01:21:18.565Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Final structure">
+<meta name="twitter:description" content="I’ve started to write what could be the final few files, in terms of the main data communication functionality.
+Console applicationThis will be the ROS node, which connects to a serial server (socket)">
+  
+    <link rel="alternate" href="/atom.xml" title="Robotic Telepresence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/Robotic-Telepresence/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-87037949-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/Robotic-Telepresence/" id="logo">Robotic Telepresence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/Robotic-Telepresence/" id="subtitle">Year 3 project notes/blog</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/">Home</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/Project-objectives">Project Objectives</a>
+        
+          <a class="main-nav-link" href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1">Gantt Chart</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://celynwalters.github.io/Robotic-Telepresence"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Final-structure" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Final structure
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/01/31/Final-structure/" class="article-date">
+  <time datetime="2017-01-31T23:17:07.000Z" itemprop="datePublished">Tue 31/01/2017 23:17</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>I’ve started to write what could be the final few files, in terms of the main data communication functionality.</p>
+<h4 id="Console-application"><a href="#Console-application" class="headerlink" title="Console application"></a>Console application</h4><p>This will be the ROS node, which connects to a serial server (socket).<br>It will subscribe to whichever topics are required and set up shared memory for each. As I can have many parallel shared spaces I think this is easier than trying to navigate a single one.<br>I’m trying a class-based approach to keep things tidy and encapsulated.<br>I had a lot of problems trying to encapsulate the callbacks (required), so in the end I’ve left some of it in <code>main()</code>.</p>
+<p>As the shared memory can only be written in integers, I’ll have to convert the joint angles (floats) back in to 4xbytes. Here’s a reason to convert bytes into floats in the Unity script (point clouds).</p>
+<h4 id="Unity-application"><a href="#Unity-application" class="headerlink" title="Unity application"></a>Unity application</h4><p>Once the data’s in the shared space, it will probably be just a block of integers. I’ll have to know how to read things in the correct order.<br>I’ve not worked out splitting work into individual threads yet, but I know it’s supported and doable.<br>I plan to have the VR in one (I think this might be automatic), point clouds in another (they will be intensive) and anything else in another? Perhaps keep a limit of 4 cores?</p>
+<h4 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h4><p>Following <a href="/2016/12/07/Point-Cloud-from-Actual-Data/">the last time I tried this</a> I ran into the same problem.<br>Even trying to send a single point cloud over the socket, the virtual machine’s CPU jumps to around 20%, never completes, no errors are displayed but the <code>rosserial_server</code> node has silently crashed.<br>I’m hoping this is due to complications with it being the same physical machine and it being virtualised, but there’s no problems with the joint angles at all.<br>I’ll have to run this in the robot lab.</p>
+<p>Using <code>std::vec</code> made sense for making a more robust program, but I had to convert it back into an array for the <code>CopyMemory()</code> function for shared memory and I ran into all sorts of endian-ness problems. They were difficult to spot as printing the contents to <code>stdout</code> didn’t show any problems.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/31/Final-structure/" data-id="cizleq1jw000ax49rg3w6g1ul" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/Robotic-Telepresence/2017/02/01/Project-meeting-8/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Project meeting 8
+        
+      </div>
+    </a>
+  
+  
+    <a href="/Robotic-Telepresence/2017/01/18/Named-shared-memory-Episode-3/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Named shared memory: Episode 3</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        <!-- MANUALLY ADDED FOR GANTT CHART -->
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Celyn Walters<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/Robotic-Telepresence/" class="mobile-nav-link">Home</a>
+  
+    <a href="/Robotic-Telepresence/Project-objectives" class="mobile-nav-link">Project Objectives</a>
+  
+    <a href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1" class="mobile-nav-link">Gantt Chart</a>
+  
+    <a href="/Robotic-Telepresence/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/Robotic-Telepresence/fancybox/jquery.fancybox.css">
+  <script src="/Robotic-Telepresence/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/Robotic-Telepresence/js/script.js"></script>
+
+  </div>
+</body>
+</html>

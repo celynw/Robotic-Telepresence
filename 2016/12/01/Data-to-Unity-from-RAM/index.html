@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Data to Unity from RAM | Robotic Telepresence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="I started by copying code from the “rosserial_hello_world” and “rosserial_unity” (.dll code) solutions into a new solution.
+I’m looking up how to create shared memory in Windows for sharing the data.Y">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Data to Unity from RAM">
+<meta property="og:url" content="https://celynwalters.github.io/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/index.html">
+<meta property="og:site_name" content="Robotic Telepresence">
+<meta property="og:description" content="I started by copying code from the “rosserial_hello_world” and “rosserial_unity” (.dll code) solutions into a new solution.
+I’m looking up how to create shared memory in Windows for sharing the data.Y">
+<meta property="og:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Standalone-rosserial-application/Connection.png">
+<meta property="og:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Standalone-rosserial-application/Success.png">
+<meta property="og:updated_time" content="2016-12-01T21:08:09.430Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Data to Unity from RAM">
+<meta name="twitter:description" content="I started by copying code from the “rosserial_hello_world” and “rosserial_unity” (.dll code) solutions into a new solution.
+I’m looking up how to create shared memory in Windows for sharing the data.Y">
+<meta name="twitter:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Standalone-rosserial-application/Connection.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Robotic Telepresence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/Robotic-Telepresence/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-87037949-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/Robotic-Telepresence/" id="logo">Robotic Telepresence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/Robotic-Telepresence/" id="subtitle">Year 3 project notes/blog</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/">Home</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/Project-objectives">Project Objectives</a>
+        
+          <a class="main-nav-link" href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1">Gantt Chart</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://celynwalters.github.io/Robotic-Telepresence"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Data-to-Unity-from-RAM" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Data to Unity from RAM
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/" class="article-date">
+  <time datetime="2016-12-01T17:18:29.000Z" itemprop="datePublished">Thu 01/12/2016 17:18</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>I started by copying code from the “rosserial_hello_world” and “rosserial_unity” (<code>.dll</code> code) solutions into a new solution.</p>
+<p>I’m looking up how to create shared memory in Windows for sharing the data.<br>You can’t feasibly do this in a <code>.dll</code> because the space would have to be initialised statically.<br>The way to do this seems to be using <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa366551.aspx" target="_blank" rel="external">Named Shared Memory</a>.<br>Unfortunately, it seems that I might still have to worry about marshal functions or ‘unsafe’ code because of the C# in Unity.<br>An alternative could be <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa365590.aspx" target="_blank" rel="external">Named Pipes</a>.</p>
+<h6 id="Named-pipes"><a href="#Named-pipes" class="headerlink" title="Named pipes"></a>Named pipes</h6><p>I made <em>another</em> visual studio solution to test this, and created an empty <code>GameObject</code> in Unity with a new script for the other end.<br>In order for some classes to be valid such as <code>System.IO.Pipes</code>, I changed the project settings to handle the full .Net 2.0:</p>
+<blockquote>
+<p>Edit &gt; Project Settings &gt; Player &gt; Other Settings &gt; Optimization &gt; Api Compitbility Level &gt; “.NET 2.0”<br>(rather than “.NET 2.0 Subset”)</p>
+</blockquote>
+<p>For the Unity side, I found some recent example code on the <a href="http://answers.unity3d.com/questions/483123/how-do-i-get-named-pipes-to-work-in-unity.html#answer-1272634" target="_blank" rel="external">Unity3D forums</a>.<br>It pointed me to the <a href="https://msdn.microsoft.com/en-us/library/bb546085%28v=vs.110%29.aspx" target="_blank" rel="external">“How to use names pipes for network interprocess communication” MSDN page</a>.<br>I copied the C++ code from the example just to see if it would compile, or work in any way.<br>I made sure that the <code>NamedPipeClientStream</code> for each end had the same name (“testpipe” for now).<br>At first, I was successful, except Unity got stuck in the starting state, and became unresponsive and needed to be forced quit.<br><img src="/Robotic-Telepresence/2016/12/01/Standalone-rosserial-application/Connection.png" alt="The &#39;PipeDataSend&#39; Windows console application, after running Unity"><br>With a bit of tweaking in the Unity script, I was able to get the expected message into Unity.<br>I had to cut out a <code>getPipedData()</code> function, which sounds like it’s defeating the point.<br>However, the functionality is repeated exactly in the <code>Setup()</code> of the Unity script, which works.<br><img src="/Robotic-Telepresence/2016/12/01/Standalone-rosserial-application/Success.png" alt="The &quot;I am the one true server&quot; string was defined in the &#39;PipeDataSend&#39; Windows console application"><br><figure class="highlight cs"><figcaption><span>The part of PipeDataReceive.cs which was commented out</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">getPipedData</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="comment">//UnityEngine.Debug.Log("Thread Called - Start");</span></div><div class="line">	StreamString ss = <span class="keyword">new</span> StreamString(pipeClient);</div><div class="line">	UnityEngine.Debug.Log(ss.ReadString());</div><div class="line">	<span class="comment">//UnityEngine.Debug.Log("Thread Called - End");</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>I noticed afterwards that after Unity gets stuck, closing the console applications un-freezes Unity which returns with:</p>
+<blockquote>
+<p>OverflowException: Number overflow.<br>StreamString.ReadString() (at Assets/_Scripts/PipeDataReceive.cs:51)<br>PipeDataReceive.getPipedData() (at Assets/_Scripts/PipeDataReceive.cs:33)<br>PipeDataReceive.Update() (at Assets/_Scripts/PipeDataReceive.cs:27)</p>
+</blockquote>
+<p>I lowered the threads from 4 to 1.<br>I had missed the part about reading from and writing to a file for example purposes, so I stripped it out.<br>The <code>PipeDataSend</code> and <code>PipeDataReceive</code> files are about as short and compact as I can make them now.<br>They work well. The <code>PipeDataSend</code> waits for a connection. As soon as <code>PipeDataReceive</code> is started, <code>PipeDataSend</code> send over “Hello Unity!” and then finishes.<br>However, you must not stop the Unity game before the pipe server or it will crash…</p>
+<p>Next step: See how this performs after integrating with <code>rosserial_windows</code> in Unity.<br><figure class="highlight cpp"><figcaption><span>PipeDataSend.cpp</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#using <span class="meta-string">&lt;System.Core.dll&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> System;</div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> System::IO;</div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> System::IO::Pipes;</div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> System::Text;</div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> System::Threading;</div><div class="line"></div><div class="line"><span class="keyword">public</span> ref <span class="keyword">class</span> StreamString &#123;</div><div class="line"><span class="keyword">private</span>:</div><div class="line">	Stream^ ioStream;</div><div class="line">	UnicodeEncoding^ streamEncoding;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">	StreamString(Stream^ ioStream) &#123;</div><div class="line">		<span class="keyword">this</span>-&gt;ioStream = ioStream;</div><div class="line">		streamEncoding = gcnew UnicodeEncoding();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	String^ ReadString() &#123;</div><div class="line">		<span class="keyword">int</span> len;</div><div class="line"></div><div class="line">		len = ioStream-&gt;ReadByte() * <span class="number">256</span>;</div><div class="line">		len += ioStream-&gt;ReadByte();</div><div class="line">		<span class="built_in">array</span>&lt;Byte&gt;^ inBuffer = gcnew <span class="built_in">array</span>&lt;Byte&gt;(len);</div><div class="line">		ioStream-&gt;Read(inBuffer, <span class="number">0</span>, len);</div><div class="line"></div><div class="line">		<span class="keyword">return</span> streamEncoding-&gt;GetString(inBuffer);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">int</span> <span class="title">WriteString</span><span class="params">(String^ outString)</span> </span>&#123;</div><div class="line">		<span class="built_in">array</span>&lt;Byte&gt;^ outBuffer = streamEncoding-&gt;GetBytes(outString);</div><div class="line">		<span class="keyword">int</span> len = outBuffer-&gt;Length;</div><div class="line">		<span class="keyword">if</span> (len &gt; UInt16::MaxValue)</div><div class="line">			len = (<span class="keyword">int</span>)UInt16::MaxValue;</div><div class="line">		ioStream-&gt;WriteByte((Byte)(len / <span class="number">256</span>));</div><div class="line">		ioStream-&gt;WriteByte((Byte)(len &amp; <span class="number">255</span>));</div><div class="line">		ioStream-&gt;Write(outBuffer, <span class="number">0</span>, len);</div><div class="line">		ioStream-&gt;Flush();</div><div class="line"></div><div class="line">		<span class="keyword">return</span> outBuffer-&gt;Length + <span class="number">2</span>;</div><div class="line">	&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">public</span> ref <span class="keyword">class</span> PipeServer &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span><span class="params">()</span> </span>&#123;</div><div class="line">		Console::WriteLine(<span class="string">"Pipe server started"</span>);</div><div class="line">		Console::WriteLine(<span class="string">"Waiting for client connection..."</span>);</div><div class="line">		Thread^ server = gcnew Thread(gcnew ThreadStart(&amp;ServerThread));</div><div class="line">		server-&gt;Start();</div><div class="line">		Thread::Sleep(<span class="number">250</span>);</div><div class="line">		<span class="keyword">while</span> (<span class="literal">true</span>) &#123;</div><div class="line">			<span class="keyword">if</span> (server != <span class="literal">nullptr</span>) &#123;</div><div class="line">				<span class="comment">// Check if it has gone. If so, remove it.</span></div><div class="line">				<span class="keyword">if</span> (server-&gt;Join(<span class="number">250</span>)) &#123;</div><div class="line">					Console::WriteLine(<span class="string">"Server thread finished."</span>, server-&gt;ManagedThreadId);</div><div class="line">					server = <span class="literal">nullptr</span>;</div><div class="line">					<span class="keyword">break</span>;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		Console::WriteLine(<span class="string">"Finished."</span>);</div><div class="line">	&#125;</div><div class="line"><span class="keyword">private</span>:</div><div class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">ServerThread</span><span class="params">()</span> </span>&#123;</div><div class="line">		NamedPipeServerStream^ pipeServer = gcnew NamedPipeServerStream(<span class="string">"rospipe"</span>, PipeDirection::InOut);</div><div class="line"></div><div class="line">		<span class="comment">// Wait for a client to connect</span></div><div class="line">		pipeServer-&gt;WaitForConnection();</div><div class="line"></div><div class="line">		Console::WriteLine(<span class="string">"Client connected"</span>);</div><div class="line">		<span class="comment">// Do my data transfer here!</span></div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			StreamString^ ss = gcnew StreamString(pipeServer);</div><div class="line"></div><div class="line">			ss-&gt;WriteString(<span class="string">"Hello Unity!"</span>);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">catch</span> (IOException^ e) &#123;</div><div class="line">			Console::WriteLine(<span class="string">"ERROR: &#123;0&#125;"</span>, e-&gt;Message);</div><div class="line">		&#125;</div><div class="line">		pipeServer-&gt;Close();</div><div class="line">	&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	PipeServer::Main();</div><div class="line">	Console::WriteLine(<span class="string">"\nPlease close this window."</span>);</div><div class="line">	<span class="keyword">while</span> (<span class="number">1</span>) &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight cs"><figcaption><span>PipeDataReceive.cs</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> UnityEngine;</div><div class="line"><span class="keyword">using</span> System.Collections;</div><div class="line"><span class="keyword">using</span> System.IO;</div><div class="line"><span class="keyword">using</span> System.IO.Pipes;</div><div class="line"><span class="keyword">using</span> System.Threading;</div><div class="line"><span class="keyword">using</span> System.Text;</div><div class="line"><span class="keyword">using</span> System;</div><div class="line"><span class="keyword">using</span> System.Security.Principal;</div><div class="line"><span class="keyword">using</span> System.Diagnostics;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">PipeDataReceive</span> : <span class="title">MonoBehaviour</span> &#123;</div><div class="line">	<span class="keyword">public</span> NamedPipeClientStream pipeClient = <span class="keyword">new</span> NamedPipeClientStream(<span class="string">"."</span>, <span class="string">"rospipe"</span>, PipeDirection.InOut, PipeOptions.Asynchronous);</div><div class="line">	<span class="keyword">public</span> StreamString ss;</div><div class="line">	Thread readThread;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Start</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		UnityEngine.Debug.Log(<span class="string">"Connecting to pipe server..."</span>);</div><div class="line">		pipeClient.Connect();</div><div class="line">		Thread.Sleep(<span class="number">250</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Update</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		getPipedData();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">getPipedData</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		StreamString ss = <span class="keyword">new</span> StreamString(pipeClient);</div><div class="line">		UnityEngine.Debug.Log(<span class="string">"piped: "</span>+ss.ReadString());</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">StreamString</span> &#123;</div><div class="line">	<span class="keyword">private</span> Stream ioStream;</div><div class="line">	<span class="keyword">private</span> UnicodeEncoding streamEncoding;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">StreamString</span>(<span class="params">Stream ioStream</span>) </span>&#123;</div><div class="line">		<span class="keyword">this</span>.ioStream = ioStream;</div><div class="line">		streamEncoding = <span class="keyword">new</span> UnicodeEncoding();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">string</span> <span class="title">ReadString</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="keyword">int</span> len;</div><div class="line">		len = ioStream.ReadByte() * <span class="number">256</span>;</div><div class="line">		len += ioStream.ReadByte();</div><div class="line">		<span class="keyword">byte</span>[] inBuffer = <span class="keyword">new</span> <span class="keyword">byte</span>[len];</div><div class="line">		ioStream.Read(inBuffer, <span class="number">0</span>, len);</div><div class="line">		<span class="keyword">string</span> outString = streamEncoding.GetString(inBuffer);</div><div class="line"></div><div class="line">		<span class="keyword">return</span> outString;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">WriteString</span>(<span class="params"><span class="keyword">string</span> outString</span>) </span>&#123;</div><div class="line">		<span class="keyword">byte</span>[] outBuffer = streamEncoding.GetBytes(outString);</div><div class="line">		<span class="keyword">int</span> len = outBuffer.Length;</div><div class="line">		<span class="keyword">if</span> (len &gt; UInt16.MaxValue)</div><div class="line">			len = (<span class="keyword">int</span>)UInt16.MaxValue;</div><div class="line">		ioStream.WriteByte((<span class="keyword">byte</span>)(len / <span class="number">256</span>));</div><div class="line">		ioStream.WriteByte((<span class="keyword">byte</span>)(len &amp; <span class="number">255</span>));</div><div class="line">		ioStream.Write(outBuffer, <span class="number">0</span>, len);</div><div class="line">		ioStream.Flush();</div><div class="line"></div><div class="line">		<span class="keyword">return</span> outBuffer.Length + <span class="number">2</span>;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/" data-id="cizleq1ju0009x49ra4mnwaut" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/Robotic-Telepresence/2016/12/01/Named-pipe-dll/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Named pipe dll
+        
+      </div>
+    </a>
+  
+  
+    <a href="/Robotic-Telepresence/2016/12/01/Project-meeting-6/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Project meeting 6</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        <!-- MANUALLY ADDED FOR GANTT CHART -->
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Celyn Walters<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/Robotic-Telepresence/" class="mobile-nav-link">Home</a>
+  
+    <a href="/Robotic-Telepresence/Project-objectives" class="mobile-nav-link">Project Objectives</a>
+  
+    <a href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1" class="mobile-nav-link">Gantt Chart</a>
+  
+    <a href="/Robotic-Telepresence/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/Robotic-Telepresence/fancybox/jquery.fancybox.css">
+  <script src="/Robotic-Telepresence/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/Robotic-Telepresence/js/script.js"></script>
+
+  </div>
+</body>
+</html>

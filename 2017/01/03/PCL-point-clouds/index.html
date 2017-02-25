@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>PCL point clouds | Robotic Telepresence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Now I have a list of 200kB files (xaa, xab, xac etc.), split from the first PointCloud2 message in the rosbag.Viewing the ascii .pcd file, I found what looked like the start of meaningful data, at poi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PCL point clouds">
+<meta property="og:url" content="https://celynwalters.github.io/Robotic-Telepresence/2017/01/03/PCL-point-clouds/index.html">
+<meta property="og:site_name" content="Robotic Telepresence">
+<meta property="og:description" content="Now I have a list of 200kB files (xaa, xab, xac etc.), split from the first PointCloud2 message in the rosbag.Viewing the ascii .pcd file, I found what looked like the start of meaningful data, at poi">
+<meta property="og:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/03/PCL-point-clouds/Conversion Success.png">
+<meta property="og:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/03/PCL-point-clouds/First 65000 White.png">
+<meta property="og:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/03/PCL-point-clouds/Full Selection.png">
+<meta property="og:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/03/PCL-point-clouds/Colours Wrong.png">
+<meta property="og:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/03/PCL-point-clouds/Colours Fixed.png">
+<meta property="og:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/03/PCL-point-clouds/Complete.png">
+<meta property="og:updated_time" content="2017-02-25T13:43:03.239Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PCL point clouds">
+<meta name="twitter:description" content="Now I have a list of 200kB files (xaa, xab, xac etc.), split from the first PointCloud2 message in the rosbag.Viewing the ascii .pcd file, I found what looked like the start of meaningful data, at poi">
+<meta name="twitter:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/03/PCL-point-clouds/Conversion Success.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Robotic Telepresence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/Robotic-Telepresence/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-87037949-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/Robotic-Telepresence/" id="logo">Robotic Telepresence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/Robotic-Telepresence/" id="subtitle">Year 3 project notes/blog</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/">Home</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/Project-objectives">Project Objectives</a>
+        
+          <a class="main-nav-link" href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1">Gantt Chart</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://celynwalters.github.io/Robotic-Telepresence"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-PCL-point-clouds" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      PCL point clouds
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/01/03/PCL-point-clouds/" class="article-date">
+  <time datetime="2017-01-03T21:06:59.000Z" itemprop="datePublished">Tue 03/01/2017 21:06</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>Now I have a list of 200kB files (<code>xaa</code>, <code>xab</code>, <code>xac</code> etc.), split from the first PointCloud2 message in the <code>rosbag</code>.<br>Viewing the ascii <code>.pcd</code> file, I found what looked like the start of meaningful data, at point 29515.<br>Doing some arithmetic led me to the 17th file, or <code>xaq</code>.<br>I used this to confirm my program wasn’t working.</p>
+<h3 id="BUG"><a href="#BUG" class="headerlink" title="BUG"></a>BUG</h3><p>I’ve just realised that I wasn’t discarding data properly!<br>The offsets of 4 bytes of 0, 1, 2 and 4 are required, but I wasn’t discarding 3, 5, 6 or 7!<br>Along with making sure the commas were removed: Success!!<br><img src="/Robotic-Telepresence/2017/01/03/PCL-point-clouds/Conversion Success.png" alt="Using a custom segment of data which won&#39;t return NaNs"></p>
+<p>I needed to adapt the program to skip the header parts of the message to only read the data.<br>I ran it on a full message and it took a couple of minutes to finish printing, but it worked.<br>Removing the printing functionality sped it up to about 20 seconds.<br><strong>This needs to be faster!</strong><br>I can optimise the code a bit more, and it’s only running on a single core.<br>I can also get Unity to read from RAM rather than wait for stdout redirection.</p>
+<h3 id="Into-Unity"><a href="#Into-Unity" class="headerlink" title="Into Unity"></a>Into Unity</h3><p>I can call the program in Unity, however it does not close automatically.<br>I realised that this is caused by redirecting standard output into Unity.<br>By completely reading everything in the buffer, it is fixed.</p>
+<p>I got it to display the first 65000 points of a whole message.<br><img src="/Robotic-Telepresence/2017/01/03/PCL-point-clouds/First 65000 White.png" alt="It&#39;s white because there&#39;s a problem with the rendering I haven&#39;t realised yet."><br>65000 is the maximum number of vertices in a mesh in Unity.<br>I’ll have to split the cloud into submeshes.</p>
+<h3 id="More-hindsight"><a href="#More-hindsight" class="headerlink" title="More hindsight"></a>More hindsight</h3><p>I’ve made another mistake. After a long time of trial and error, I’ve found that while you can split a mesh into submeshes, the overall limit is still 65000 points because it’s actually still one mesh.<br>The purpose of submeshes is for different materials.<br>I’ll have to make more GameObjects with their own meshes.</p>
+<h3 id="Full-mesh"><a href="#Full-mesh" class="headerlink" title="Full mesh"></a>Full mesh</h3><p>A partial success, but the colours still don’t work and the rotation is wrong.<br><img src="/Robotic-Telepresence/2017/01/03/PCL-point-clouds/Full Selection.png" alt="The cloud is structured in strips, from Baxter&#39;s back to front"><br>To fix the colours, I’ve realised that the colours are supposed to be between 0 and 1, not 0 and 255.<br>To fix the rotation, I need to find out the base transformation.</p>
+<h3 id="Colours"><a href="#Colours" class="headerlink" title="Colours"></a>Colours</h3><p>But the colours seem wrong.<br>Perhaps this is to do with endian-ness I didn’t account for.<br><img src="/Robotic-Telepresence/2017/01/03/PCL-point-clouds/Colours Wrong.png" alt="It&#39;s not just my eyes? I think?"><br>Yep! That was it. Now for the transformation.<br><img src="/Robotic-Telepresence/2017/01/03/PCL-point-clouds/Colours Fixed.png" alt="Phew"></p>
+<h3 id="Transformation"><a href="#Transformation" class="headerlink" title="Transformation"></a>Transformation</h3><p>This was quite difficult to find.<br>The Googlable phrases were all quite similar, and most people were trying to <em>set</em> the transform, not <em>get</em> it.<br>I started with <code>RViz</code> again. I remember having to set the base transform for viewing the octomap.<br>This didn’t exactly help, although I saw some error messages which said:<br><figure class="highlight plain"><figcaption><span>In RViz</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Failed to transform from frame [camera_rgb_optical_frame] to frame [base]</div></pre></td></tr></table></figure></p>
+<p>This gave me a bit more to go on. From the <code>PointCloud2</code> message itself, I knew it used the <code>camera_rgb_optical_frame</code>.<br>This eventually led me to <code>tf_echo</code>:<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$ rosrun tf tf_echo camera_rgb_optical_frame base</div><div class="line">At time 1479833365.881</div><div class="line">- Translation: [-0.024, -0.546, 1.873]</div><div class="line">- Rotation: <span class="keyword">in</span> Quaternion [0.708, 0.675, -0.154, 0.145]</div><div class="line">            <span class="keyword">in</span> RPY (radian) [-3.139, 0.425, 1.524]</div><div class="line">            <span class="keyword">in</span> RPY (degree) [-179.836, 24.340, 87.300]</div><div class="line"></div><div class="line">$ rosrun tf tf_echo base camera_rgb_optical_frame</div><div class="line">At time 1479833366.181</div><div class="line">- Translation: [1.270, 0.003, 1.481]</div><div class="line">- Rotation: <span class="keyword">in</span> Quaternion [0.708, 0.675, -0.154, -0.145]</div><div class="line">            <span class="keyword">in</span> RPY (radian) [-2.717, 0.022, 1.528]</div><div class="line">            <span class="keyword">in</span> RPY (degree) [-155.691, 1.276, 87.539]</div></pre></td></tr></table></figure></p>
+<p>I 100% wasn’t sure which way around it was, so I tried both.<br>Using my knowledge from the <a href="/Robotic-Telepresence/2016/11/14/URDF-importer/">URDF importer</a>, I made a Unity script to convert these into the native frame.<br>By negating the X translation, rotating by -90 degrees in X, then rotating by -Z, then -Y, then +X with the values for the translation from <code>base</code> to <code>camera_rgb_optical_frame</code>, it worked:<br><img src="/Robotic-Telepresence/2017/01/03/PCL-point-clouds/Complete.png" alt="It still seems off, probably not my fault."><br>Thankfully, the point clouds are dense enough for now to not worry about them being represented by single pixels.<br>There seem to be no performance issues whatsoever.</p>
+<h3 id="Still-lots-to-do"><a href="#Still-lots-to-do" class="headerlink" title="Still lots to do"></a>Still lots to do</h3><p>I still have to work out how to make this not take 20 seconds each frame, while still allowing other processes to run.<br>Not to mention bringing everything together…</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/03/PCL-point-clouds/" data-id="cizleq1ki000qx49r12hdclf6" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/Robotic-Telepresence/2017/01/18/Named-shared-memory-Episode-3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Named shared memory: Episode 3
+        
+      </div>
+    </a>
+  
+  
+    <a href="/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Converting point clouds 2</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        <!-- MANUALLY ADDED FOR GANTT CHART -->
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Celyn Walters<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/Robotic-Telepresence/" class="mobile-nav-link">Home</a>
+  
+    <a href="/Robotic-Telepresence/Project-objectives" class="mobile-nav-link">Project Objectives</a>
+  
+    <a href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1" class="mobile-nav-link">Gantt Chart</a>
+  
+    <a href="/Robotic-Telepresence/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/Robotic-Telepresence/fancybox/jquery.fancybox.css">
+  <script src="/Robotic-Telepresence/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/Robotic-Telepresence/js/script.js"></script>
+
+  </div>
+</body>
+</html>

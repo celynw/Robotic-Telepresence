@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Importing directly from URDF | Robotic Telepresence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="The urdf file is an XML-based format.In order to import values and heirarchical structure from the file into Unity automatically, I’ll have to parse it in some way.I can ignore many parts of the urdf">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Importing directly from URDF">
+<meta property="og:url" content="https://celynwalters.github.io/Robotic-Telepresence/2016/11/13/Importing-directly-from-URDF/index.html">
+<meta property="og:site_name" content="Robotic Telepresence">
+<meta property="og:description" content="The urdf file is an XML-based format.In order to import values and heirarchical structure from the file into Unity automatically, I’ll have to parse it in some way.I can ignore many parts of the urdf">
+<meta property="og:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/13/Importing-directly-from-URDF/XML Values.png">
+<meta property="og:updated_time" content="2017-02-25T13:41:53.694Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Importing directly from URDF">
+<meta name="twitter:description" content="The urdf file is an XML-based format.In order to import values and heirarchical structure from the file into Unity automatically, I’ll have to parse it in some way.I can ignore many parts of the urdf">
+<meta name="twitter:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/13/Importing-directly-from-URDF/XML Values.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Robotic Telepresence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/Robotic-Telepresence/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-87037949-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/Robotic-Telepresence/" id="logo">Robotic Telepresence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/Robotic-Telepresence/" id="subtitle">Year 3 project notes/blog</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/">Home</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/Project-objectives">Project Objectives</a>
+        
+          <a class="main-nav-link" href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1">Gantt Chart</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://celynwalters.github.io/Robotic-Telepresence"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Importing-directly-from-URDF" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Importing directly from URDF
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/11/13/Importing-directly-from-URDF/" class="article-date">
+  <time datetime="2016-11-13T18:28:59.000Z" itemprop="datePublished">Sun 13/11/2016 18:28</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>The <code>urdf</code> file is an XML-based format.<br>In order to import values and heirarchical structure from the file into Unity automatically, I’ll have to parse it in some way.<br>I can ignore many parts of the <code>urdf</code> specification as I don’t need them yet.<br>There are a few options:</p>
+<ul>
+<li><h3 id="Scene-files"><a href="#Scene-files" class="headerlink" title="Scene files"></a>Scene files</h3><p>The scene files in Unity hold the structure of <code>GameObjects</code>, their configuration, and how the world is laid out.<br>The online documentation for Unity states that the scene files can be saved in a <a href="https://docs.unity3d.com/Manual/TextSceneFormat.html" target="_blank" rel="external">text-based format</a>.<br>One option could be to use a program or script to create a new scene file with the <code>urdf</code> parameters within.</p>
+</li>
+<li><h3 id="Prefab"><a href="#Prefab" class="headerlink" title="Prefab"></a>Prefab</h3><p>Unity <code>GameObjects</code> can be instances of a <code>Prefab</code>. Usually, the <code>GameObjects</code> are instantiated from the pre-existing <code>Prefab</code>.<br>However, <code>Prefabs</code> can be retroactively created from a <code>GameObject</code>, and then the <code>GameObject</code> becomes an instance of that new <code>Prefab</code>.<br>One idea could have been to create <code>Prefabs</code> outside of Unity and then import them, but it looks like <code>Prefabs</code> are binary files (not zip files), and there’s no documentation of the format.</p>
+</li>
+<li><h3 id="Unity-script"><a href="#Unity-script" class="headerlink" title="Unity script"></a>Unity script</h3><p>There are methods in Unity for creating, instantiating, modifying and destroying <code>GameObjects</code>.<br>Scripts attached to <code>GameObjects</code> usually execute when the scene is set to run, but there are other ways they can be used to enhance the workflow of the developer.<br>If I can achieve a sufficient level of functionality with <code>C#</code> this seems like the best solution.</p>
+<p>  Enter <code>AssetPostProcessor</code>.</p>
+</li>
+</ul>
+<h3 id="AssetPostProcessor"><a href="#AssetPostProcessor" class="headerlink" title="AssetPostProcessor"></a>AssetPostProcessor</h3><p>According to the <a href="https://docs.unity3d.com/ScriptReference/AssetPostprocessor.html" target="_blank" rel="external">docs</a>:</p>
+<blockquote>
+<p><strong>AssetPostprocessor</strong> lets you hook into the import pipeline and run scripts prior or after importing assets.</p>
+</blockquote>
+<p>Create an <code>Editor</code> folder in the root directory of the project, if it doesn’t exist already.<br>(You can re-import assets by right-clicking them and selecting, <code>Reimport</code>.)</p>
+<p>At first, the script runs for all assets, including itself!<br>By adding in some functions to check if the extension contains a <code>.urdf</code> file, we can filter the results.</p>
+<figure class="highlight cs"><figcaption><span>urdfPostProcessor.cs initial version</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> UnityEngine;</div><div class="line"><span class="keyword">using</span> UnityEditor;</div><div class="line"><span class="keyword">using</span> System.Collections;</div><div class="line"><span class="keyword">using</span> System.IO; <span class="comment">//For Path</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">urdfPostProcessor</span> : <span class="title">AssetPostprocessor</span></div><div class="line">&#123;</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">OnPostprocessAllAssets</span>(<span class="params"><span class="keyword">string</span>[] importedAssets, <span class="keyword">string</span>[] deletedAssets, <span class="keyword">string</span>[] movedAssets, <span class="keyword">string</span>[] movedFromPath</span>) </span>&#123;</div><div class="line">		<span class="keyword">foreach</span> (<span class="keyword">string</span> str <span class="keyword">in</span> importedAssets) &#123;</div><div class="line">			<span class="keyword">string</span> ext = Path.GetExtension(str);</div><div class="line">			<span class="keyword">if</span> (ext == <span class="string">".xacro"</span>)</div><div class="line">				ext = Path.GetExtension(Path.GetFileNameWithoutExtension(str));</div><div class="line">			<span class="keyword">if</span> (ext == <span class="string">".urdf"</span>)</div><div class="line">				Debug.Log(<span class="string">"YES: "</span>+str);</div><div class="line">			<span class="keyword">else</span></div><div class="line">				Debug.Log(<span class="string">"no: "</span>+str);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Now that this script runs for each <code>urdf</code> file, we can try to access some of the data.<br>It is reccommended to use the system’s xml parsing.<br><figure class="highlight cs"><figcaption><span>urdfPostProcessor.cs continued</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line"><span class="keyword">using</span> System.Xml; <span class="comment">//For urdf</span></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">importURDF</span>(<span class="params"><span class="keyword">string</span> filename</span>) </span>&#123;</div><div class="line">		<span class="comment">//Load XML file</span></div><div class="line">		<span class="keyword">var</span> xmlData = <span class="keyword">new</span> XmlDocument();</div><div class="line">		xmlData.Load(filename);</div><div class="line">		<span class="comment">//Set root</span></div><div class="line">		<span class="keyword">var</span> root = xmlData.DocumentElement;<span class="comment">//.GetEnumerator();</span></div><div class="line">		<span class="comment">//Create nodelist</span></div><div class="line">		XmlNodeList nodeList;</div><div class="line">		nodeList = root.SelectNodes(<span class="string">"link"</span>);</div><div class="line">		<span class="comment">//Print out some results</span></div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;nodeList.Count; i++) &#123;</div><div class="line">			<span class="keyword">var</span> node = nodeList[i];</div><div class="line">			XmlNode ret = node.SelectSingleNode(<span class="string">"visual/origin"</span>);</div><div class="line">			<span class="keyword">if</span> (ret != <span class="literal">null</span>)</div><div class="line">				Debug.Log(node.Attributes[<span class="string">"name"</span>].Value+<span class="string">": "</span>+ret.Attributes[<span class="string">"rpy"</span>].Value);</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
+<p>The code above finds the <code>urdf</code> links which have a <code>visual</code> child, with an <code>origin</code> child of its own.<br>For each of those, it prints their names and the <code>rpy</code> values of the origin node.</p>
+<p><img src="/Robotic-Telepresence/2016/11/13/Importing-directly-from-URDF/XML Values.png" alt="Values from the XML in the debug logger in Unity"></p>
+<p>This isn’t exactly what we want, because it doesn’t follow the hierarchy. But we’re getting there.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/13/Importing-directly-from-URDF/" data-id="cizleq1k2000fx49rhtnhaez2" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/Robotic-Telepresence/2016/11/14/URDF-importer/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          URDF importer
+        
+      </div>
+    </a>
+  
+  
+    <a href="/Robotic-Telepresence/2016/11/09/Coordinate-system-converted/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Coordinate system converted</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        <!-- MANUALLY ADDED FOR GANTT CHART -->
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Celyn Walters<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/Robotic-Telepresence/" class="mobile-nav-link">Home</a>
+  
+    <a href="/Robotic-Telepresence/Project-objectives" class="mobile-nav-link">Project Objectives</a>
+  
+    <a href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1" class="mobile-nav-link">Gantt Chart</a>
+  
+    <a href="/Robotic-Telepresence/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/Robotic-Telepresence/fancybox/jquery.fancybox.css">
+  <script src="/Robotic-Telepresence/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/Robotic-Telepresence/js/script.js"></script>
+
+  </div>
+</body>
+</html>

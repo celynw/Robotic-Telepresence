@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>VR with VRUI | Robotic Telepresence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="A few things have surfaced this week, primarily, Vive support for vrui in Linux.I downloaded the source:1234$ wget http://idav.ucdavis.edu/~okreylos/ResDev/Vrui/Build-Ubuntu.sh$ sha1sum Build-Ubuntu.s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VR with VRUI">
+<meta property="og:url" content="https://celynwalters.github.io/Robotic-Telepresence/2016/11/02/VR-with-VRUI/index.html">
+<meta property="og:site_name" content="Robotic Telepresence">
+<meta property="og:description" content="A few things have surfaced this week, primarily, Vive support for vrui in Linux.I downloaded the source:1234$ wget http://idav.ucdavis.edu/~okreylos/ResDev/Vrui/Build-Ubuntu.sh$ sha1sum Build-Ubuntu.s">
+<meta property="og:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/02/VR-with-VRUI/Cluster Jello.png">
+<meta property="og:updated_time" content="2017-02-25T13:44:20.687Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="VR with VRUI">
+<meta name="twitter:description" content="A few things have surfaced this week, primarily, Vive support for vrui in Linux.I downloaded the source:1234$ wget http://idav.ucdavis.edu/~okreylos/ResDev/Vrui/Build-Ubuntu.sh$ sha1sum Build-Ubuntu.s">
+<meta name="twitter:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/02/VR-with-VRUI/Cluster Jello.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Robotic Telepresence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/Robotic-Telepresence/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-87037949-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/Robotic-Telepresence/" id="logo">Robotic Telepresence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/Robotic-Telepresence/" id="subtitle">Year 3 project notes/blog</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/">Home</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/Project-objectives">Project Objectives</a>
+        
+          <a class="main-nav-link" href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1">Gantt Chart</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://celynwalters.github.io/Robotic-Telepresence"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-VR-with-VRUI" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      VR with VRUI
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/11/02/VR-with-VRUI/" class="article-date">
+  <time datetime="2016-11-02T12:33:20.000Z" itemprop="datePublished">Wed 02/11/2016 13:33</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>A few things have surfaced this week, primarily, Vive support for <code>vrui</code> in Linux.<br>I downloaded the source:<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ wget http://idav.ucdavis.edu/~okreylos/ResDev/Vrui/Build-Ubuntu.sh</div><div class="line">$ sha1sum Build-Ubuntu.sh</div><div class="line">$ ./Build-Ubuntu.sh</div><div class="line">$ <span class="built_in">cd</span> ~/src/Vrui-4.2-004</div></pre></td></tr></table></figure></p>
+<p>There’s a part which enables device permissions for “non-standard devices”.<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo make installudevrules</div></pre></td></tr></table></figure></p>
+<p>I wondered if this would fix the issues I was having with SteamVR, <a href="/Robotic-Telepresence/2016/10/19/Attempting-VR-in-Ubuntu/">here</a>.<br>No luck.</p>
+<p>Time to try <code>Vrui</code> with the Vive.<br>I had to go to the Vrui release <a href="http://doc-ok.org/?p=1508" target="_blank" rel="external">blog post</a> in order to find full specific install instructions:<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span></div><div class="line">$ wget http://idav.ucdavis.edu/~okreylos/ResDev/Vrui/Build-Ubuntu.sh</div><div class="line">$ bash Build-Ubuntu.sh</div><div class="line">$ <span class="built_in">cd</span> ~/src/Vrui-4.2-004</div><div class="line">$ make STEAMVRDIR=/home/celynwalters/.steam/steam/steamapps/common/SteamVR/</div><div class="line">$ sudo make STEAMVRDIR=/home/celynwalters/.steam/steam/steamapps/common/SteamVR/ install</div></pre></td></tr></table></figure></p>
+<p>However, the tracking driver still fails:<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ RunViveTracker.sh</div><div class="line">VRDeviceDaemon: Reading configuration file</div><div class="line">/usr/<span class="built_in">local</span>/bin/VRDeviceDaemon: relocation error: /usr/<span class="built_in">local</span>/lib/x86_64-linux-gnu/Vrui-4.2/libMisc.g++-3.so.4: symbol _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm, version GLIBCXX_3.4.21 not defined <span class="keyword">in</span> file libstdc++.so.6 with link time reference</div></pre></td></tr></table></figure></p>
+<p>I found a <a href="https://www.reddit.com/r/Vive/comments/580ep4/vive_is_working_on_linux_steamvr_still_isnt_though/d8y9ent/" target="_blank" rel="external">reddit post</a> communicating with the tool author, <code>Doc_Ok</code>, who had my issue.<br><code>Doc_Ok</code> replied with a fix:</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">$ ldd /usr/<span class="built_in">local</span>/bin/VRDeviceDaemon</div><div class="line">	linux-vdso.so.1 =&gt;  (0x00007fff0fae4000)</div><div class="line">	libdl.so.2 =&gt; /lib/x86_64-linux-gnu/libdl.so.2 (0x00007fa3799ce000)</div><div class="line">	libComm.g++-3.so.4 =&gt; /usr/<span class="built_in">local</span>/lib/x86_64-linux-gnu/Vrui-4.2/libComm.g++-3.so.4 (0x00007fa3797b9000)</div><div class="line">	libGeometry.g++-3.so.4 =&gt; /usr/<span class="built_in">local</span>/lib/x86_64-linux-gnu/Vrui-4.2/libGeometry.g++-3.so.4 (0x00007fa379477000)</div><div class="line">	libIO.g++-3.so.4 =&gt; /usr/<span class="built_in">local</span>/lib/x86_64-linux-gnu/Vrui-4.2/libIO.g++-3.so.4 (0x00007fa37924b000)</div><div class="line">	libMisc.g++-3.so.4 =&gt; /usr/<span class="built_in">local</span>/lib/x86_64-linux-gnu/Vrui-4.2/libMisc.g++-3.so.4 (0x00007fa37902c000)</div><div class="line">	libThreads.g++-3.so.4 =&gt; /usr/<span class="built_in">local</span>/lib/x86_64-linux-gnu/Vrui-4.2/libThreads.g++-3.so.4 (0x00007fa378e26000)</div><div class="line">	libpthread.so.0 =&gt; /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007fa378c09000)</div><div class="line">	libstdc++.so.6 =&gt; /usr/lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007fa378887000)</div><div class="line">	libm.so.6 =&gt; /lib/x86_64-linux-gnu/libm.so.6 (0x00007fa37857d000)</div><div class="line">	libgcc_s.so.1 =&gt; /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007fa378367000)</div><div class="line">	libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007fa377f9e000)</div><div class="line">	/lib64/ld-linux-x86-64.so.2 (0x000055761dc87000)</div><div class="line">	libMath.g++-3.so.4 =&gt; /usr/<span class="built_in">local</span>/lib/x86_64-linux-gnu/Vrui-4.2/libMath.g++-3.so.4 (0x00007fa377d86000)</div><div class="line">	libz.so.1 =&gt; /lib/x86_64-linux-gnu/libz.so.1 (0x00007fa377b6c000)</div></pre></td></tr></table></figure>
+<p>The script was using Steam’s libstdc++, which I’ve redirected to use the built in ones.<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo nano $(<span class="built_in">which</span> RunViveTracker.sh)</div></pre></td></tr></table></figure></p>
+<p>Replace the line:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">RUNTIMEDIR2=$STEAMDIR/ubuntu12_32/steam-runtime/amd64/usr/lib/x86_64-linux-gnu</div></pre></td></tr></table></figure></p>
+<p>with<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">RUNTIMEDIR2=/usr/lib/</div></pre></td></tr></table></figure></p>
+<h3 id="Sucess"><a href="#Sucess" class="headerlink" title="Sucess!"></a>Sucess!</h3><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">VRDeviceDaemon: Reading configuration file</div><div class="line">VRDeviceDaemon: Initializing device manager</div><div class="line">VRDeviceManager: Loading device Vive of <span class="built_in">type</span> OpenVRHost</div><div class="line">GetBool <span class="keyword">for</span> driver_lighthouse/dbhistory</div><div class="line">GetString <span class="keyword">for</span> driver_lighthouse/usedisambiguation</div><div class="line">GetInt32 <span class="keyword">for</span> driver_lighthouse/disambiguationdebug</div><div class="line">GetBool <span class="keyword">for</span> driver_lighthouse/disableimu</div><div class="line">GetInt32 <span class="keyword">for</span> driver_lighthouse/primarybasestation</div><div class="line">GetBool <span class="keyword">for</span> driver_lighthouse/trackedCamera</div><div class="line">OpenVRHost: Activating 1 tracked devices</div><div class="line">OpenVRHost: Activating tracked device 0 with ID 0</div><div class="line">GetBool <span class="keyword">for</span> driver_lighthouse/fakeHtcHmdMainboard</div><div class="line">OpenVRHost: Updating HMD configuration... <span class="keyword">done</span></div><div class="line">OpenVRHost: Battery level of device 0 is 100%</div><div class="line">VRDeviceManager: Managing 3 trackers, 10 buttons, 6 valuators</div><div class="line">VRDeviceManager: Managing 3 virtual devices</div><div class="line">VRDeviceDaemon: Initializing device server</div><div class="line">VRDeviceServer: Listening <span class="keyword">for</span> incoming connections on TCP port 8555</div><div class="line">ioctl (GFEATURE): Broken pipe</div><div class="line">...</div><div class="line">ioctl (SFEATURE): Broken pipe</div><div class="line">OpenVRHost: Updating HMD configuration... <span class="keyword">done</span></div><div class="line">OpenVRHost: Battery level of device 0 is 100%</div><div class="line">VRDeviceServer: Sending updated HMD configuration 0 to clients... <span class="keyword">done</span></div><div class="line">OpenVRHost: Updating HMD configuration... <span class="keyword">done</span></div><div class="line">OpenVRHost: Physical IPD on device 0 <span class="built_in">set</span> to 63.7mm</div><div class="line">OpenVRHost: Updating HMD configuration... <span class="keyword">done</span></div><div class="line">OpenVRHost: Physical IPD on device 0 <span class="built_in">set</span> to 63.7mm</div><div class="line">VRDeviceServer: Sending updated HMD configuration 0 to clients... <span class="keyword">done</span></div><div class="line">OpenVRHost: Adding device with serial number LHB-3CF79497</div><div class="line">OpenVRHost: Error retrieving connected device 1</div><div class="line">OpenVRHost: Adding device with serial number LHB-5CEC2D20</div><div class="line">OpenVRHost: Error retrieving connected device 1</div></pre></td></tr></table></figure>
+<p>While this is running, we can run a position test in another shell:<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ DeviceTest localhost:8555 -t 0 -p</div></pre></td></tr></table></figure></p>
+<p>Giving us a real-time position:<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">     Pos X     Pos Y     Pos Z</div><div class="line">(   -0.853    -0.863    -1.730)</div></pre></td></tr></table></figure></p>
+<p>And more output in the original shell:<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">Creating new client state... <span class="keyword">done</span></div><div class="line">VRDeviceServer: Connecting new client localhost:53204</div><div class="line">Adding new client state to list</div><div class="line">Adding listener <span class="keyword">for</span> client<span class="string">'s socket</span></div><div class="line">Client connected</div><div class="line">Reading message... done, 0</div><div class="line">Reading protocol version... done, 4</div><div class="line">Sending connect reply... done</div><div class="line">Reading message... done, 3</div><div class="line">VRDeviceManager: Starting devices</div><div class="line">Reading message... done, 7</div><div class="line">Sending packet reply... done</div><div class="line">VRDeviceServer: Disconnecting client localhost:53204 due to exception "Client terminated connection"</div><div class="line">VRDeviceManager: Stopping devices</div><div class="line">Creating new client state... done</div><div class="line">VRDeviceServer: Connecting new client localhost:53206</div><div class="line">Adding new client state to list</div><div class="line">Adding listener for client's socket</div><div class="line">Client connected</div><div class="line">Reading message... <span class="keyword">done</span>, 0</div><div class="line">Reading protocol version... <span class="keyword">done</span>, 4</div><div class="line">Sending connect reply... <span class="keyword">done</span></div><div class="line">Reading message... <span class="keyword">done</span>, 3</div><div class="line">VRDeviceManager: Starting devices</div><div class="line">Reading message... <span class="keyword">done</span>, 7</div><div class="line">Sending packet reply... <span class="keyword">done</span></div><div class="line">OpenVRHost: Updating HMD configuration... <span class="keyword">done</span></div><div class="line">OpenVRHost: Battery level of device 0 is 100%</div><div class="line">OpenVRHost: Device 0 has been connected</div><div class="line">OpenVRHost: World transform <span class="keyword">for</span> device 0: &#123;(0, 0, 0), &#123;(-0.995354, 0.0181601, 0.0945509), 0.381241&#125;&#125;</div><div class="line">OpenVRHost: Local transform <span class="keyword">for</span> device 0: &#123;(-0.00849516, -0.00496823, -0.0715013), &#123;(-1, -0, -0), 3.14159&#125;&#125;</div><div class="line">OpenVRHost: Updating HMD configuration... <span class="keyword">done</span></div><div class="line">OpenVRHost: Battery level of device 0 is 100%</div><div class="line">OpenVRHost: Proximity sensor on device 0 triggered</div><div class="line">OpenVRHost: Proximity sensor on device 0 untriggered</div><div class="line">OpenVRHost: Proximity sensor on device 0 triggered</div><div class="line">VRDeviceServer: Disconnecting client localhost:53206 due to exception <span class="string">"Client terminated connection"</span></div><div class="line">VRDeviceManager: Stopping devices</div></pre></td></tr></table></figure></p>
+<p>We have tracking!<br>We can also try it out on a controller:<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ DeviceTest localhost:8555 -t 1 -p -b</div></pre></td></tr></table></figure></p>
+<p>Giving the position of one, and the button states for both:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">     Pos X     Pos Y     Pos Z</div><div class="line">(   -0.765    -1.238    -1.572) . . . . . X . . . X</div></pre></td></tr></table></figure></p>
+<p>There’s even a room setup utility. Somehow it already knows my room layout so I skipped this step.<br>I went into <code>nvidia-settings</code> to turn on the Vive display. It acts as a desktop again.<br>My Vive had the display connector name <code>DPF-1</code>.<br>Set the environment variable, build and run the program:<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">export</span> __GL_SYNC_DISPLAY_DEVICE=DFP-1</div><div class="line">$ <span class="built_in">cd</span> ~/src/Vrui-4.2-004/ExamplePrograms</div><div class="line">$ make INSTALLDIR=/usr/<span class="built_in">local</span></div><div class="line">$ sudo make INSTALLDIR=/usr/<span class="built_in">local</span> install</div><div class="line">$ ClusterJello -rootSection Vive</div></pre></td></tr></table></figure></p>
+<p>It worked! I was put into a virtual environment<br>The VR lags a bit, which will cause motion sickness.<br>I’m not sure what the issue is which is causing it.<br>It could be a graphics driver incompatibility.</p>
+<p><img src="/Robotic-Telepresence/2016/11/02/VR-with-VRUI/Cluster Jello.png" alt="I couldn&#39;t take a screenshot, but this the demo application I used, &#39;ClusterJello&#39;. Taken from Oliver Kreylos&#39; &lt;a href=https://www.youtube.com/watch?v=OJlzmKxDd40&gt;video&lt;/a&gt;"></p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/02/VR-with-VRUI/" data-id="cizleq1lf001ex49ryawr1qud" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/Robotic-Telepresence/2016/11/05/Images-in-the-hexo-site/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Images in the hexo site
+        
+      </div>
+    </a>
+  
+  
+    <a href="/Robotic-Telepresence/2016/10/31/Hexo-site/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hexo site</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        <!-- MANUALLY ADDED FOR GANTT CHART -->
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Celyn Walters<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/Robotic-Telepresence/" class="mobile-nav-link">Home</a>
+  
+    <a href="/Robotic-Telepresence/Project-objectives" class="mobile-nav-link">Project Objectives</a>
+  
+    <a href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1" class="mobile-nav-link">Gantt Chart</a>
+  
+    <a href="/Robotic-Telepresence/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/Robotic-Telepresence/fancybox/jquery.fancybox.css">
+  <script src="/Robotic-Telepresence/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/Robotic-Telepresence/js/script.js"></script>
+
+  </div>
+</body>
+</html>

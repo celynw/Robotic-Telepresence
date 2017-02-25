@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Baxter imported | Robotic Telepresence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="To import the meshes, I first tried to add new mesh filter and mesh renderer components to the created GameObjects.Unfortunately, this doesn’t add the materials like it does when you drag them in, and">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Baxter imported">
+<meta property="og:url" content="https://celynwalters.github.io/Robotic-Telepresence/2016/11/14/Baxter-imported/index.html">
+<meta property="og:site_name" content="Robotic Telepresence">
+<meta property="og:description" content="To import the meshes, I first tried to add new mesh filter and mesh renderer components to the created GameObjects.Unfortunately, this doesn’t add the materials like it does when you drag them in, and">
+<meta property="og:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/14/Baxter-imported/Baxter.png">
+<meta property="og:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/14/Baxter-imported/Hierarchy.png">
+<meta property="og:updated_time" content="2016-11-15T00:08:24.954Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Baxter imported">
+<meta name="twitter:description" content="To import the meshes, I first tried to add new mesh filter and mesh renderer components to the created GameObjects.Unfortunately, this doesn’t add the materials like it does when you drag them in, and">
+<meta name="twitter:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/14/Baxter-imported/Baxter.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Robotic Telepresence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/Robotic-Telepresence/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-87037949-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/Robotic-Telepresence/" id="logo">Robotic Telepresence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/Robotic-Telepresence/" id="subtitle">Year 3 project notes/blog</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/">Home</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/Project-objectives">Project Objectives</a>
+        
+          <a class="main-nav-link" href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1">Gantt Chart</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://celynwalters.github.io/Robotic-Telepresence"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Baxter-imported" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Baxter imported
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/11/14/Baxter-imported/" class="article-date">
+  <time datetime="2016-11-14T23:39:32.000Z" itemprop="datePublished">Mon 14/11/2016 23:39</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>To import the meshes, I first tried to add new mesh filter and mesh renderer components to the created GameObjects.<br>Unfortunately, this doesn’t add the materials like it does when you drag them in, and I can’t seem to find an easy way to do add multiple, let alone choose the correct ones.<br>If a mesh had too many trianlges and was split into two, you also can’t attach both of them to the mesh filter, or attach two mesh filters to a <code>GameObject</code>.</p>
+<p>I managed to find out how to import them in a nice(ish) way:</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">string</span> path = meshNode.Attributes[<span class="string">"filename"</span>].Value;</div><div class="line">System.Uri uri = <span class="keyword">new</span> System.Uri(path);</div><div class="line">path = uri.Host + uri.PathAndQuery; <span class="comment">//Removes "package://"</span></div><div class="line">obj = GameObject.Instantiate(AssetDatabase.LoadAssetAtPath(<span class="string">"Assets/"</span>+path, <span class="keyword">typeof</span>(GameObject))) <span class="keyword">as</span> GameObject;</div></pre></td></tr></table></figure>
+<p>This keeps the extra GameObjects such as Camera, Light and the Animation component.<br>The meshes are also children of each ‘URDF_link’ <code>GameObject</code> rather that acting as them.<br>You cannot easily copy the components (mesh filter, mesh renderer) to another object.<br>Even copying the only values would be a hassle.<br>The easiest was swapping the <code>GameObjects</code> around<br>The transformations and modifications would be applied afterwards.</p>
+<p><img src="/Robotic-Telepresence/2016/11/14/Baxter-imported/Baxter.png" alt="Baxter at &#39;position zero&#39;"></p>
+<p>To run the code, you only have to drag the robot package into the assets window, and the robot is automatically added to the scene.<br>In the end, it might be better if this was saved as a <code>PreFab</code> and not added to the scene.<br>The body looks hollow because the second mesh part was not automatically imported.<br>There are still problems with multiple mesh parts, where the <code>.urdf</code> and the <code>.urdf.xacro</code> are both being parsed.</p>
+<p><img src="/Robotic-Telepresence/2016/11/14/Baxter-imported/Hierarchy.png" alt="Showing the generated hierarchy. Some of the transformations have rounding errors."></p>
+<p>I wanted to try it out on some other robots, but most the ones I could get my hands on did not contain <code>.DAE</code> files, only <code>.STL</code> files which aren’t supported by Unity.<br>Fortuantely, ROS provides a <a href="http://wiki.ros.org/collada_urdf" target="_blank" rel="external">converter</a>.</p>
+<blockquote>
+<p>To be continued</p>
+</blockquote>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/14/Baxter-imported/" data-id="cizleq1io0002x49ri3wvmzy5" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/Robotic-Telepresence/2016/11/15/Project-meeting-4/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Project meeting 4
+        
+      </div>
+    </a>
+  
+  
+    <a href="/Robotic-Telepresence/2016/11/14/URDF-importer/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">URDF importer</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        <!-- MANUALLY ADDED FOR GANTT CHART -->
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Celyn Walters<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/Robotic-Telepresence/" class="mobile-nav-link">Home</a>
+  
+    <a href="/Robotic-Telepresence/Project-objectives" class="mobile-nav-link">Project Objectives</a>
+  
+    <a href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1" class="mobile-nav-link">Gantt Chart</a>
+  
+    <a href="/Robotic-Telepresence/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/Robotic-Telepresence/fancybox/jquery.fancybox.css">
+  <script src="/Robotic-Telepresence/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/Robotic-Telepresence/js/script.js"></script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Rigging Baxter | Robotic Telepresence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="I’ve managed to get the Baxter meshes into Unity, but they are completely separate parts.ROS uses a .urdf file format to relate parts to each other, which isn’t directly compatible or convertible to a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rigging Baxter">
+<meta property="og:url" content="https://celynwalters.github.io/Robotic-Telepresence/2016/10/27/Rigging-Baxter/index.html">
+<meta property="og:site_name" content="Robotic Telepresence">
+<meta property="og:description" content="I’ve managed to get the Baxter meshes into Unity, but they are completely separate parts.ROS uses a .urdf file format to relate parts to each other, which isn’t directly compatible or convertible to a">
+<meta property="og:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/27/Rigging-Baxter/Torso.png">
+<meta property="og:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/27/Rigging-Baxter/Offset.png">
+<meta property="og:updated_time" content="2017-02-25T13:37:24.756Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Rigging Baxter">
+<meta name="twitter:description" content="I’ve managed to get the Baxter meshes into Unity, but they are completely separate parts.ROS uses a .urdf file format to relate parts to each other, which isn’t directly compatible or convertible to a">
+<meta name="twitter:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/27/Rigging-Baxter/Torso.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Robotic Telepresence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/Robotic-Telepresence/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-87037949-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/Robotic-Telepresence/" id="logo">Robotic Telepresence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/Robotic-Telepresence/" id="subtitle">Year 3 project notes/blog</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/">Home</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/Project-objectives">Project Objectives</a>
+        
+          <a class="main-nav-link" href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1">Gantt Chart</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://celynwalters.github.io/Robotic-Telepresence"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Rigging-Baxter" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Rigging Baxter
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/10/27/Rigging-Baxter/" class="article-date">
+  <time datetime="2016-10-27T16:05:31.000Z" itemprop="datePublished">Thu 27/10/2016 17:05</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>I’ve managed to get the Baxter meshes into Unity, but they are completely separate parts.<br>ROS uses a <code>.urdf</code> file format to relate parts to each other, which isn’t directly compatible or convertible to a Unity supported format.<br>In order to progress, I need to manually rig Baxter.<br>I can view the official files as they are text-based (an <code>xml</code> format).<br>Within the <code>baxter.urdf</code> file, there is a header:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">baxter.urdf is DEPRECATED. It is included here for backward compatibility.</div><div class="line">Please use baxter.urdf.xacro by running:</div><div class="line">$ rosrun xacro xacro.py - -inorder `rospack find baxter_description`/urdf/baxter.urdf.xacro</div></pre></td></tr></table></figure></p>
+<p>The <code>xacro</code> format also is <code>xml</code> based.<br>It seems to be the same, but also include metadata for the materials.<br>I’ll be using this <code>.urdf.xacro</code> file for reference and ignoring the <code>.urdf</code>.</p>
+<p>I started with the torso, as that was described in the <code>baxter_base.urdf.xacro</code> as being at the origin.<br><img src="/Robotic-Telepresence/2016/10/27/Rigging-Baxter/Torso.png" alt=""><br>I am thinking of adding the collision models later when(/if) I need to.<br>There are two files in the head folder, <code>H0</code> and <code>H1</code>. The <code>urdf</code> describes <code>H1</code> being called the ‘screen’.<br>By looking at photos of a fully assembled Baxter, <code>H1</code> is a round part which appears to attach below the head part of the torso model, and the screen should attach to that.<br>Unfortunately, the coordinates in the <code>urdf</code> do not match the coordinate system in Unity.</p>
+<ul>
+<li>An decrease in <code>Z</code> in the <code>urdf</code> is an increase in <code>Y</code> in Unity.</li>
+<li>The units in the <code>urdf</code> appear to be almost 100x smaller than those in Unity.<br>Even manually moving the <code>H0</code> part to the correct Y location, it is still offset, even though the <code>urdf</code> describes the other axes as being zero.<br><img src="/Robotic-Telepresence/2016/10/27/Rigging-Baxter/Offset.png" alt="Showing the strange offset"></li>
+</ul>
+<p>I also noticed that the screen (<code>H1</code>) was rotated 90 degrees. The <code>urdf</code> describes the rotation in radians, while Unity describes it in degrees.</p>
+<p>Looking at a <code>urdf</code> <a href="http://wiki.ros.org/urdf/Tutorials/Building%20a%20Visual%20Robot%20Model%20with%20URDF%20from%20Scratch" target="_blank" rel="external">tutorial</a>, ROS uses metres as the units of distance.<br>Unity uses generic units, but in relation to the scale of the model parts this looks about correct.</p>
+<p>After writing half an email to Oscar, I worked it out.<br>I had a better look at the <code>urdf</code> and noticed that the <code>&quot;head&quot;</code> link is mentioned in some <code>joint</code> objects.<br>Specifically, the <code>&quot;head_pan&quot;</code> joint with the parent of <code>&quot;torso&quot;</code> and the child of <code>&quot;head&quot;</code> had the correct coordinates (some inverted and not the correct xyz).<br>The <code>urdf</code> is heirarchical, with inherited transformations.<br>Unity also works like this, so I can lay out Unity GameObjects in the same manner as in the <code>urdf</code>. Duh.<br>Perhaps the origin values in the links themselves could be the internal origins in the <code>.dae</code> files?</p>
+<p>I started off with the parent-most object: the <code>base</code>. Everything inherits from here.<br>As I went along, GameObjects were made for joints, links, parents, children… I started assigning Unity tags to them to remember what was what, keeping their original names.<br>The <code>head_camera</code> joint has a child link called <code>head_camera</code>, so GameObjects like these need to be separate.<br>As I was going through, it became obvious that going down the hierarchy, it alternates between joint and link.<br>Imay have to specify between <code>&quot;fixed&quot;</code> and <code>&quot;revolute&quot;</code> joint types.<br>To save myself some work, I copied the right arm to the left once I’d created all of the GameObjects.<br>There will still be a good amount of work to input all of the coordinates.<br>I think this is necessary, even if I do end up making a converter, so that I understand it and I know it works.<br>When dragging the models in, these should replace the relevant “URDF link” tagged GameObjects.</p>
+<p>I dragged in the torso, pedestal, head mount and screen.<br>The screen has some rotation which I need to work out.</p>
+<p>I can’t work out the rotation for the screen (<code>head_nod</code>), so I’ll continue adding parts for now.<br>Is the origin of each model as described in the <code>urdf</code> the origin in the DAE file? Does Unity see this?<br>If so, undoing that in the parent GameObject will be good?<br>By comparing the <code>left_torso_arm_mount</code> and the <code>right_torso_arm_mount</code>, we can see which numbers are mirrored, and so which correspond to what?</p>
+<p>I talked with a housemate who worked with Unity on placement.<br>When you drag a <code>.DAE</code> into Unity, it creates a new GameObject, which contains 3 children:</p>
+<ul>
+<li>Camera</li>
+<li>Lamp</li>
+<li>Mesh (with the same name as the GameObject)</li>
+</ul>
+<p>He pointed out that the Camera and Lamp are not created by Unity, but exported from whatever was used to design the models (Blender/3DS Max).</p>
+<p>Changing a GameObject’s parent does not move the object in the scene. As a result, a transformation is applied to counteract the change the parent’s transformation has on this GameObject.<br>I didn’t realise this until I messed up the values everywhere. Correcting…</p>
+<p>I got pretty confused with the combined rotations for the screen, so I’m going to try doing the arms.<br>Some of the transformations don’t seem to make sense. The part can be perfectly in place but have one transformation still to do.<br>I think the rotations are being done in the wrong order.</p>
+<p>I found somebody trying to do exactly what I am, <a href="https://forum.unity3d.com/threads/problem-with-setting-game-object-rotation.426902/" target="_blank" rel="external">here</a>, but their problem is related to gimbal lock with eurler angles.</p>
+<h3 id="Looking-at-an-example"><a href="#Looking-at-an-example" class="headerlink" title="Looking at an example"></a>Looking at an example</h3><p>If I could get <code>Gazebo</code> to work in a virtual machine, I can see what baxter looks like at time=0 on one monitor, and have Unity on the other.<br>I had some problems getting it to run.<br>The problems were caused by VirtualBox Additions, for shared folders/clipboard, resolution fixes etc.<br>However I still can’t get it to run. I think there’s some incompatibility between ROS Kinetic and Indigo.<br>(The <a href="http://sdk.rethinkrobotics.com/wiki/Baxter_Simulator" target="_blank" rel="external">website</a> only gives support for up to Indigo).<br>I’ve also found that Indigo isn’t supported on Ubuntu 16! Only <a href="http://answers.ros.org/question/240718/installing-indigo-after-kinetic" target="_blank" rel="external">13 and 14</a>.</p>
+<p>I created a new virtual machine, and I seemed to get close to it working, but it started quitting with no error feedback,</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/27/Rigging-Baxter/" data-id="cizleq1l70014x49r9quq3fy9" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/Robotic-Telepresence/2016/10/30/Sorting-out-rotation/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Sorting out rotation
+        
+      </div>
+    </a>
+  
+  
+    <a href="/Robotic-Telepresence/2016/10/26/Jekyll-site/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Jekyll site</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        <!-- MANUALLY ADDED FOR GANTT CHART -->
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Celyn Walters<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/Robotic-Telepresence/" class="mobile-nav-link">Home</a>
+  
+    <a href="/Robotic-Telepresence/Project-objectives" class="mobile-nav-link">Project Objectives</a>
+  
+    <a href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1" class="mobile-nav-link">Gantt Chart</a>
+  
+    <a href="/Robotic-Telepresence/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/Robotic-Telepresence/fancybox/jquery.fancybox.css">
+  <script src="/Robotic-Telepresence/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/Robotic-Telepresence/js/script.js"></script>
+
+  </div>
+</body>
+</html>

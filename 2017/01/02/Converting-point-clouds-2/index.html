@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Converting point clouds 2 | Robotic Telepresence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="To further my investigation of why I was unable to convert the PointCloud2 messages into usable values, I tried using Rviz, which I know can view the data properly.It’s a hassle as I have to restart m">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Converting point clouds 2">
+<meta property="og:url" content="https://celynwalters.github.io/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/index.html">
+<meta property="og:site_name" content="Robotic Telepresence">
+<meta property="og:description" content="To further my investigation of why I was unable to convert the PointCloud2 messages into usable values, I tried using Rviz, which I know can view the data properly.It’s a hassle as I have to restart m">
+<meta property="og:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/View PCL.png">
+<meta property="og:updated_time" content="2017-02-25T13:41:01.910Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Converting point clouds 2">
+<meta name="twitter:description" content="To further my investigation of why I was unable to convert the PointCloud2 messages into usable values, I tried using Rviz, which I know can view the data properly.It’s a hassle as I have to restart m">
+<meta name="twitter:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/View PCL.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Robotic Telepresence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/Robotic-Telepresence/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-87037949-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/Robotic-Telepresence/" id="logo">Robotic Telepresence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/Robotic-Telepresence/" id="subtitle">Year 3 project notes/blog</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/">Home</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/Project-objectives">Project Objectives</a>
+        
+          <a class="main-nav-link" href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1">Gantt Chart</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://celynwalters.github.io/Robotic-Telepresence"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Converting-point-clouds-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Converting point clouds 2
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/" class="article-date">
+  <time datetime="2017-01-02T13:47:58.000Z" itemprop="datePublished">Mon 02/01/2017 13:47</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>To further my investigation of why I was unable to convert the PointCloud2 messages into usable values, I tried using <code>Rviz</code>, which I know can view the data properly.<br>It’s a hassle as I have to restart my PC, and I lose access to most of my development tools (rviz won’t run in a virtual machine).<br>If I can export some of the data, I’ll have something to compare the results of my program to.<br><code>rviz</code> showed how many messages were coming through, and you could select an area of points to see their data. However, you couldn’t select <em>all</em> points, or export the data.</p>
+<p>Later, I came across a tool called <code>bag_to_pcd</code> <a href="http://re.je/notes/2013/capturing-point-clouds-with-pcl-tools/" target="_blank" rel="external">here</a>.<br>I converted each message in the bag to a <code>.pcd</code> file, and then converted the first one into other formats from there.<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ sudo add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl</div><div class="line">$ sudo apt update</div><div class="line">$ sudo apt install libpcl-all</div><div class="line">$ sudo apt install libpcl-all-dev</div><div class="line">$ sudo apt install ros-indigo-perception</div><div class="line"></div><div class="line">$ rosrun pcl_ros bag_to_pcd ~/Downloads/baxter.bag /camera/depth_registered/points ~/Downloads</div><div class="line">$ pcl_pcd2ply 1479833365.438671766.pcd output.ply</div><div class="line">$ pcl_convert_pcd_ascii_binary 1479833365.438671766.pcd output.pcd 0</div></pre></td></tr></table></figure></p>
+<p>I was left with a binary <code>.pcd</code> file, an ascii <code>.pcd</code> file, and a binary <code>.ply</code> file (which didn’t work, unexpected eof even with trailing newline)</p>
+<p>I could view them to make sure they were still OK using <code>pcd_viewer</code><br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ rosrun perception_pcl pcd_viewer output.pcd</div></pre></td></tr></table></figure></p>
+<p><img src="/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/View PCL.png" alt="Incredibly buggy in my virtual machine!"></p>
+<h3 id="New-information"><a href="#New-information" class="headerlink" title="New information"></a>New information</h3><p>When viewing the ascii <code>.pcd</code> file, it became apparent that huge sections at the start and end of the file was meaningless data.<br>This could help to explain why I wasn’t getting anywhere.<br>I also learned that a devices like a kinect will often output <code>nan</code> values if the incident ray wasn’t returned.</p>
+<p>I’ll have to re-export the <code>rosbag</code> message, so that it’s the first message in the bag. Then I can compare my results to the actual points.<br>Hopefully then I can come up with a way to filter out the bad data efficiently.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/" data-id="cizleq1iw0004x49ra1jia6av" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/Robotic-Telepresence/2017/01/03/PCL-point-clouds/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          PCL point clouds
+        
+      </div>
+    </a>
+  
+  
+    <a href="/Robotic-Telepresence/2016/12/14/Project-meeting-7/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Project meeting 7</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        <!-- MANUALLY ADDED FOR GANTT CHART -->
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Celyn Walters<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/Robotic-Telepresence/" class="mobile-nav-link">Home</a>
+  
+    <a href="/Robotic-Telepresence/Project-objectives" class="mobile-nav-link">Project Objectives</a>
+  
+    <a href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1" class="mobile-nav-link">Gantt Chart</a>
+  
+    <a href="/Robotic-Telepresence/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/Robotic-Telepresence/fancybox/jquery.fancybox.css">
+  <script src="/Robotic-Telepresence/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/Robotic-Telepresence/js/script.js"></script>
+
+  </div>
+</body>
+</html>

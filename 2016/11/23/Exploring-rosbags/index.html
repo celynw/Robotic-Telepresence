@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Exploring rosbags | Robotic Telepresence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="In the last project meeting, we recorded about 60 seconds worth of Baxter waving his arms around and saved it as a rosbag.The uncompressed version is 8.5GB, and to view it in RViz for example will pro">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Exploring rosbags">
+<meta property="og:url" content="https://celynwalters.github.io/Robotic-Telepresence/2016/11/23/Exploring-rosbags/index.html">
+<meta property="og:site_name" content="Robotic Telepresence">
+<meta property="og:description" content="In the last project meeting, we recorded about 60 seconds worth of Baxter waving his arms around and saved it as a rosbag.The uncompressed version is 8.5GB, and to view it in RViz for example will pro">
+<meta property="og:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/23/Exploring-rosbags/Subscriber.png">
+<meta property="og:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/23/Exploring-rosbags/Named.png">
+<meta property="og:updated_time" content="2016-12-01T19:01:43.721Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Exploring rosbags">
+<meta name="twitter:description" content="In the last project meeting, we recorded about 60 seconds worth of Baxter waving his arms around and saved it as a rosbag.The uncompressed version is 8.5GB, and to view it in RViz for example will pro">
+<meta name="twitter:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/23/Exploring-rosbags/Subscriber.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Robotic Telepresence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/Robotic-Telepresence/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-87037949-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/Robotic-Telepresence/" id="logo">Robotic Telepresence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/Robotic-Telepresence/" id="subtitle">Year 3 project notes/blog</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/">Home</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/Project-objectives">Project Objectives</a>
+        
+          <a class="main-nav-link" href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1">Gantt Chart</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://celynwalters.github.io/Robotic-Telepresence"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Exploring-rosbags" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Exploring rosbags
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/11/23/Exploring-rosbags/" class="article-date">
+  <time datetime="2016-11-23T23:02:48.000Z" itemprop="datePublished">Wed 23/11/2016 23:02</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>In the <a href="/Robotic-Telepresence/2016/11/22/Project-meeting-5/">last project meeting</a>, we recorded about 60 seconds worth of Baxter waving his arms around and saved it as a rosbag.<br>The uncompressed version is 8.5GB, and to view it in RViz for example will probably require it to be loaded into RAM.<br>Oscar recommended using a RAMdisk to speed things up.<br>Since I have <em>too much</em> RAM (64GB), I thought it would be easier to just put the whole Ubuntu virtual machine into the RAMdisk.</p>
+<p>First, make sure roscore is running.<br>In each separate terminal, I remember I have to source the <code>workspace/devel/setup.zsh</code> file.<br><figure class="highlight zsh"><figcaption><span>Command line 1</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> ~/catkin_ws</div><div class="line">$ . ./devel/setup.zsh</div><div class="line">$ roscore</div></pre></td></tr></table></figure></p>
+<p>From here, I can do<br><figure class="highlight zsh"><figcaption><span>Command line 2</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">$ rosbag info ~/Downloads/baxter.bag</div><div class="line">path:        /home/celynwalters/Downloads/baxter.bag</div><div class="line">version:     2.0</div><div class="line">duration:    1:03s (63s)</div><div class="line">start:       Nov 22 2016 16:49:25.44 (1479833365.44)</div><div class="line">end:         Nov 22 2016 16:50:28.49 (1479833428.49)</div><div class="line">size:        7.9 GB</div><div class="line">messages:    37025</div><div class="line">compression: none [866/866 chunks]</div><div class="line">types:       octomap_msgs/Octomap    [9a45536b45c5e409<span class="built_in">cd</span>49f04bb2d9999f]</div><div class="line">             sensor_msgs/JointState  [3066dcd76a6cfaef579bd0f34173e9fd]</div><div class="line">             sensor_msgs/PointCloud2 [1158d486dd51d683ce2f1be655c3c181]</div><div class="line">             tf2_msgs/TFMessage      [94810edda583a504dfda3829e70d7eec]</div><div class="line">topics:      /camera/depth_registered/points     865 msgs    : sensor_msgs/PointCloud2</div><div class="line">             /octomap_full                        55 msgs    : octomap_msgs/Octomap   </div><div class="line">             /robot/joint_states               24149 msgs    : sensor_msgs/JointState  (2 connections)</div><div class="line">             /tf                               11954 msgs    : tf2_msgs/TFMessage      (7 connections)</div><div class="line">             /tf_static                            2 msgs    : tf2_msgs/TFMessage      (2 connections)</div></pre></td></tr></table></figure></p>
+<p>Great, I can see all of the ROS topics it contains.<br>I know from my <code>rosserial</code> experiments that I can listen to a topic using <code>rostopic echo</code> even if it isn’t visible yet.<br>In a separate shell I did this for the joint angles as this is the ‘easiest’ to integrate into Unity for now.<br><figure class="highlight zsh"><figcaption><span>Command line 3</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ rostopic <span class="built_in">echo</span> /robot/joint_states</div></pre></td></tr></table></figure></p>
+<p>Back in this shell, I played back the bag:<br><figure class="highlight zsh"><figcaption><span>Command line 2</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ rosbag play ~/Downloads/baxter.bag</div><div class="line">[ INFO] [1479942083.502475169]: Opening /home/celynwalters/Downloads/baxter.bag</div><div class="line"></div><div class="line">Waiting 0.2 seconds after advertising topics... done.</div><div class="line"></div><div class="line">Hit space to toggle paused, or <span class="string">'s'</span> to step.</div><div class="line"> [RUNNING]  Bag Time: 1479833369.512015   Duration: 4.075116 / 63.055731</div></pre></td></tr></table></figure></p>
+<p>This gives a very fast output of each frame for each topic:<br><figure class="highlight zsh"><figcaption><span>Command line 3</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">header: </div><div class="line">  seq: 387581</div><div class="line">  stamp: </div><div class="line">    secs: 1479833365</div><div class="line">    nsecs: 441285362</div><div class="line">  frame_id: <span class="string">''</span></div><div class="line">name: [<span class="string">'head_nod'</span>, <span class="string">'head_pan'</span>, <span class="string">'left_e0'</span>, <span class="string">'left_e1'</span>, <span class="string">'left_s0'</span>, <span class="string">'left_s1'</span>, <span class="string">'left_w0'</span>, <span class="string">'left_w1'</span>, <span class="string">'left_w2'</span>, <span class="string">'right_e0'</span>, <span class="string">'right_e1'</span>, <span class="string">'right_s0'</span>, <span class="string">'right_s1'</span>, <span class="string">'right_w0'</span>, <span class="string">'right_w1'</span>, <span class="string">'right_w2'</span>, <span class="string">'torso_t0'</span>]</div><div class="line">position: [0.0, 0.03029612056073692, -1.405126401703039, 1.2931458041874038, -0.04832039481839053, 0.030679615757708275, 1.5991749713705439, 1.3537380453088776, -0.4636456931383663, 1.647111870991963, 1.5945730290068876, -0.18676216092504913, 0.13537380453088776, -1.5872866202644318, 1.491029325824622, -0.9004467224887379, -12.565987119160338]</div><div class="line">velocity: [0.0, 0.003926990816250607, -0.009817477040626518, -0.005497787142750851, -0.005890486224375911, -0.00510508806112579, -0.012959069693627005, 0.003926990816250607, -0.01021017612225158, 0.011780972448751823, 0.01649336142825255, 0.0007853981632501215, 0.023561944897503646, -0.009032078877376396, -0.01531526418337737, -0.009817477040626518, 0.0]</div><div class="line">effort: [0.0, 0.0, -18.58, -0.312, 0.216, -7.88, 0.896, 0.2, 0.14, 21.096, 1.26, 1.088, -4.268, 0.828, -0.052, -0.036, -20.48]</div><div class="line">---</div><div class="line">header: </div><div class="line">  seq: 387582</div><div class="line">  stamp: </div><div class="line">    secs: 1479833365</div><div class="line">    nsecs: 451285944</div><div class="line">  frame_id: <span class="string">''</span></div><div class="line">name: [<span class="string">'head_nod'</span>, <span class="string">'head_pan'</span>, <span class="string">'left_e0'</span>, <span class="string">'left_e1'</span>, <span class="string">'left_s0'</span>, <span class="string">'left_s1'</span>, <span class="string">'left_w0'</span>, <span class="string">'left_w1'</span>, <span class="string">'left_w2'</span>, <span class="string">'right_e0'</span>, <span class="string">'right_e1'</span>, <span class="string">'right_s0'</span>, <span class="string">'right_s1'</span>, <span class="string">'right_w0'</span>, <span class="string">'right_w1'</span>, <span class="string">'right_w2'</span>, <span class="string">'torso_t0'</span>]</div><div class="line">position: [0.0, 0.03029612056073692, -1.4043594113090963, 1.2931458041874038, -0.04793689962141918, 0.03106311095467963, 1.5991749713705439, 1.3537380453088776, -0.464412683532309, 1.6455778902040776, 1.5934225434159734, -0.18561167533413506, 0.1357572997278591, -1.5869031250674606, 1.491029325824622, -0.9004467224887379, -12.565987119160338]</div><div class="line">velocity: [0.0, -0.0047123889795007284, 0.010995574285501701, 0.02120575040775328, -0.003926990816250607, 0.01688606050987761, -0.001570796326500243, -0.00039269908162506076, 0.006675884387626033, 0.014529866020127248, -0.006283185306000972, 0.01649336142825255, 0.02552544030562895, -0.0047123889795007284, 0.023169245815878585, 0.01021017612225158, 0.0]</div><div class="line">effort: [0.0, 0.0, -18.42, -0.248, 0.404, -7.912, 0.924, 0.216, 0.128, 20.932, 1.228, 1.184, -4.368, 0.816, -0.064, -0.028, -20.48]</div><div class="line">---</div><div class="line">...</div></pre></td></tr></table></figure></p>
+<p>I’m going to adapt the <code>rosserial_hello_world</code> code to subscribe instead of publish.<br>The <a href="http://wiki.ros.org/rosserial/Overview/Publishers%20and%20Subscribers" target="_blank" rel="external">documentation</a> says that you need to include the header file for the sort of message you want to use.<br>Thankfully, the built <code>lib/</code> folder on the windows side includes baxter’s message descriptions.<br>You then “create a function that returns void and takes a constant reference of your message type as its argument”.<br>“Then to actually setup the connection we have to create a statically allocated ros::Subscriber which is templated on your message type and call NodeHandle::subscribe within the setup() function”<br>Sounds easy enough…</p>
+<p>After I spent ages trying to make sense of the <code>baxter_core_msgs/JointCommand.h</code> header file, I eventually found out which messages to use.<br>To find out, play the <code>rosbag</code>, and in another shell do:<br><figure class="highlight zsh"><figcaption><span>Command line 3</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">$ rostopic list -v</div><div class="line"></div><div class="line">Published topics:</div><div class="line"> * /robot/joint_states [sensor_msgs/JointState] 1 publisher</div><div class="line"> * /camera/depth_registered/points [sensor_msgs/PointCloud2] 1 publisher</div><div class="line"> * /octomap_full [octomap_msgs/Octomap] 1 publisher</div><div class="line"> * /rosout [rosgraph_msgs/Log] 1 publisher</div><div class="line"> * /tf [tf2_msgs/TFMessage] 1 publisher</div><div class="line"> * /tf_static [tf2_msgs/TFMessage] 1 publisher</div><div class="line"> * /clock [rosgraph_msgs/Clock] 1 publisher</div><div class="line"> * /rosout_agg [rosgraph_msgs/Log] 1 publisher</div><div class="line"></div><div class="line">Subscribed topics:</div><div class="line"> * /rosout [rosgraph_msgs/Log] 1 subscriber</div></pre></td></tr></table></figure></p>
+<p>So actually, the joint angles use the <code>sensor_msgs/JointState</code> message,<br>I had to move some lines around, correct some typos, syntax errors etc. etc.<br>I wasn’t sure about printing actual joint angles yet, but I know I can print <code>position_length</code>, which presumably means how many joint positions there are.</p>
+<p>It worked! The screenshot (often…) shows there are 17 angles. This almost definitely corresponds to:</p>
+<ul>
+<li>14 arm joints (2x7)</li>
+<li>2 head joints</li>
+<li>1 torso joint</li>
+</ul>
+<p><img src="/Robotic-Telepresence/2016/11/23/Exploring-rosbags/Subscriber.png" alt="Left side is Ubuntu running ROS playing the Baxter rosbag, right side is Windows subscribing to it"><br>With a little more tweaking, and it’s actually pretty easy!<br>I can pull the names out and format it in any way I choose to suit my Unity needs.</p>
+<p><img src="/Robotic-Telepresence/2016/11/23/Exploring-rosbags/Named.png" alt="The &#39;1&#39; position_length messages are revealed to be for the grippers"></p>
+<p>Next stop, compiling this code into the Unity <code>.dll</code>, and then getting the joints to mirror the <code>rosbag</code>.<br>NICE.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/23/Exploring-rosbags/" data-id="cizleq1jz000cx49r4jpp4co3" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/Robotic-Telepresence/2016/11/28/Rosbag-communication/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Rosbag communication
+        
+      </div>
+    </a>
+  
+  
+    <a href="/Robotic-Telepresence/2016/11/22/Project-meeting-5/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Project meeting 5</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        <!-- MANUALLY ADDED FOR GANTT CHART -->
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Celyn Walters<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/Robotic-Telepresence/" class="mobile-nav-link">Home</a>
+  
+    <a href="/Robotic-Telepresence/Project-objectives" class="mobile-nav-link">Project Objectives</a>
+  
+    <a href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1" class="mobile-nav-link">Gantt Chart</a>
+  
+    <a href="/Robotic-Telepresence/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/Robotic-Telepresence/fancybox/jquery.fancybox.css">
+  <script src="/Robotic-Telepresence/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/Robotic-Telepresence/js/script.js"></script>
+
+  </div>
+</body>
+</html>
