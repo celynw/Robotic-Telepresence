@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Fixing point cloud problems | Robotic Telepresence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Now that the lab computer has access to the network, it was possible to attempt to communicate with the ROS machine.After sorting out an issue caused by Windows Firewall, it was possible to receive jo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fixing point cloud problems">
+<meta property="og:url" content="https://celynwalters.github.io/Robotic-Telepresence/2017/02/28/Fixing-point-cloud-problems/index.html">
+<meta property="og:site_name" content="Robotic Telepresence">
+<meta property="og:description" content="Now that the lab computer has access to the network, it was possible to attempt to communicate with the ROS machine.After sorting out an issue caused by Windows Firewall, it was possible to receive jo">
+<meta property="og:updated_time" content="2017-03-01T03:41:42.895Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fixing point cloud problems">
+<meta name="twitter:description" content="Now that the lab computer has access to the network, it was possible to attempt to communicate with the ROS machine.After sorting out an issue caused by Windows Firewall, it was possible to receive jo">
+  
+    <link rel="alternate" href="/atom.xml" title="Robotic Telepresence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/Robotic-Telepresence/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-87037949-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/Robotic-Telepresence/" id="logo">Robotic Telepresence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/Robotic-Telepresence/" id="subtitle">Year 3 project notes/blog</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/">Home</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/Project-objectives">Project Objectives</a>
+        
+          <a class="main-nav-link" href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1">Gantt Chart</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://celynwalters.github.io/Robotic-Telepresence"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Fixing-point-cloud-problems" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Fixing point cloud problems
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/02/28/Fixing-point-cloud-problems/" class="article-date">
+  <time datetime="2017-02-28T22:50:35.000Z" itemprop="datePublished">Tue 28/02/2017 22:50</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>Now that the lab computer has access to the network, it was possible to attempt to communicate with the ROS machine.<br>After sorting out an issue caused by Windows Firewall, it was possible to receive joint messages over <code>rosserial_server socket_node</code>.<br>However, a single <code>PointCloud2</code> message caused CPU to skip to (over) 100%, and the serial server to hang, just as for me.<br>Oscar found a python script which would publish a custom point cloud and regularly send the message, containing just 3 white points.<br>This was able to be received!<br>It’s time to verify whether the problem was caused by the point clouds being too big, or if it was something like the colour interfering with the expected message format.</p>
+<p>New test field format</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>0-4</th>
+<th>5-8</th>
+<th>7-11</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>X</td>
+<td>Y</td>
+<td>Z</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>Old real field format</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>0-4</th>
+<th>5-8</th>
+<th>7-11</th>
+<th>12-15</th>
+<th>16-19</th>
+<th>20-23</th>
+<th>24-27</th>
+<th>28-31</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>X</td>
+<td>Y</td>
+<td>Z</td>
+<td>–</td>
+<td>C</td>
+<td>–</td>
+<td>–</td>
+<td>–</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>The python script is only able to publish point clouds in the first format.<br>I had to reverse engineer the python file using functionality in:<br><code>/opt/ros/indigo/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py</code><br>It should match the format of the existing clouds from the Kinect wth Baxter.</p>
+<p>I was able to receive three points in the new format.</p>
+<p>Since the real point cloud data is in the byte format, I’ll use random Matlab data to test.<br><figure class="highlight matlab"><figcaption><span>Matlab workspace</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">data = <span class="built_in">randn</span>(<span class="built_in">length</span>,<span class="number">8</span>);</div><div class="line">csvwrite(<span class="string">'out.csv'</span>, data)</div></pre></td></tr></table></figure></p>
+<p>I then pasted the (formatted) values directly into the python file.</p>
+<p>I found some weird problems. Looking into it:<br><code>msg.data_length</code> is:</p>
+<ul>
+<li>32 for 1 point (expected)</li>
+<li>64 for 2 points (expected)</li>
+<li>128 for 4 points (expected)</li>
+<li>ACCESS VIOLATION at 8 points when attempting to read <code>msg.data[0]</code></li>
+<li>224 for 7 points (expected)</li>
+<li>32 for 9 points</li>
+<li>Nothing received for many (&gt;100 points)<ul>
+<li>These can still be listened to locally with <code>rostopic echo &lt;path&gt;</code></li>
+<li>Everything is still responsive</li>
+</ul>
+</li>
+</ul>
+<p>On closer inspection, it seems like there is some kind of quantisation going on.<br>16 points gives the same error as for 8 points, and 9 points looks like 1 point.<br>Not quite sure why yet.<br>The python script makes <code>height = 1</code>, and <code>width = data length</code>.</p>
+<p>I tried changing the buffer sizes in the generated C++ files on the Windows PC:<br><figure class="highlight cpp"><figcaption><span>ros_lib/ros/node_handle.h excerpt</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line"><span class="keyword">namespace</span> ros &#123;</div><div class="line">  <span class="keyword">using</span> rosserial_msgs::TopicInfo;</div><div class="line">  <span class="comment">/* Node Handle */</span></div><div class="line">  <span class="keyword">template</span>&lt;<span class="keyword">class</span> Hardware,</div><div class="line">           <span class="keyword">int</span> MAX_SUBSCRIBERS=<span class="number">25</span>, <span class="comment">// Reduced from 25</span></div><div class="line">           <span class="keyword">int</span> MAX_PUBLISHERS=<span class="number">25</span>, <span class="comment">// Reduced from 25</span></div><div class="line">           <span class="keyword">int</span> INPUT_SIZE=<span class="number">200000</span>, <span class="comment">// Increased from 512</span></div><div class="line">           <span class="keyword">int</span> OUTPUT_SIZE=<span class="number">200000</span>&gt; <span class="comment">// Increased from 512</span></div><div class="line">  <span class="keyword">class</span> NodeHandle_ : <span class="keyword">public</span> NodeHandleBase_</div><div class="line">  &#123;</div><div class="line">...</div></pre></td></tr></table></figure></p>
+<p>This resulted in me being able to see large (1x640) messages!<br>However, the length is still zero with no data being transmitted.<br>By reducing the actual length by 1, so making it 1x639, the message was reported to have length of 224.<br>Not sure where this is being limited, but I’ll try the real point cloud from the <code>rosbag</code>.<br>The same thing happens as before.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/28/Fixing-point-cloud-problems/" data-id="cizqf2rfe000bw89r0viodglu" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/Robotic-Telepresence/2017/02/23/Project-meeting-11/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Project meeting 11</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        <!-- MANUALLY ADDED FOR GANTT CHART -->
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Celyn Walters<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/Robotic-Telepresence/" class="mobile-nav-link">Home</a>
+  
+    <a href="/Robotic-Telepresence/Project-objectives" class="mobile-nav-link">Project Objectives</a>
+  
+    <a href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1" class="mobile-nav-link">Gantt Chart</a>
+  
+    <a href="/Robotic-Telepresence/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/Robotic-Telepresence/fancybox/jquery.fancybox.css">
+  <script src="/Robotic-Telepresence/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/Robotic-Telepresence/js/script.js"></script>
+
+  </div>
+</body>
+</html>
