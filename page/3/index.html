@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Robotic Telepresence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Robotic Telepresence">
+<meta property="og:url" content="https://celynwalters.github.io/Robotic-Telepresence/page/3/index.html">
+<meta property="og:site_name" content="Robotic Telepresence">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Robotic Telepresence">
+  
+    <link rel="alternate" href="/atom.xml" title="Robotic Telepresence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/Robotic-Telepresence/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/Robotic-Telepresence/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-87037949-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/Robotic-Telepresence/" id="logo">Robotic Telepresence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/Robotic-Telepresence/" id="subtitle">Electronic Engineering BEng final project</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/">Home</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/Project-objectives">Project Objectives</a>
+        
+          <a class="main-nav-link" href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1">Gantt Chart</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://celynwalters.github.io/Robotic-Telepresence"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-Final-structure" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2017/01/31/Final-structure/">Final structure</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/01/31/Final-structure/" class="article-date">
+  <time datetime="2017-01-31T23:17:07.000Z" itemprop="datePublished">Tue 31/01/2017 23:17</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>I’ve started to write what could be the final few files, in terms of the main data communication functionality.</p>
+<h4 id="Console-application"><a href="#Console-application" class="headerlink" title="Console application"></a>Console application</h4><p>This will be the ROS node, which connects to a serial server (socket).<br>It will subscribe to whichever topics are required and set up shared memory for each. As I can have many parallel shared spaces I think this is easier than trying to navigate a single one.<br>I’m trying a class-based approach to keep things tidy and encapsulated.<br>I had a lot of problems trying to encapsulate the callbacks (required), so in the end I’ve left some of it in <code>main()</code>.</p>
+<p>As the shared memory can only be written in integers, I’ll have to convert the joint angles (floats) back in to 4xbytes. Here’s a reason to convert bytes into floats in the Unity script (point clouds).</p>
+<h4 id="Unity-application"><a href="#Unity-application" class="headerlink" title="Unity application"></a>Unity application</h4><p>Once the data’s in the shared space, it will probably be just a block of integers. I’ll have to know how to read things in the correct order.<br>I’ve not worked out splitting work into individual threads yet, but I know it’s supported and doable.<br>I plan to have the VR in one (I think this might be automatic), point clouds in another (they will be intensive) and anything else in another? Perhaps keep a limit of 4 cores?</p>
+<h4 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h4><p>Following <a href="/2016/12/07/Point-Cloud-from-Actual-Data/">the last time I tried this</a> I ran into the same problem.<br>Even trying to send a single point cloud over the socket, the virtual machine’s CPU jumps to around 20%, never completes, no errors are displayed but the <code>rosserial_server</code> node has silently crashed.<br>I’m hoping this is due to complications with it being the same physical machine and it being virtualised, but there’s no problems with the joint angles at all.<br>I’ll have to run this in the robot lab.</p>
+<p>Using <code>std::vec</code> made sense for making a more robust program, but I had to convert it back into an array for the <code>CopyMemory()</code> function for shared memory and I ran into all sorts of endian-ness problems. They were difficult to spot as printing the contents to <code>stdout</code> didn’t show any problems.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/31/Final-structure/" data-id="cizvl9s71000acs9ri82isamk" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Named-shared-memory-Episode-3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2017/01/18/Named-shared-memory-Episode-3/">Named shared memory: Episode 3</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/01/18/Named-shared-memory-Episode-3/" class="article-date">
+  <time datetime="2017-01-18T14:40:07.000Z" itemprop="datePublished">Wed 18/01/2017 14:40</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <h4 id="Inter-process-communication"><a href="#Inter-process-communication" class="headerlink" title="Inter-process communication"></a>Inter-process communication</h4><p>Following the success of <a href="/Robotic-Telepresence/2016/12/03/Named-Shared-Memory-Episode-2/">Named Shared Memory: Episode 2</a>, it wasn’t too far to be able to see the message generated in one process in the Unity debug log.<br>As long as it’s known what data is expected at which offsets it can be reconstructed.<br>The only function data types available are:</p>
+<blockquote>
+<ul>
+<li>Byte</li>
+<li>Int16</li>
+<li>Int32</li>
+<li>Int64</li>
+<li>IntPtr</li>
+</ul>
+</blockquote>
+<p>Luckily these can be cast to whatever you like.</p>
+<p><img src="/Robotic-Telepresence/2017/01/18/Named-Shared-Memory-Episode-3/Message.png" alt="Process writing the message can be started before or after Unity starts"></p>
+<p>I’ve had trouble casting to floats from Int32s.<br>I’ve come across ‘BitConverter.ToSingle’ which does the same task as the byte/float union in my console application.<br>Perhaps I could use a <code>.dll</code> after all.</p>
+<h4 id="Project-structure"><a href="#Project-structure" class="headerlink" title="Project structure"></a>Project structure</h4><p>I’ve decided to make the console application the smallest middle-man possible, so it will only transfer the data to the shared memory.<br>Any multithreading will be solely handled by Unity.<br>I’ve managed to get this working, but it has not reduced the time yet (still at ~19 seconds for a single frame).<br>I think this is because earlier it was reading from a stream, writing to another stream and having that stream being read which could pipeline.<br>Now it’s only doint the first read from a stream.<br>I will see what it’s like by combining the <code>NamedSharedMemory</code> project and the <code>rosserial</code> projects, cutting out any streams.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/18/Named-shared-memory-Episode-3/" data-id="cizvl9s7l000pcs9r4v6npa9s" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-PCL-point-clouds" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2017/01/03/PCL-point-clouds/">PCL point clouds</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/01/03/PCL-point-clouds/" class="article-date">
+  <time datetime="2017-01-03T21:06:59.000Z" itemprop="datePublished">Tue 03/01/2017 21:06</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>Now I have a list of 200kB files (<code>xaa</code>, <code>xab</code>, <code>xac</code> etc.), split from the first PointCloud2 message in the <code>rosbag</code>.<br>Viewing the ascii <code>.pcd</code> file, I found what looked like the start of meaningful data, at point 29515.<br>Doing some arithmetic led me to the 17th file, or <code>xaq</code>.<br>I used this to confirm my program wasn’t working.</p>
+<h4 id="BUG"><a href="#BUG" class="headerlink" title="BUG"></a>BUG</h4><p>I’ve just realised that I wasn’t discarding data properly!<br>The offsets of 4 bytes of 0, 1, 2 and 4 are required, but I wasn’t discarding 3, 5, 6 or 7!<br>Along with making sure the commas were removed: Success!!<br><img src="/Robotic-Telepresence/2017/01/03/PCL-point-clouds/Conversion Success.png" alt="Using a custom segment of data which won&#39;t return NaNs"></p>
+<p>I needed to adapt the program to skip the header parts of the message to only read the data.<br>I ran it on a full message and it took a couple of minutes to finish printing, but it worked.<br>Removing the printing functionality sped it up to about 20 seconds.<br><strong>This needs to be faster!</strong><br>I can optimise the code a bit more, and it’s only running on a single core.<br>I can also get Unity to read from RAM rather than wait for stdout redirection.</p>
+<h4 id="Into-Unity"><a href="#Into-Unity" class="headerlink" title="Into Unity"></a>Into Unity</h4><p>I can call the program in Unity, however it does not close automatically.<br>I realised that this is caused by redirecting standard output into Unity.<br>By completely reading everything in the buffer, it is fixed.</p>
+<p>I got it to display the first 65000 points of a whole message.<br><img src="/Robotic-Telepresence/2017/01/03/PCL-point-clouds/First 65000 White.png" alt="It&#39;s white because there&#39;s a problem with the rendering I haven&#39;t realised yet."><br>65000 is the maximum number of vertices in a mesh in Unity.<br>I’ll have to split the cloud into submeshes.</p>
+<h4 id="More-hindsight"><a href="#More-hindsight" class="headerlink" title="More hindsight"></a>More hindsight</h4><p>I’ve made another mistake. After a long time of trial and error, I’ve found that while you can split a mesh into submeshes, the overall limit is still 65000 points because it’s actually still one mesh.<br>The purpose of submeshes is for different materials.<br>I’ll have to make more GameObjects with their own meshes.</p>
+<h4 id="Full-mesh"><a href="#Full-mesh" class="headerlink" title="Full mesh"></a>Full mesh</h4><p>A partial success, but the colours still don’t work and the rotation is wrong.<br><img src="/Robotic-Telepresence/2017/01/03/PCL-point-clouds/Full Selection.png" alt="The cloud is structured in strips, from Baxter&#39;s back to front"><br>To fix the colours, I’ve realised that the colours are supposed to be between 0 and 1, not 0 and 255.<br>To fix the rotation, I need to find out the base transformation.</p>
+<h4 id="Colours"><a href="#Colours" class="headerlink" title="Colours"></a>Colours</h4><p>But the colours seem wrong.<br>Perhaps this is to do with endian-ness I didn’t account for.<br><img src="/Robotic-Telepresence/2017/01/03/PCL-point-clouds/Colours Wrong.png" alt="It&#39;s not just my eyes? I think?"><br>Yep! That was it. Now for the transformation.<br><img src="/Robotic-Telepresence/2017/01/03/PCL-point-clouds/Colours Fixed.png" alt="Phew"></p>
+<h4 id="Transformation"><a href="#Transformation" class="headerlink" title="Transformation"></a>Transformation</h4><p>This was quite difficult to find.<br>The Googlable phrases were all quite similar, and most people were trying to <em>set</em> the transform, not <em>get</em> it.<br>I started with <code>RViz</code> again. I remember having to set the base transform for viewing the octomap.<br>This didn’t exactly help, although I saw some error messages which said:<br><figure class="highlight plain"><figcaption><span>In RViz</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Failed to transform from frame [camera_rgb_optical_frame] to frame [base]</div></pre></td></tr></table></figure></p>
+<p>This gave me a bit more to go on. From the <code>PointCloud2</code> message itself, I knew it used the <code>camera_rgb_optical_frame</code>.<br>This eventually led me to <code>tf_echo</code>:<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$ rosrun tf tf_echo camera_rgb_optical_frame base</div><div class="line">At time 1479833365.881</div><div class="line">- Translation: [-0.024, -0.546, 1.873]</div><div class="line">- Rotation: <span class="keyword">in</span> Quaternion [0.708, 0.675, -0.154, 0.145]</div><div class="line">            <span class="keyword">in</span> RPY (radian) [-3.139, 0.425, 1.524]</div><div class="line">            <span class="keyword">in</span> RPY (degree) [-179.836, 24.340, 87.300]</div><div class="line"></div><div class="line">$ rosrun tf tf_echo base camera_rgb_optical_frame</div><div class="line">At time 1479833366.181</div><div class="line">- Translation: [1.270, 0.003, 1.481]</div><div class="line">- Rotation: <span class="keyword">in</span> Quaternion [0.708, 0.675, -0.154, -0.145]</div><div class="line">            <span class="keyword">in</span> RPY (radian) [-2.717, 0.022, 1.528]</div><div class="line">            <span class="keyword">in</span> RPY (degree) [-155.691, 1.276, 87.539]</div></pre></td></tr></table></figure></p>
+<p>I 100% wasn’t sure which way around it was, so I tried both.<br>Using my knowledge from the <a href="/Robotic-Telepresence/2016/11/14/URDF-importer/">URDF importer</a>, I made a Unity script to convert these into the native frame.<br>By negating the X translation, rotating by -90 degrees in X, then rotating by -Z, then -Y, then +X with the values for the translation from <code>base</code> to <code>camera_rgb_optical_frame</code>, it worked:<br><img src="/Robotic-Telepresence/2017/01/03/PCL-point-clouds/Complete.png" alt="It still seems off, probably not my fault."><br>Thankfully, the point clouds are dense enough for now to not worry about them being represented by single pixels.<br>There seem to be no performance issues whatsoever.</p>
+<h4 id="Still-lots-to-do"><a href="#Still-lots-to-do" class="headerlink" title="Still lots to do"></a>Still lots to do</h4><p>I still have to work out how to make this not take 20 seconds each frame, while still allowing other processes to run.<br>Not to mention bringing everything together…</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/03/PCL-point-clouds/" data-id="cizvl9s7s000scs9rdo0abp32" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Converting-point-clouds-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/">Converting point clouds 2</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/" class="article-date">
+  <time datetime="2017-01-02T13:47:58.000Z" itemprop="datePublished">Mon 02/01/2017 13:47</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>To further my investigation of why I was unable to convert the PointCloud2 messages into usable values, I tried using <code>Rviz</code>, which I know can view the data properly.<br>It’s a hassle as I have to restart my PC, and I lose access to most of my development tools (rviz won’t run in a virtual machine).<br>If I can export some of the data, I’ll have something to compare the results of my program to.<br><code>rviz</code> showed how many messages were coming through, and you could select an area of points to see their data. However, you couldn’t select <em>all</em> points, or export the data.</p>
+<p>Later, I came across a tool called <code>bag_to_pcd</code> <a href="http://re.je/notes/2013/capturing-point-clouds-with-pcl-tools/" target="_blank" rel="external">here</a>.<br>I converted each message in the bag to a <code>.pcd</code> file, and then converted the first one into other formats from there.<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ sudo add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl</div><div class="line">$ sudo apt update</div><div class="line">$ sudo apt install libpcl-all</div><div class="line">$ sudo apt install libpcl-all-dev</div><div class="line">$ sudo apt install ros-indigo-perception</div><div class="line"></div><div class="line">$ rosrun pcl_ros bag_to_pcd ~/Downloads/baxter.bag /camera/depth_registered/points ~/Downloads</div><div class="line">$ pcl_pcd2ply 1479833365.438671766.pcd output.ply</div><div class="line">$ pcl_convert_pcd_ascii_binary 1479833365.438671766.pcd output.pcd 0</div></pre></td></tr></table></figure></p>
+<p>I was left with a binary <code>.pcd</code> file, an ascii <code>.pcd</code> file, and a binary <code>.ply</code> file (which didn’t work, unexpected eof even with trailing newline)</p>
+<p>I could view them to make sure they were still OK using <code>pcd_viewer</code><br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ rosrun perception_pcl pcd_viewer output.pcd</div></pre></td></tr></table></figure></p>
+<p><img src="/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/View PCL.png" alt="Incredibly buggy in my virtual machine!"></p>
+<h4 id="New-information"><a href="#New-information" class="headerlink" title="New information"></a>New information</h4><p>When viewing the ascii <code>.pcd</code> file, it became apparent that huge sections at the start and end of the file was meaningless data.<br>This could help to explain why I wasn’t getting anywhere.<br>I also learned that a devices like a kinect will often output <code>nan</code> values if the incident ray wasn’t returned.</p>
+<p>I’ll have to re-export the <code>rosbag</code> message, so that it’s the first message in the bag. Then I can compare my results to the actual points.<br>Hopefully then I can come up with a way to filter out the bad data efficiently.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/" data-id="cizvl9s6o0004cs9rojxtespd" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Project-meeting-7" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/12/14/Project-meeting-7/">Project meeting 7</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/12/14/Project-meeting-7/" class="article-date">
+  <time datetime="2016-12-14T12:32:16.000Z" itemprop="datePublished">Wed 14/12/2016 12:32</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <h4 id="Project-progress"><a href="#Project-progress" class="headerlink" title="Project progress"></a>Project progress</h4><p>I’m still not sure why I had so much trouble converting 3D-space points back into floats.<br>However, there should be a library in <code>ROS</code> for PCL, which is what I should be using after all.</p>
+<h4 id="Interim-report-plan-feedback"><a href="#Interim-report-plan-feedback" class="headerlink" title="Interim report plan feedback"></a>Interim report plan feedback</h4><p>I received some feedback about the structure of the report.<br>I should think about it more logically, and get somebody else to read it.<br>I’ll also be including multiple revisions of Gantt charts, including an<br>up-to-date version.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/14/Project-meeting-7/" data-id="cizvl9s8b0012cs9rwjj6wuir" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Converting-point-clouds" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/12/07/Converting-point-clouds/">Converting point clouds</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/12/07/Converting-point-clouds/" class="article-date">
+  <time datetime="2016-12-07T21:33:29.000Z" itemprop="datePublished">Wed 07/12/2016 21:33</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>I spent a long time trying to write something which formats a message into data useable by Unity for generating a vertex mesh.<br>It should have been easier, but I ran into a lot of issues.</p>
+<p>The general idea is to convert 4 bytes of the 32-byte point data to a float for each of X, Y, and Z.<br>The message even states the endian-ness of this layout (<a href="http://docs.ros.org/api/sensor_msgs/html/msg/PointCloud2.html" target="_blank" rel="external">documentation</a>).</p>
+<p>I learned of the <strong>union</strong>:<br><figure class="highlight cpp"><figcaption><span>Conversion code</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">union</span> &#123;</div><div class="line">  <span class="keyword">float</span> f;</div><div class="line">  <span class="keyword">int</span> b[<span class="number">4</span>];</div><div class="line">&#125; data;</div></pre></td></tr></table></figure></p>
+<p>I couldn’t use the whole data from a single message each time, I couldn’t even open it in a text editor as it was too large.<br>Fortunately I could split the file without even opening it.<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ split -b 200000 PointCloud.txt</div></pre></td></tr></table></figure></p>
+<p>This generated a list of 200kB files, with <code>xaa</code> being the start with the header messages.</p>
+<p>Whatever I did to the conversion program, I was always getting <code>nan</code> values, or crazily small ones.<br>I read about using the pcl library to use their methods for this rather than me implementing something myself.<br>Such methods exist in <code>pcl_ros/point_cloud.h</code>. However, this resource and the resources it depends on are part of the <code>ROS</code> environment.<br>Ideally, The Windows side would do the work, so that the Linux side only publishes the related data. It shouldn’t have to know what’s on the other end.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/07/Converting-point-clouds/" data-id="cizvl9s6x0007cs9r1ydcgv12" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Point-cloud-from-actual-data" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/12/07/Point-cloud-from-actual-data/">Point cloud from actual data</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/12/07/Point-cloud-from-actual-data/" class="article-date">
+  <time datetime="2016-12-07T13:03:08.000Z" itemprop="datePublished">Wed 07/12/2016 13:03</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>There were some errors in the <a href="/Robotic-Telepresence/2016/12/05/Point-Clouds-in-Unity/">previous post</a>.<br>There were 9,830,400 individual numbers in a single frame of the point cloud in the <code>rosbag</code>.<br>Looking at the <a href="http://docs.ros.org/api/sensor_msgs/html/msg/PointCloud2.html" target="_blank" rel="external">documentation</a> for the message type, and the header of the message, the number of points is far fewer.<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$ rostopic <span class="built_in">echo</span> --noarr --nostr /camera/depth_registered/points</div><div class="line">header: </div><div class="line">  seq: 16832</div><div class="line">  stamp: </div><div class="line">    secs: 1479833365</div><div class="line">    nsecs: 438671766</div><div class="line">height: 480</div><div class="line">width: 640</div><div class="line">is_bigendian: False</div><div class="line">point_step: 32</div><div class="line">row_step: 20480</div><div class="line">is_dense: False</div><div class="line">---</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><figcaption><span>Message header</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">fields: </div><div class="line">  - </div><div class="line">    name: x</div><div class="line">    offset: 0</div><div class="line">    datatype: 7</div><div class="line">    count: 1</div><div class="line">  - </div><div class="line">    name: y</div><div class="line">    offset: 4</div><div class="line">    datatype: 7</div><div class="line">    count: 1</div><div class="line">  - </div><div class="line">    name: z</div><div class="line">    offset: 8</div><div class="line">    datatype: 7</div><div class="line">    count: 1</div><div class="line">  - </div><div class="line">    name: rgb</div><div class="line">    offset: 16</div><div class="line">    datatype: 7</div><div class="line">    count: 1</div></pre></td></tr></table></figure>
+<p>The width and height of the cloud from the Kinect 1 is 640x480, with 32 bytes for each point.<br><code>9830400 / (640 * 480) = 32</code><br>According to the documentation for the <a href="http://docs.ros.org/api/sensor_msgs/html/msg/PointField.html" target="_blank" rel="external">PointField</a> message, each datum uses <code>datatype: 7</code>, which is a <code>FLOAT32</code>. This means 32 bits, or 4 bytes.<br>The data values in the PointCloud2 message are of type <code>uint8</code>, which uses 8 bits, or 1 byte.<br>This means that for each point in the message, there’s space for 8x <code>float32</code>.</p>
+<p>Examining the first 32 bytes of the first message, the fields described in the message header are visible:<br><figure class="highlight plain"><figcaption><span>First point in first message</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">0 0 192 127 //x</div><div class="line">0 0 192 127 //y</div><div class="line">0 0 192 127 //z</div><div class="line">0 0 0 0</div><div class="line">131 115 115 255 //rgb</div><div class="line">0 0 0 0</div><div class="line">0 0 0 0</div><div class="line">0 0 0 0</div></pre></td></tr></table></figure></p>
+<p>For some reason, playing the rosbag with a windows listener subscribed to the point cloud, causes the <code>socket_node</code> to hang, even on one message, with network activity dropping to zero.<br>This happens even when minimally changed from subscribing to <code>JointStates</code>, (which works perfectly), and not storing or printing the output.<br>The same happens with octomap, which has significatnly smaller messages.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/07/Point-cloud-from-actual-data/" data-id="cizvl9s81000tcs9rioaszlh4" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Point-clouds-in-Unity" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/12/05/Point-clouds-in-Unity/">Point clouds in Unity</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/12/05/Point-clouds-in-Unity/" class="article-date">
+  <time datetime="2016-12-05T23:41:03.000Z" itemprop="datePublished">Mon 05/12/2016 23:41</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>Giving the <code>NamedSharedMemory</code> a bit of a break while I focus on point clouds.<br>If I can’t get <code>NamedSharedMemory</code> to work, I’ve always got the slower less efficient stdout redirection into Unity.</p>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p>The example point clouds which I was provided with were very large.</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Size</th>
+<th>Vertices</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kinect_Aligned_ColourFromOscar_Subsampled.ply</td>
+<td>6.7MB</td>
+<td>419,033</td>
+</tr>
+<tr>
+<td>Oscar_Monocular_Reconstruction_Cloud.ply</td>
+<td>17.9MB</td>
+<td>396,257</td>
+</tr>
+<tr>
+<td>Kinect_Aligned.ply</td>
+<td>449.7MB</td>
+<td>37,478,946</td>
+</tr>
+<tr>
+<td>Kinect_Aligned_ColourFromOscar.ply</td>
+<td>599.7MB</td>
+<td>37,478,946</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><img src="/Robotic-Telepresence/2016/12/05/Point-Clouds-in-Unity/Subsampled.png" alt="The smallest point cloud, which has been edited by hand"><br>The best way to draw them would be to take advantage of the GPU.<br>By using a vertex shader, we can make each point in the cloud a vertex.<br>I grabbed some code from <a href="http://www.kamend.com/2014/05/rendering-a-point-cloud-inside-unity/" target="_blank" rel="external">here</a> to adapt and try out.<br>Unity only allows 65,534 vertices for each mesh, at which it is split into multiple meshes.<br>My computer, with the recommended GPU for entry-level VR had no trouble at all rendering 60,000 points in a cube.<br><img src="/Robotic-Telepresence/2016/12/05/Point-Clouds-in-Unity/60k Cube.png" alt=""><br>This is ~500 times fewer points than in the largest <code>.ply</code> file, but I don’t know how large it will <em>need</em> to be.<br>I couldn’t work out how to vary the point size. The functionality should be enabled by a script attached to the camera which specifies:<br><figure class="highlight cs"><figcaption><span>PointCLoudConfig.cs</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> UInt32 GL_VERTEX_PROGRAM_POINT_SIZE = <span class="number">0x8642</span>;</div><div class="line">glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);</div></pre></td></tr></table></figure></p>
+<h4 id="rosbag-Point-Cloud"><a href="#rosbag-Point-Cloud" class="headerlink" title="rosbag Point Cloud"></a><code>rosbag</code> Point Cloud</h4><p>In order to find how many points I should expect, I ran the <code>rosbag</code> step by step until a message containing the output was printed, which I redirected to a file.<br>The file caused my text editor to not be very responsive. I found the commas were only present in the list of points, so I counted them without opening the file.<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ rosbag play ~/Downloads/baxter.bag --pause <span class="_">-l</span></div><div class="line">$ rostopic <span class="built_in">echo</span> /camera/depth_registered/points | tee ~/PointCloud.txt</div><div class="line">$ fgrep -o <span class="string">","</span> ~/PointCloud.txt | wc <span class="_">-l</span></div><div class="line">9830399</div></pre></td></tr></table></figure></p>
+<p>This gave a file of 36.5MB, with 9,830,400 points, which would split into 151 meshes.</p>
+<p>I wrote a little script which would create <code>X</code> number of child <code>GameObjects</code>, each drawing 60,000 points in the new shader, offset by 10 units.<br><figure class="highlight cs"><figcaption><span>CreatePointCloudObject.cs</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> System.Collections;</div><div class="line"><span class="keyword">using</span> System.Collections.Generic;</div><div class="line"><span class="keyword">using</span> UnityEngine;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">CreatePointCloudObjects</span> : <span class="title">MonoBehaviour</span> &#123;</div><div class="line">	<span class="keyword">public</span> <span class="keyword">int</span> num_clouds = <span class="number">0</span>;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Start</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		Material mat = Resources.Load(<span class="string">"PointCloud"</span>, <span class="keyword">typeof</span>(Material)) <span class="keyword">as</span> Material;</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;num_clouds; i++) &#123;</div><div class="line">			GameObject gameObject = <span class="keyword">new</span> GameObject(<span class="string">"PointCloud fragment"</span>);</div><div class="line">			gameObject.transform.SetParent(<span class="keyword">this</span>.transform);</div><div class="line">			gameObject.AddComponent&lt;PointCloud&gt;(); <span class="comment">//MeshRenderer and MeshFilter already added by script</span></div><div class="line">			gameObject.GetComponent&lt;MeshRenderer&gt;().material = mat;</div><div class="line">			gameObject.transform.position = <span class="keyword">new</span> Vector3((<span class="keyword">float</span>)i*<span class="number">10</span>, <span class="number">0.0</span>f, <span class="number">0.0</span>f);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>When increasing <code>X</code> to 164, it also seemed to run without issue.<br><img src="/Robotic-Telepresence/2016/12/05/Point-Clouds-in-Unity/All Points.png" alt="Drawing 9,840,000 vertices with random vertex colours, at 1px per vertex"></p>
+<h4 id="Changing-point-size"><a href="#Changing-point-size" class="headerlink" title="Changing point size"></a>Changing point size</h4><p>I realised that whist the <code>GL_VERTEX_PROGRAM_POINT_SIZE</code> was being enabled, it wasn’t being enabled because I was running in DirectX11.<br>By going to <code>Edit &gt; Project Settings &gt; Player &gt; Other Settings</code> and unchecking <code>Auto Graphics API for Windows</code>, I was given the option to enable OpenGLCore and move it to the top of the list.<br>Now the property was being enabled (only when viewing through the scene camera, not the editor) but I wasn’t seeing any changes.<br>I still can’t get it to work.<br><a href="http://1darray.com/blog/2012/09/01/xyz-point-cloud-data-viewer-dx11/" target="_blank" rel="external">This guy</a> seems to have a very capable asset package for point clouds, but he won’t give any information away because he’s selling his work.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/05/Point-clouds-in-Unity/" data-id="cizvl9s84000xcs9r9jrgeyql" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+
+
+  <nav id="page-nav">
+    <a class="extend prev" rel="prev" href="/Robotic-Telepresence/page/2/">&laquo; Previous</a><a class="page-number" href="/Robotic-Telepresence/">1</a><a class="page-number" href="/Robotic-Telepresence/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/Robotic-Telepresence/page/4/">4</a><a class="page-number" href="/Robotic-Telepresence/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/Robotic-Telepresence/page/8/">8</a><a class="extend next" rel="next" href="/Robotic-Telepresence/page/4/">Next &raquo;</a>
+  </nav>
+
+</section>
+        <!-- MANUALLY ADDED FOR GANTT CHART -->
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Celyn Walters<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/Robotic-Telepresence/" class="mobile-nav-link">Home</a>
+  
+    <a href="/Robotic-Telepresence/Project-objectives" class="mobile-nav-link">Project Objectives</a>
+  
+    <a href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1" class="mobile-nav-link">Gantt Chart</a>
+  
+    <a href="/Robotic-Telepresence/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/Robotic-Telepresence/fancybox/jquery.fancybox.css">
+  <script src="/Robotic-Telepresence/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/Robotic-Telepresence/js/script.js"></script>
+
+  </div>
+</body>
+</html>

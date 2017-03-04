@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="Robotic Telepresence">
 <meta property="og:description" content="To further my investigation of why I was unable to convert the PointCloud2 messages into usable values, I tried using Rviz, which I know can view the data properly.It’s a hassle as I have to restart m">
 <meta property="og:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/View PCL.png">
-<meta property="og:updated_time" content="2017-02-25T13:41:01.910Z">
+<meta property="og:updated_time" content="2017-03-02T22:09:44.491Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Converting point clouds 2">
 <meta name="twitter:description" content="To further my investigation of why I was unable to convert the PointCloud2 messages into usable values, I tried using Rviz, which I know can view the data properly.It’s a hassle as I have to restart m">
@@ -21,7 +21,7 @@
     <link rel="alternate" href="/atom.xml" title="Robotic Telepresence" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.ico">
+    <link rel="icon" href="/Robotic-Telepresence/favicon.ico">
   
   
     <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
@@ -56,7 +56,7 @@ ga('send', 'pageview');
       </h1>
       
         <h2 id="subtitle-wrap">
-          <a href="/Robotic-Telepresence/" id="subtitle">Year 3 project notes/blog</a>
+          <a href="/Robotic-Telepresence/" id="subtitle">Electronic Engineering BEng final project</a>
         </h2>
       
     </div>
@@ -113,13 +113,13 @@ ga('send', 'pageview');
 <p>I was left with a binary <code>.pcd</code> file, an ascii <code>.pcd</code> file, and a binary <code>.ply</code> file (which didn’t work, unexpected eof even with trailing newline)</p>
 <p>I could view them to make sure they were still OK using <code>pcd_viewer</code><br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ rosrun perception_pcl pcd_viewer output.pcd</div></pre></td></tr></table></figure></p>
 <p><img src="/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/View PCL.png" alt="Incredibly buggy in my virtual machine!"></p>
-<h3 id="New-information"><a href="#New-information" class="headerlink" title="New information"></a>New information</h3><p>When viewing the ascii <code>.pcd</code> file, it became apparent that huge sections at the start and end of the file was meaningless data.<br>This could help to explain why I wasn’t getting anywhere.<br>I also learned that a devices like a kinect will often output <code>nan</code> values if the incident ray wasn’t returned.</p>
+<h4 id="New-information"><a href="#New-information" class="headerlink" title="New information"></a>New information</h4><p>When viewing the ascii <code>.pcd</code> file, it became apparent that huge sections at the start and end of the file was meaningless data.<br>This could help to explain why I wasn’t getting anywhere.<br>I also learned that a devices like a kinect will often output <code>nan</code> values if the incident ray wasn’t returned.</p>
 <p>I’ll have to re-export the <code>rosbag</code> message, so that it’s the first message in the bag. Then I can compare my results to the actual points.<br>Hopefully then I can come up with a way to filter out the bad data efficiently.</p>
 
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/" data-id="cizqf2rf50006w89r4hhyurlu" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/" data-id="cizvl9s6o0004cs9rojxtespd" class="article-share-link">Share</a>
     
      
   </footer>
@@ -165,7 +165,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
     </div>
   </div>
 

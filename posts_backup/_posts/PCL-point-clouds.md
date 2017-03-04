@@ -8,7 +8,7 @@ Viewing the ascii `.pcd` file, I found what looked like the start of meaningful 
 Doing some arithmetic led me to the 17th file, or `xaq`.
 I used this to confirm my program wasn't working.
 
-### BUG
+#### BUG
 I've just realised that I wasn't discarding data properly!
 The offsets of 4 bytes of 0, 1, 2 and 4 are required, but I wasn't discarding 3, 5, 6 or 7!
 Along with making sure the commas were removed: Success!!
@@ -21,7 +21,7 @@ Removing the printing functionality sped it up to about 20 seconds.
 I can optimise the code a bit more, and it's only running on a single core.
 I can also get Unity to read from RAM rather than wait for stdout redirection.
 
-### Into Unity
+#### Into Unity
 I can call the program in Unity, however it does not close automatically.
 I realised that this is caused by redirecting standard output into Unity.
 By completely reading everything in the buffer, it is fixed.
@@ -31,25 +31,25 @@ I got it to display the first 65000 points of a whole message.
 65000 is the maximum number of vertices in a mesh in Unity.
 I'll have to split the cloud into submeshes.
 
-### More hindsight
+#### More hindsight
 I've made another mistake. After a long time of trial and error, I've found that while you can split a mesh into submeshes, the overall limit is still 65000 points because it's actually still one mesh.
 The purpose of submeshes is for different materials.
 I'll have to make more GameObjects with their own meshes.
 
-### Full mesh
+#### Full mesh
 A partial success, but the colours still don't work and the rotation is wrong.
 ![The cloud is structured in strips, from Baxter's back to front](/Robotic-Telepresence/2017/01/03/PCL-point-clouds/Full Selection.png)
 To fix the colours, I've realised that the colours are supposed to be between 0 and 1, not 0 and 255.
 To fix the rotation, I need to find out the base transformation.
 
-### Colours
+#### Colours
 But the colours seem wrong.
 Perhaps this is to do with endian-ness I didn't account for.
 ![It's not just my eyes? I think?](/Robotic-Telepresence/2017/01/03/PCL-point-clouds/Colours Wrong.png)
 Yep! That was it. Now for the transformation.
 ![Phew](/Robotic-Telepresence/2017/01/03/PCL-point-clouds/Colours Fixed.png)
 
-### Transformation
+#### Transformation
 This was quite difficult to find.
 The Googlable phrases were all quite similar, and most people were trying to _set_ the transform, not _get_ it.
 I started with `RViz` again. I remember having to set the base transform for viewing the octomap.
@@ -81,6 +81,6 @@ By negating the X translation, rotating by -90 degrees in X, then rotating by -Z
 Thankfully, the point clouds are dense enough for now to not worry about them being represented by single pixels.
 There seem to be no performance issues whatsoever.
 
-### Still lots to do
+#### Still lots to do
 I still have to work out how to make this not take 20 seconds each frame, while still allowing other processes to run.
 Not to mention bringing everything together...

@@ -67,7 +67,7 @@ with
 ```zsh
 RUNTIMEDIR2=/usr/lib/
 ```
-### Sucess!
+#### Sucess!
 ```zsh
 VRDeviceDaemon: Reading configuration file
 VRDeviceDaemon: Initializing device manager

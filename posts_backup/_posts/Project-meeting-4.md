@@ -5,7 +5,7 @@ tags:
 renderer_options:
   gfm: false
 ---
-### Next steps
+#### Next steps
 The next step to do is to try and animate Baxter.
 We'll try and get some recorded motion from Baxter to replay as if it was being transmitted live.
 Apparently the joint positions etc. are just smooshed together in a text file (not like the `urdf`, but the joint and link names will be consistent).
@@ -15,7 +15,7 @@ To get rosserial_windows working:
 - Compile in Windows (or use in Unity..?)
 - Run executable
 
-### Inverse kinematics (IK)
+#### Inverse kinematics (IK)
 Baxter has an IK solver for working out joint positions based on an end effector position.
 Unity probably has some similar functionality, it's common to want to animate boned meshes.
 If it's feasible, I think it would be prefereble to use Baxter's solutions for this.

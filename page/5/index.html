@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Robotic Telepresence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Robotic Telepresence">
+<meta property="og:url" content="https://celynwalters.github.io/Robotic-Telepresence/page/5/index.html">
+<meta property="og:site_name" content="Robotic Telepresence">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Robotic Telepresence">
+  
+    <link rel="alternate" href="/atom.xml" title="Robotic Telepresence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/Robotic-Telepresence/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/Robotic-Telepresence/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-87037949-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/Robotic-Telepresence/" id="logo">Robotic Telepresence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/Robotic-Telepresence/" id="subtitle">Electronic Engineering BEng final project</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/">Home</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/Project-objectives">Project Objectives</a>
+        
+          <a class="main-nav-link" href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1">Gantt Chart</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://celynwalters.github.io/Robotic-Telepresence"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-ROS-serial-Unity-plugin" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/11/21/ROS-serial-Unity-plugin/">ROS serial: Unity plugin</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/11/21/ROS-serial-Unity-plugin/" class="article-date">
+  <time datetime="2016-11-21T21:04:48.000Z" itemprop="datePublished">Mon 21/11/2016 21:04</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>Unity managed plugins.<br>Create ‘Plugins’ folder in Unity assets, and put <code>.dll</code> files in there.<br>Try to compile <code>rosserial_hello_world</code> as a <code>.dll</code>?</p>
+<p>(Be careful with name mangling!?)</p>
+<p>Create new empty project, Win32 DLL.<br>Add new <code>.cpp</code> file, <code>main.cpp</code>.<br>Put some code in:<br><figure class="highlight cpp"><figcaption><span>main.cpp (rosserial_hello_world)</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> DLLEXPORT __declspec (dllexport)</span></div><div class="line"></div><div class="line"><span class="keyword">extern</span> <span class="string">"C"</span> &#123;</div><div class="line">	<span class="function">DLLEXPORT <span class="keyword">int</span> <span class="title">GetRandom</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> rand();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Write a script in Unity and attach it to a <code>GameObject</code>.<br>In the script, call the function from the DLL:<br><figure class="highlight cs"><figcaption><span>TestNative.cs</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> UnityEngine;</div><div class="line"><span class="keyword">using</span> System.Collections;</div><div class="line"><span class="keyword">using</span> System.Runtime.InteropServices; <span class="comment">//For DLLImport</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">TestNative</span> : <span class="title">MonoBehaviour</span> &#123;</div><div class="line">	[DllImport (<span class="string">"rosserial_unity"</span>)]</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">extern</span> <span class="keyword">int</span> <span class="title">GetRandom</span>(<span class="params"></span>)</span>;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Start</span> (<span class="params"></span>) </span>&#123;</div><div class="line">		print(<span class="string">"Native random number: "</span>+GetRandom());</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Run the scene.<br>I got a few errors, but the main one was:<br><figure class="highlight plain"><figcaption><span>Unity console</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Failed to load &apos;Assets/Plugins/rosserial_unity.dll&apos;, expected 64 bit architecture (IMAGE_FILE_MACHINE_AMD64), but was IMAGE_FILE_MACHINE_I386. You must recompile your plugin for 64 bit architecture.</div></pre></td></tr></table></figure></p>
+<p>Simple, will recompile.<br>It worked!<br><img src="/Robotic-Telepresence/2016/11/21/ROS-serial-Unity-plugin/Random Number.png" alt="The output from the .dll in Unity"></p>
+<p>Now. Copy the <code>ros_lib</code> folder generated from <code>rosserial_windows</code> (<a href="/Robotic-Telepresence/2016/11/21/ROS-serial/">this post</a>) into the Visual Studio project folder.<br>Add them to the project as before.<br>I also had to add <code>stdafx.cpp</code>, <code>stdafx.h</code> and <code>targetver.h</code> as they were missing. I’m not sure I need them, they were generated by Visual Studio for the console application.<br>The build succeeds with all the includes from the generated <code>rosserial_hello_world</code> code.</p>
+<p>Splitting the original code into functions, and making the scope of created objects also allows compilation.<br><figure class="highlight cpp"><figcaption><span>main.cpp (rosserial_unity)</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"stdafx.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ros.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;geometry_msgs/Twist.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> DLLEXPORT __declspec (dllexport)</span></div><div class="line"></div><div class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">string</span>;</div><div class="line"></div><div class="line"><span class="keyword">extern</span> <span class="string">"C"</span> &#123;</div><div class="line">	ros::NodeHandle nh;</div><div class="line">	geometry_msgs::Twist twist_msg;</div><div class="line">	ros::<span class="function">Publisher <span class="title">cmd_vel_pub</span><span class="params">(<span class="string">"cmd_vel"</span>, &amp;twist_msg)</span></span>;</div><div class="line"></div><div class="line">	<span class="function">DLLEXPORT <span class="keyword">void</span> <span class="title">Connect</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">char</span> *ros_master = <span class="string">"192.168.0.31"</span>;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"Connecting to server at %s\n"</span>, ros_master);</div><div class="line">		nh.initNode(ros_master);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function">DLLEXPORT <span class="keyword">void</span> <span class="title">Advertise</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"Advertising cmd_vel message\n"</span>);</div><div class="line">		<span class="comment">// geometry_msgs::Twist twist_msg;</span></div><div class="line">		<span class="comment">// ros::Publisher cmd_vel_pub("cmd_vel", &amp;twist_msg);</span></div><div class="line">		nh.advertise(cmd_vel_pub);</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"Go robot go!\n"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function">DLLEXPORT <span class="keyword">void</span> <span class="title">Print</span><span class="params">()</span> </span>&#123;</div><div class="line">		twist_msg.linear.x = <span class="number">5.1</span>;</div><div class="line">		twist_msg.linear.y = <span class="number">0</span>;</div><div class="line">		twist_msg.linear.z = <span class="number">0</span>;</div><div class="line">		twist_msg.angular.x = <span class="number">0</span>;</div><div class="line">		twist_msg.angular.y = <span class="number">0</span>;</div><div class="line">		twist_msg.angular.z = <span class="number">-1.8</span>;</div><div class="line">		cmd_vel_pub.publish(&amp;twist_msg);</div><div class="line"></div><div class="line">		nh.spinOnce();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>I made a Unity script, changed from the <code>TestNative.cs</code> script to accomodate the new functions and implement a while loop.<br>This should hopefully do near enough the same thing as the original <code>rosserial_hello_world</code> script.<br><figure class="highlight cs"><figcaption><span>rosserial.cs</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> UnityEngine;</div><div class="line"><span class="keyword">using</span> System.Collections;</div><div class="line"><span class="keyword">using</span> System.Runtime.InteropServices; <span class="comment">//For DLLImport</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">rosserial</span> : <span class="title">MonoBehaviour</span> &#123;</div><div class="line">	[DllImport (<span class="string">"rosserial_unity"</span>)]</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">extern</span> <span class="keyword">void</span> <span class="title">Connect</span>(<span class="params"></span>)</span>;</div><div class="line">	[DllImport (<span class="string">"rosserial_unity"</span>)]</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">extern</span> <span class="keyword">void</span> <span class="title">Advertise</span>(<span class="params"></span>)</span>;</div><div class="line">	[DllImport (<span class="string">"rosserial_unity"</span>)]</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">extern</span> <span class="keyword">void</span> <span class="title">Print</span>(<span class="params"></span>)</span>;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Start</span> (<span class="params"></span>) </span>&#123;</div><div class="line">		Connect();</div><div class="line">		Advertise();</div><div class="line">		<span class="keyword">while</span>(<span class="literal">true</span>) &#123;</div><div class="line">			Print();</div><div class="line">			System.Threading.Thread.Sleep(<span class="number">1000</span>); <span class="comment">//This is bad but I'm just testing</span></div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>This causes Unity to freeze, requiring a force quit with the Task Manager.<br>The play button is still depressed but not active, as if it’s preparing to start.<br>HOWEVER, in the virtual machine, we get the output!<br><img src="/Robotic-Telepresence/2016/11/21/ROS-serial-Unity-plugin/Success.png" alt="Before the game was running, only up to the &quot;Listening on port 11411&quot; was visible. The output on the right is being streamed in."><br>Moving code to the <code>Update()</code> loop, and commenting out the functions still keeps causing Unity to hang.<br>The fix turned out to be simple.<br>We don’t need a while loop in <code>Start()</code>, or in <code>Update()</code>. The <code>Update()</code> function is already a loop.<br>I set it to only <code>Print()</code> when the x component of the translation of Baxter’s torso changed.<br>After connecting, the socket node complained every second about some desynchronisation:<br><figure class="highlight plain"><figcaption><span>Console output (excerpt)</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[WARN] [1479767182.854363980]: Sync with device lost.</div></pre></td></tr></table></figure></p>
+<p>As soon as I moved baxter, it stopped.</p>
+<p>Next step: Replace the dummy data with actual values!</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/21/ROS-serial-Unity-plugin/" data-id="cizvl9s8c0015cs9rfqekodmw" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-ROS-serial" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/11/21/ROS-serial/">ROS serial</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/11/21/ROS-serial/" class="article-date">
+  <time datetime="2016-11-21T13:03:18.000Z" itemprop="datePublished">Mon 21/11/2016 13:03</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>Following the instructions <a href="http://wiki.ros.org/rosserial_windows/Tutorials/Hello%20World" target="_blank" rel="external">here</a> with a few edits.<br><code>apt</code> can mostly replace <code>apt-get</code> now, and I’m using version indigo, not hydro.</p>
+<p>Install rosserial_windows:<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo apt install ros-indigo-rosserial-windows ros-indigo-rosserial-server</div></pre></td></tr></table></figure></p>
+<p>Make sure I’ve set up the environment:<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> ~/catkin_ws</div><div class="line">$ . devel/setup.zsh</div></pre></td></tr></table></figure></p>
+<p>Generate ros_lib:<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ rosrun rosserial_windows make_libraries.py my_library</div></pre></td></tr></table></figure></p>
+<p>I couldn’t run this, rosserial wasn’t coming up in the tab completion for rosrun.<br>Refreshing the tree fixed it:<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ rospack profile</div></pre></td></tr></table></figure></p>
+<p>After running the installer, it failed giving the following message:<br><figure class="highlight plain"><figcaption><span>rosrun output</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">*** Warning, failed to generate libraries for the following packages: ***</div><div class="line">    baxter_sim_kinematics (missing dependency)</div><div class="line">    pr2_description (missing dependency)</div></pre></td></tr></table></figure></p>
+<p>Installing them:<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo apt install ros-indigo-baxter-sim-kinematics ros-indigo-pr2-description</div></pre></td></tr></table></figure></p>
+<p>ros-indigo-pr2-description was already installed…<br>So it wasn’t surprising when this installation didn’t help<br>Checking dependencies didn’t help:<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ rosdep check --from-paths ./src -ignore-src</div><div class="line">All system dependencies have been satisfied</div></pre></td></tr></table></figure></p>
+<p>It turns out that there were more dependencies to install:<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo apt install ros-indigo-moveit-resources ros-indigo-convex-decomposition</div></pre></td></tr></table></figure></p>
+<p>This solved the <code>baxter-sim-kinematics</code> error.<br>After installing <code>ros-indigo-ivcon</code> it exited successfully.</p>
+<p>In Windows, I created a new Console Application in Visual Studio.<br>Copied the generated folder to the project folder.<br>Added the files not in their own folders to the project.<br>Then I added the folder to the additional includes list.<br>After copying the ‘hello world’ code, it build and began running, listening on <code>1.2.3.4</code>.</p>
+<p>As at this point I was running Xubuntu and ROS in a virtual machine, I tried to see if I could contact it.<br>I had to change the virtual machine’s network settings from NAT ro Bridged adaptor.<br>After a reboot, I could ping it at the new address.<br>I changed the <code>ros_master</code> to the new address.<br>In the guest system, I ran three terminals as the instructions said to start the server.</p>
+<p>I got a response in the built program!<br><img src="/Robotic-Telepresence/2016/11/21/ROS-serial/Visual Studio.png" alt="hello_world running on Windows"><br>I also got the correct output in the virtual machine:<br><img src="/Robotic-Telepresence/2016/11/21/ROS-serial/Terminal.png" alt="rostopic echo /cmd_vel"></p>
+<p>I’d like to try and get this to work within the Unity project.<br>This might be a little difficult, as I’m using C# in Unity, but I haven’t done the research yet.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/21/ROS-serial/" data-id="cizvl9s8i001bcs9rbk5iq7ij" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Project-meeting-4" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/11/15/Project-meeting-4/">Project meeting 4</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/11/15/Project-meeting-4/" class="article-date">
+  <time datetime="2016-11-15T19:46:17.000Z" itemprop="datePublished">Tue 15/11/2016 19:46</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <h4 id="Next-steps"><a href="#Next-steps" class="headerlink" title="Next steps"></a>Next steps</h4><p>The next step to do is to try and animate Baxter.<br>We’ll try and get some recorded motion from Baxter to replay as if it was being transmitted live.<br>Apparently the joint positions etc. are just smooshed together in a text file (not like the <code>urdf</code>, but the joint and link names will be consistent).<br>To get rosserial_windows working:</p>
+<ul>
+<li>Install packages in Linux (Ubuntu 14)</li>
+<li>Generate C# code</li>
+<li>Compile in Windows (or use in Unity..?)</li>
+<li>Run executable</li>
+</ul>
+<h4 id="Inverse-kinematics-IK"><a href="#Inverse-kinematics-IK" class="headerlink" title="Inverse kinematics (IK)"></a>Inverse kinematics (IK)</h4><p>Baxter has an IK solver for working out joint positions based on an end effector position.<br>Unity probably has some similar functionality, it’s common to want to animate boned meshes.<br>If it’s feasible, I think it would be prefereble to use Baxter’s solutions for this.<br>There can be multiple solutions for solving inverse kinematics.<br>If it makes a difference, Baxter’s internal results could be more predictable/reliable.<br>It might also only require the data for the end effector position to be sent to Baxter rather than the whole arm.<br>The user would to move Baxter’s hand with a Vive wand and request an attempt to move to that position.<br>I wonder what happens if you attempt to move to an impossible position outside of the movement limits.</p>
+<p>Also, fill out the Health and Safety form for the Robot Lab.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/15/Project-meeting-4/" data-id="cizvl9s87000zcs9r7qvc4mg4" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Baxter-imported" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/11/14/Baxter-imported/">Baxter imported</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/11/14/Baxter-imported/" class="article-date">
+  <time datetime="2016-11-14T23:39:32.000Z" itemprop="datePublished">Mon 14/11/2016 23:39</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>To import the meshes, I first tried to add new mesh filter and mesh renderer components to the created GameObjects.<br>Unfortunately, this doesn’t add the materials like it does when you drag them in, and I can’t seem to find an easy way to do add multiple, let alone choose the correct ones.<br>If a mesh had too many trianlges and was split into two, you also can’t attach both of them to the mesh filter, or attach two mesh filters to a <code>GameObject</code>.</p>
+<p>I managed to find out how to import them in a nice(ish) way:</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">string</span> path = meshNode.Attributes[<span class="string">"filename"</span>].Value;</div><div class="line">System.Uri uri = <span class="keyword">new</span> System.Uri(path);</div><div class="line">path = uri.Host + uri.PathAndQuery; <span class="comment">//Removes "package://"</span></div><div class="line">obj = GameObject.Instantiate(AssetDatabase.LoadAssetAtPath(<span class="string">"Assets/"</span>+path, <span class="keyword">typeof</span>(GameObject))) <span class="keyword">as</span> GameObject;</div></pre></td></tr></table></figure>
+<p>This keeps the extra GameObjects such as Camera, Light and the Animation component.<br>The meshes are also children of each ‘URDF_link’ <code>GameObject</code> rather that acting as them.<br>You cannot easily copy the components (mesh filter, mesh renderer) to another object.<br>Even copying the only values would be a hassle.<br>The easiest was swapping the <code>GameObjects</code> around<br>The transformations and modifications would be applied afterwards.</p>
+<p><img src="/Robotic-Telepresence/2016/11/14/Baxter-imported/Baxter.png" alt="Baxter at &#39;position zero&#39;"></p>
+<p>To run the code, you only have to drag the robot package into the assets window, and the robot is automatically added to the scene.<br>In the end, it might be better if this was saved as a <code>PreFab</code> and not added to the scene.<br>The body looks hollow because the second mesh part was not automatically imported.<br>There are still problems with multiple mesh parts, where the <code>.urdf</code> and the <code>.urdf.xacro</code> are both being parsed.</p>
+<p><img src="/Robotic-Telepresence/2016/11/14/Baxter-imported/Hierarchy.png" alt="Showing the generated hierarchy. Some of the transformations have rounding errors."></p>
+<p>I wanted to try it out on some other robots, but most the ones I could get my hands on did not contain <code>.DAE</code> files, only <code>.STL</code> files which aren’t supported by Unity.<br>Fortuantely, ROS provides a <a href="http://wiki.ros.org/collada_urdf" target="_blank" rel="external">converter</a>.</p>
+<blockquote>
+<p>To be continued</p>
+</blockquote>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/14/Baxter-imported/" data-id="cizvl9s6j0002cs9r78372e34" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-URDF-importer" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/11/14/URDF-importer/">URDF importer</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/11/14/URDF-importer/" class="article-date">
+  <time datetime="2016-11-14T00:09:35.000Z" itemprop="datePublished">Mon 14/11/2016 00:09</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>Most robot repositories should have a repository with a robot description folder.<br>In Baxter’s case, this is <code>baxter_description</code>. It countains the <code>urdf</code> files and the mesh files.<br>By dragging this folder into the Unity Assets for a project, the importer script will automatically pick up the urdf files and filter down to the relevant one.<br>From here it can browse to the path of the meshes as the paths should match the existing directory layout.</p>
+<p>The updated script is able to produce the hierarchy of joints and links with their respective transforms.<br>It uses a pair of functions that alternate and recurse with each other until the ends of the hierarchy are met, creating links and joints.<br><figure class="highlight cs"><figcaption><span>udrfPostProcessor.cs excerpt, updated</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">parseURDF</span>(<span class="params"><span class="keyword">string</span> filename</span>) </span>&#123;</div><div class="line">		<span class="comment">//Load file</span></div><div class="line">		<span class="keyword">var</span> xmlData = <span class="keyword">new</span> XmlDocument();</div><div class="line">		xmlData.Load(filename);</div><div class="line">		<span class="comment">//Set root node</span></div><div class="line">		XmlNode rootNode = xmlData.DocumentElement;</div><div class="line">		<span class="keyword">string</span> name = rootNode.Attributes[<span class="string">"name"</span>].Value;</div><div class="line">		GameObject rootObj = <span class="keyword">new</span> GameObject(name);</div><div class="line">		rootObj.tag = <span class="string">"URDF link"</span>;</div><div class="line">		<span class="comment">//Start recursive alternating functions to reach bottom of hierarchy</span></div><div class="line">		XmlNodeList joints = rootNode.SelectNodes(<span class="string">"joint/parent[@link='base']"</span>);</div><div class="line">		<span class="keyword">foreach</span> (XmlNode jointNode <span class="keyword">in</span> joints)</div><div class="line">			generateJoint(jointNode, rootObj, rootNode);</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">generateJoint</span>(<span class="params">XmlNode node, GameObject parentObj, XmlNode rootNode</span>) </span>&#123;</div><div class="line">		<span class="comment">//Create joint</span></div><div class="line">		node = node.ParentNode;</div><div class="line">		<span class="keyword">string</span> name = node.Attributes[<span class="string">"name"</span>].Value;</div><div class="line">		GameObject obj = <span class="keyword">new</span> GameObject(name);</div><div class="line">		obj.transform.parent = parentObj.transform;</div><div class="line">		obj.tag = <span class="string">"URDF joint"</span>;</div><div class="line">		<span class="comment">//Get origin rotation and translation parameters</span></div><div class="line">		getOrigin(node.SelectSingleNode(<span class="string">"origin"</span>), obj);</div><div class="line">		<span class="comment">//Find the child link</span></div><div class="line">		Debug.Log(node.SelectSingleNode(<span class="string">"child"</span>).Attributes[<span class="string">"link"</span>].Value);</div><div class="line">		XmlNode link = rootNode.SelectSingleNode(<span class="string">"link[@name='"</span>+node.SelectSingleNode(<span class="string">"child"</span>).Attributes[<span class="string">"link"</span>].Value+<span class="string">"']"</span>);</div><div class="line">		generateLink(link, obj, rootNode);</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">generateLink</span>(<span class="params">XmlNode node, GameObject parentObj, XmlNode rootNode</span>) </span>&#123;</div><div class="line">		<span class="comment">//Create link</span></div><div class="line">		<span class="keyword">string</span> name = node.Attributes[<span class="string">"name"</span>].Value;</div><div class="line">		GameObject obj = <span class="keyword">new</span> GameObject(name);</div><div class="line">		obj.transform.parent = parentObj.transform;</div><div class="line">		obj.tag = <span class="string">"URDF link"</span>;</div><div class="line">		<span class="comment">//Get origin rotation and translation parameters</span></div><div class="line">		XmlNode originNode = node.SelectSingleNode(<span class="string">"visual/origin"</span>);</div><div class="line">		<span class="keyword">if</span> (originNode != <span class="literal">null</span>) <span class="comment">//Not all links have a visual node</span></div><div class="line">			getOrigin(originNode, obj);</div><div class="line">		<span class="comment">//Find all joints who have this link as a parent</span></div><div class="line">		XmlNodeList joints = rootNode.SelectNodes(<span class="string">"joint/parent[@link='"</span>+name+<span class="string">"']"</span>);</div><div class="line">		<span class="keyword">foreach</span> (XmlNode jointNode <span class="keyword">in</span> joints)</div><div class="line">			generateJoint(jointNode, obj, rootNode);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">getOrigin</span>(<span class="params">XmlNode node, GameObject obj</span>) </span>&#123;</div><div class="line">		<span class="comment">//Parse for translation</span></div><div class="line">		<span class="keyword">string</span>[] xyzStr = node.Attributes[<span class="string">"xyz"</span>].Value.Split(<span class="string">' '</span>);</div><div class="line">		Vector3 locations = <span class="keyword">new</span> Vector3();</div><div class="line">		locations.x = <span class="keyword">float</span>.Parse(xyzStr[<span class="number">0</span>]);</div><div class="line">		locations.y = <span class="keyword">float</span>.Parse(xyzStr[<span class="number">1</span>]);</div><div class="line">		locations.z = <span class="keyword">float</span>.Parse(xyzStr[<span class="number">2</span>]);</div><div class="line">		<span class="comment">//Parse for rotation</span></div><div class="line">		<span class="keyword">string</span>[] rpyStr = node.Attributes[<span class="string">"rpy"</span>].Value.Split(<span class="string">' '</span>);</div><div class="line">		Vector3 angles = <span class="keyword">new</span> Vector3();</div><div class="line">		angles.x = <span class="keyword">float</span>.Parse(rpyStr[<span class="number">0</span>]); <span class="comment">//r</span></div><div class="line">		angles.y = <span class="keyword">float</span>.Parse(rpyStr[<span class="number">1</span>]); <span class="comment">//p</span></div><div class="line">		angles.z = <span class="keyword">float</span>.Parse(rpyStr[<span class="number">2</span>]); <span class="comment">//y</span></div><div class="line">		angles = angles * Mathf.Rad2Deg;</div><div class="line">		<span class="comment">//Apply Transform</span></div><div class="line">		obj.transform.Translate(-locations.x, locations.y, locations.z);</div><div class="line">		obj.transform.Rotate(<span class="number">0</span>, <span class="number">0</span>, -angles.z, Space.Self);</div><div class="line">		obj.transform.Rotate(<span class="number">0</span>, -angles.y, <span class="number">0</span>, Space.Self);</div><div class="line">		obj.transform.Rotate(angles.x, <span class="number">0</span>, <span class="number">0</span>, Space.Self);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>An annoying run-time error which got me for a while was that a trailing slash can cause the XML parser to reach the end of the file unexpectedly.<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">node.SelectSingleNode(<span class="string">"visual/geometry/mesh/"</span>);</div></pre></td></tr></table></figure></p>
+<p>Unfortunately, adding meshes directly using scripting loses out in some of the extra functionality that goes on behind the scenes when you drag an asset into the scene.<br>Creating a mesh renderer and a mesh filter via a script for the GameObjects is possible, but attached models are bright pink (no assigned texture).<br>When you drag an asset to instantiate it, Unity knows which materials to assign (which have been automativally generated).<br>Perhaps an easier way would be to emulate this action, and then delete any superfluous components?<br>It also doesn’t handle meshes which have been split for having too many vertices very well (i.e. the torso).</p>
+<p>There’s still scope for the other parameters, such as movement limits, collision geometry, primitive shapes in place of models, and so on.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/14/URDF-importer/" data-id="cizvl9s8n001fcs9rfa9kzxgc" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Importing-directly-from-URDF" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/11/13/Importing-directly-from-URDF/">Importing directly from URDF</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/11/13/Importing-directly-from-URDF/" class="article-date">
+  <time datetime="2016-11-13T18:28:59.000Z" itemprop="datePublished">Sun 13/11/2016 18:28</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>The <code>urdf</code> file is an XML-based format.<br>In order to import values and heirarchical structure from the file into Unity automatically, I’ll have to parse it in some way.<br>I can ignore many parts of the <code>urdf</code> specification as I don’t need them yet.<br>There are a few options:</p>
+<ul>
+<li><h4 id="Scene-files"><a href="#Scene-files" class="headerlink" title="Scene files"></a>Scene files</h4><p>The scene files in Unity hold the structure of <code>GameObjects</code>, their configuration, and how the world is laid out.<br>The online documentation for Unity states that the scene files can be saved in a <a href="https://docs.unity3d.com/Manual/TextSceneFormat.html" target="_blank" rel="external">text-based format</a>.<br>One option could be to use a program or script to create a new scene file with the <code>urdf</code> parameters within.</p>
+</li>
+<li><h4 id="Prefab"><a href="#Prefab" class="headerlink" title="Prefab"></a>Prefab</h4><p>Unity <code>GameObjects</code> can be instances of a <code>Prefab</code>. Usually, the <code>GameObjects</code> are instantiated from the pre-existing <code>Prefab</code>.<br>However, <code>Prefabs</code> can be retroactively created from a <code>GameObject</code>, and then the <code>GameObject</code> becomes an instance of that new <code>Prefab</code>.<br>One idea could have been to create <code>Prefabs</code> outside of Unity and then import them, but it looks like <code>Prefabs</code> are binary files (not zip files), and there’s no documentation of the format.</p>
+</li>
+<li><h4 id="Unity-script"><a href="#Unity-script" class="headerlink" title="Unity script"></a>Unity script</h4><p>There are methods in Unity for creating, instantiating, modifying and destroying <code>GameObjects</code>.<br>Scripts attached to <code>GameObjects</code> usually execute when the scene is set to run, but there are other ways they can be used to enhance the workflow of the developer.<br>If I can achieve a sufficient level of functionality with <code>C#</code> this seems like the best solution.</p>
+<p>  Enter <code>AssetPostProcessor</code>.</p>
+</li>
+</ul>
+<h4 id="AssetPostProcessor"><a href="#AssetPostProcessor" class="headerlink" title="AssetPostProcessor"></a>AssetPostProcessor</h4><p>According to the <a href="https://docs.unity3d.com/ScriptReference/AssetPostprocessor.html" target="_blank" rel="external">docs</a>:</p>
+<blockquote>
+<p><strong>AssetPostprocessor</strong> lets you hook into the import pipeline and run scripts prior or after importing assets.</p>
+</blockquote>
+<p>Create an <code>Editor</code> folder in the root directory of the project, if it doesn’t exist already.<br>(You can re-import assets by right-clicking them and selecting, <code>Reimport</code>.)</p>
+<p>At first, the script runs for all assets, including itself!<br>By adding in some functions to check if the extension contains a <code>.urdf</code> file, we can filter the results.</p>
+<figure class="highlight cs"><figcaption><span>urdfPostProcessor.cs initial version</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> UnityEngine;</div><div class="line"><span class="keyword">using</span> UnityEditor;</div><div class="line"><span class="keyword">using</span> System.Collections;</div><div class="line"><span class="keyword">using</span> System.IO; <span class="comment">//For Path</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">urdfPostProcessor</span> : <span class="title">AssetPostprocessor</span></div><div class="line">&#123;</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">OnPostprocessAllAssets</span>(<span class="params"><span class="keyword">string</span>[] importedAssets, <span class="keyword">string</span>[] deletedAssets, <span class="keyword">string</span>[] movedAssets, <span class="keyword">string</span>[] movedFromPath</span>) </span>&#123;</div><div class="line">		<span class="keyword">foreach</span> (<span class="keyword">string</span> str <span class="keyword">in</span> importedAssets) &#123;</div><div class="line">			<span class="keyword">string</span> ext = Path.GetExtension(str);</div><div class="line">			<span class="keyword">if</span> (ext == <span class="string">".xacro"</span>)</div><div class="line">				ext = Path.GetExtension(Path.GetFileNameWithoutExtension(str));</div><div class="line">			<span class="keyword">if</span> (ext == <span class="string">".urdf"</span>)</div><div class="line">				Debug.Log(<span class="string">"YES: "</span>+str);</div><div class="line">			<span class="keyword">else</span></div><div class="line">				Debug.Log(<span class="string">"no: "</span>+str);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Now that this script runs for each <code>urdf</code> file, we can try to access some of the data.<br>It is reccommended to use the system’s xml parsing.<br><figure class="highlight cs"><figcaption><span>urdfPostProcessor.cs continued</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line"><span class="keyword">using</span> System.Xml; <span class="comment">//For urdf</span></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">importURDF</span>(<span class="params"><span class="keyword">string</span> filename</span>) </span>&#123;</div><div class="line">		<span class="comment">//Load XML file</span></div><div class="line">		<span class="keyword">var</span> xmlData = <span class="keyword">new</span> XmlDocument();</div><div class="line">		xmlData.Load(filename);</div><div class="line">		<span class="comment">//Set root</span></div><div class="line">		<span class="keyword">var</span> root = xmlData.DocumentElement;<span class="comment">//.GetEnumerator();</span></div><div class="line">		<span class="comment">//Create nodelist</span></div><div class="line">		XmlNodeList nodeList;</div><div class="line">		nodeList = root.SelectNodes(<span class="string">"link"</span>);</div><div class="line">		<span class="comment">//Print out some results</span></div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;nodeList.Count; i++) &#123;</div><div class="line">			<span class="keyword">var</span> node = nodeList[i];</div><div class="line">			XmlNode ret = node.SelectSingleNode(<span class="string">"visual/origin"</span>);</div><div class="line">			<span class="keyword">if</span> (ret != <span class="literal">null</span>)</div><div class="line">				Debug.Log(node.Attributes[<span class="string">"name"</span>].Value+<span class="string">": "</span>+ret.Attributes[<span class="string">"rpy"</span>].Value);</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
+<p>The code above finds the <code>urdf</code> links which have a <code>visual</code> child, with an <code>origin</code> child of its own.<br>For each of those, it prints their names and the <code>rpy</code> values of the origin node.</p>
+<p><img src="/Robotic-Telepresence/2016/11/13/Importing-directly-from-URDF/XML Values.png" alt="Values from the XML in the debug logger in Unity"></p>
+<p>This isn’t exactly what we want, because it doesn’t follow the hierarchy. But we’re getting there.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/13/Importing-directly-from-URDF/" data-id="cizvl9s78000fcs9rx6efwcvj" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Coordinate-system-converted" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/11/09/Coordinate-system-converted/">Coordinate system converted</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/11/09/Coordinate-system-converted/" class="article-date">
+  <time datetime="2016-11-09T13:04:25.000Z" itemprop="datePublished">Wed 09/11/2016 13:04</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <h4 id="Differences"><a href="#Differences" class="headerlink" title="Differences"></a>Differences</h4><p>ROS uses a right-handed coordinate system.<br>Unity uses a left-handed coordinate system.<br>(<a href="https://en.wikipedia.org/wiki/Right-hand_rule" target="_blank" rel="external">handedness</a>)</p>
+<h4 id="Translation"><a href="#Translation" class="headerlink" title="Translation"></a>Translation</h4><p>ROS uses <a href="http://www.ros.org/reps/rep-0103.html" target="_blank" rel="external">this convention</a>:</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>ROS Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>X +ve</td>
+<td>forwards</td>
+</tr>
+<tr>
+<td>Y +ve</td>
+<td>left</td>
+</tr>
+<tr>
+<td>Z +ve</td>
+<td>up</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>On importing Baxter models as a Unity assets, they come in at +90 degrees rotated around Unity’s X axis.<br>In relation to Baxter, the Unity coordinate system is:</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>Unity Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>X +ve</td>
+<td>backwards</td>
+</tr>
+<tr>
+<td>Y +ve</td>
+<td>left</td>
+</tr>
+<tr>
+<td>Z +ve</td>
+<td>up</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>When the parent-most GameObject is rotated so that Baxter is upright, the child XYZ frame is also rotated.<br>So for translation, all I need to do is negate the X translation.</p>
+<h4 id="Rotation"><a href="#Rotation" class="headerlink" title="Rotation"></a>Rotation</h4><p>The following table describes what an increase in rotation value for each axis looks like in ROS and Unity (using local rotations).<br>As the axes for translations can now match up, disregarding negativity they should for rotations.</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>Rotation</th>
+<th>Label</th>
+<th>Axis</th>
+<th>Direction in ROS</th>
+<th>Direction in Unity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Roll</td>
+<td>r</td>
+<td>X (+ve)</td>
+<td>right</td>
+<td>right</td>
+</tr>
+<tr>
+<td>Pitch</td>
+<td>p</td>
+<td>Y (+ve)</td>
+<td>forwards</td>
+<td>backwards</td>
+</tr>
+<tr>
+<td>Yaw</td>
+<td>y</td>
+<td>Z (+ve)</td>
+<td>left</td>
+<td>right</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>The order in which rotations are performed makes a difference.<br>The code in the following script was used to successfully rotate the meshes to the correct starting positions.<br><figure class="highlight cs"><figcaption><span>ConvertCoordinateSystem.cs</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> UnityEngine;</div><div class="line"><span class="keyword">using</span> System.Collections;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">InitialRotation</span> : <span class="title">MonoBehaviour</span> &#123;</div><div class="line">	<span class="keyword">public</span> Vector3 input = <span class="keyword">new</span> Vector3();</div><div class="line">	<span class="keyword">public</span> Vector3 angles = <span class="keyword">new</span> Vector3(<span class="number">0.0</span>f, <span class="number">0.0</span>f, <span class="number">0.0</span>f);</div><div class="line">	<span class="keyword">private</span> Vector3 saved;</div><div class="line"></div><div class="line">	<span class="comment">// Use this for initialization</span></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Start</span> (<span class="params"></span>) </span>&#123;</div><div class="line">		angles.x = input.x * Mathf.Rad2Deg;</div><div class="line">		angles.y = input.y * Mathf.Rad2Deg;</div><div class="line">		angles.z = input.z * Mathf.Rad2Deg;</div><div class="line"></div><div class="line">		transform.localEulerAngles = Vector3.zero;</div><div class="line">		transform.Rotate(<span class="number">0</span>, <span class="number">0</span>, -angles.z, Space.Self);</div><div class="line">		transform.Rotate(<span class="number">0</span>, -angles.y, <span class="number">0</span>, Space.Self);</div><div class="line">		transform.Rotate(angles.x, <span class="number">0</span>, <span class="number">0</span>, Space.Self);</div><div class="line">		saved = transform.localEulerAngles;</div><div class="line"></div><div class="line">		<span class="comment">//Don't switch to the game window</span></div><div class="line">		UnityEditor.SceneView.FocusWindowIfItsOpen(<span class="keyword">typeof</span>(UnityEditor.SceneView));</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">// Update is called once per frame</span></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Update</span> (<span class="params"></span>) </span>&#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>The <code>Vector3</code> variable ‘Input’ was used to manually enter the values from the <code>.xacro.urdf</code> file.<br>The <code>Vector3</code> variable ‘angles’ I used as an indicator to show what (additional?) rotation was being performed on the part.</p>
+<p><img src="/Robotic-Telepresence/2016/11/09/Coordinate-system-converted/Inputs.png" alt="Script inputs"></p>
+<p>To verify that the script was working, I rotated the joints using the <code>&lt;limit lower/&gt;</code> and <code>&lt;limit upper/&gt;</code> values to see if the arm would clip into another body part.<br>This showed that it worked correctly, because there was no clipping.<br>It showed that the shape of Baxter has been designed so that there are hollows for the respective protruding parts to get a larger operating range of movement.</p>
+<p><img src="/Robotic-Telepresence/2016/11/09/Coordinate-system-converted/Limits.png" alt="Verifying the joint limits"></p>
+<p>I had trouble importing E1 (lower elbow) and E0 for some reason, maybe it was a corrupt file.<br>Replacing it with a fresh one from the GitHub repository solved the issue.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/09/Coordinate-system-converted/" data-id="cizvl9s6u0005cs9rphdzttdn" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Project-meeting-3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/11/08/Project-meeting-3/">Project meeting 3</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/11/08/Project-meeting-3/" class="article-date">
+  <time datetime="2016-11-08T20:07:40.000Z" itemprop="datePublished">Tue 08/11/2016 20:07</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>I still need to get swipe access to the robot lab.<br>After that I need to do health and safety briefing for Baxter.</p>
+<p>I confirmed my suspicions that ROS versions don’t generally mix, while the Kinetic upgrade is an especially significant change.<br>Baxter is running on Indigo and I would need a very good reason to use Kinetic instead.<br>Remember, Indigo doesn’t work on Ubuntu 16. Use 14 for the LTS.</p>
+<p>I got Oscar to send me some point cloud data</p>
+<ul>
+<li>Raw data directly from kinect (428MB)</li>
+<li>Coloured data (571MB)</li>
+<li>Coloured subsampled data (6.39MB)</li>
+<li>Monocular reconstruction cloud (17MB)</li>
+<li>Octree (53.1MB)<br>The point cloud data is in <code>.ply</code> binary format.</li>
+</ul>
+<p>He also sent me a list of libraries I’ll need to generate/view it.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">meshlab</div><div class="line">ros-indigo-octomap</div><div class="line">ros-indigo-octomap-mapping</div><div class="line">ros-indigo-octomap-msgs</div><div class="line">ros-indigo-octomap-ros</div><div class="line">ros-indigo-octomap-rviz-plugins </div><div class="line">ros-indigo-octomap-server</div><div class="line">ros-indigo-octovis</div></pre></td></tr></table></figure></p>
+<p>Also, a link to the wiki page for <a href="http://wiki.ros.org/rosserial_windows/Tutorials/Hello%20World" target="_blank" rel="external">sending serial messages to ROS from Windows</a>.</p>
+<p>Oscar also said that a Raspberry Pi may not have a fast enough internet connection to handle the point cloud data, or have very good latency.<br>This isn’t too much of a problem. In the robot lab, there’s a computer dedicated to Baxter which has university log-on (first run will apparently still be a pain)<br>The others (including the beefy one with 4x12GB VRAM) don’t, but I’ll get some help when the time comes.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/08/Project-meeting-3/" data-id="cizvl9s8a0011cs9rh6l0ulqs" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+
+
+  <nav id="page-nav">
+    <a class="extend prev" rel="prev" href="/Robotic-Telepresence/page/4/">&laquo; Previous</a><a class="page-number" href="/Robotic-Telepresence/">1</a><span class="space">&hellip;</span><a class="page-number" href="/Robotic-Telepresence/page/3/">3</a><a class="page-number" href="/Robotic-Telepresence/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/Robotic-Telepresence/page/6/">6</a><a class="page-number" href="/Robotic-Telepresence/page/7/">7</a><a class="page-number" href="/Robotic-Telepresence/page/8/">8</a><a class="extend next" rel="next" href="/Robotic-Telepresence/page/6/">Next &raquo;</a>
+  </nav>
+
+</section>
+        <!-- MANUALLY ADDED FOR GANTT CHART -->
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Celyn Walters<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/Robotic-Telepresence/" class="mobile-nav-link">Home</a>
+  
+    <a href="/Robotic-Telepresence/Project-objectives" class="mobile-nav-link">Project Objectives</a>
+  
+    <a href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1" class="mobile-nav-link">Gantt Chart</a>
+  
+    <a href="/Robotic-Telepresence/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/Robotic-Telepresence/fancybox/jquery.fancybox.css">
+  <script src="/Robotic-Telepresence/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/Robotic-Telepresence/js/script.js"></script>
+
+  </div>
+</body>
+</html>

@@ -29,7 +29,7 @@ $ rosrun perception_pcl pcd_viewer output.pcd
 ```
 ![Incredibly buggy in my virtual machine!](/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/View PCL.png)
 
-### New information
+#### New information
 When viewing the ascii `.pcd` file, it became apparent that huge sections at the start and end of the file was meaningless data.
 This could help to explain why I wasn't getting anywhere.
 I also learned that a devices like a kinect will often output `nan` values if the incident ray wasn't returned.

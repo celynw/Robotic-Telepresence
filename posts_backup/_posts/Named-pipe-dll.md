@@ -38,7 +38,7 @@ Now I can run the code a few times before crashing. Wow!
 I've set the PipeDirection in the `.dll` to 'Out' rather than 2-way.
 It took me too long to realise I had to change the other end to 'In'...
 
-# I've made a terrible mistake
+### Oops.
 As educational this was, I'm trying to write values which overwrite the old ones, regardless of whether they were read or not.
 The data in named pipes MUST be read on the receiving end in the same order, FIFO.
 I have, however, gained a much better understanding of how all of this works, and some new keywords for Googling.

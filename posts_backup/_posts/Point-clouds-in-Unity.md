@@ -6,7 +6,7 @@ tags:
 Giving the `NamedSharedMemory` a bit of a break while I focus on point clouds.
 If I can't get `NamedSharedMemory` to work, I've always got the slower less efficient stdout redirection into Unity.
 
-##### Method
+#### Method
 The example point clouds which I was provided with were very large.
 > 
 | File                                          | Size    | Vertices   |
@@ -30,7 +30,7 @@ const UInt32 GL_VERTEX_PROGRAM_POINT_SIZE = 0x8642;
 glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 ```
 
-##### `rosbag` Point Cloud
+#### `rosbag` Point Cloud
 In order to find how many points I should expect, I ran the `rosbag` step by step until a message containing the output was printed, which I redirected to a file.
 The file caused my text editor to not be very responsive. I found the commas were only present in the list of points, so I counted them without opening the file.
 ```zsh Command line
@@ -64,7 +64,7 @@ public class CreatePointCloudObjects : MonoBehaviour {
 When increasing `X` to 164, it also seemed to run without issue.
 ![Drawing 9,840,000 vertices with random vertex colours, at 1px per vertex](/Robotic-Telepresence/2016/12/05/Point-Clouds-in-Unity/All Points.png)
 
-##### Changing point size
+#### Changing point size
 I realised that whist the `GL_VERTEX_PROGRAM_POINT_SIZE` was being enabled, it wasn't being enabled because I was running in DirectX11.
 By going to `Edit > Project Settings > Player > Other Settings` and unchecking `Auto Graphics API for Windows`, I was given the option to enable OpenGLCore and move it to the top of the list.
 Now the property was being enabled (only when viewing through the scene camera, not the editor) but I wasn't seeing any changes.

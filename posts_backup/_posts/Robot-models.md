@@ -3,11 +3,11 @@ title: Robot models
 date: 2016-10-23 14:32:34
 tags:
 ---
-### URDF
+#### URDF
 I've found there's a [Unified Robot Description Format](http://wiki.ros.org/urdf), an XML format which ROS uses.
 I don't know the full extent for what it's for or what it contains yet.
 
-### Baxter models
+#### Baxter models
 There's [an official page](http://sdk.rethinkrobotics.com/wiki/URDF) for Baxter's URDF.
 I will try to see how easy it is to input its information into Unity.
 There's also a [GitHub page](https://github.com/RethinkRobotics) for ReThink Robotics Inc. (Baxter).

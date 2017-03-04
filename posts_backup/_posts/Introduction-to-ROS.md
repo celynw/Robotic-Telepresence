@@ -29,7 +29,7 @@ Get rosinstall. Distributed separately, is for downloading source trees for ROS 
 $ sudo apt-get install python-rosinstall
 ```
 
-### First ROS tests
+#### First ROS tests
 Checking the environment variables have been set:
 ```zsh
 $ printenv | grep ROS
@@ -49,7 +49,7 @@ Now the environment has been overlayed onto our own. Check with:
 $ echo $ROS_PACKAGE_PATH
 ```
 
-### Tutorials
+#### Tutorials
 Install tutorials if I haven't got them already:
 ```zsh
 $ sudo apt-get install ros-kinetic-ros-tutorials

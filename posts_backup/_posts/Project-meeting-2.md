@@ -3,7 +3,7 @@ title: Project meeting 2
 date: 2016-10-26 16:08:54
 tags:
 ---
-### Housekeeping
+#### Housekeeping
 - I haven't filled out the project health and safety form. Bring it to the next meeting!
 - I'm required to take notes. I should also keep them in a format which Rich can read
 	In the past people have used Google Docs. I like the idea of keeping my notes in Markdown so I might end up using an online host for that.

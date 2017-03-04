@@ -11,7 +11,7 @@
 <meta property="og:url" content="https://celynwalters.github.io/Robotic-Telepresence/2016/12/01/Project-meeting-6/index.html">
 <meta property="og:site_name" content="Robotic Telepresence">
 <meta property="og:description" content="Discussion about the previous week’s workI tried to explain the problems I was having with .dlls.I had some potentially useful tips about how to get them to work with arrays. I should look into marsha">
-<meta property="og:updated_time" content="2016-12-01T18:12:54.053Z">
+<meta property="og:updated_time" content="2017-03-02T22:08:01.925Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Project meeting 6">
 <meta name="twitter:description" content="Discussion about the previous week’s workI tried to explain the problems I was having with .dlls.I had some potentially useful tips about how to get them to work with arrays. I should look into marsha">
@@ -19,7 +19,7 @@
     <link rel="alternate" href="/atom.xml" title="Robotic Telepresence" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.ico">
+    <link rel="icon" href="/Robotic-Telepresence/favicon.ico">
   
   
     <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
@@ -54,7 +54,7 @@ ga('send', 'pageview');
       </h1>
       
         <h2 id="subtitle-wrap">
-          <a href="/Robotic-Telepresence/" id="subtitle">Year 3 project notes/blog</a>
+          <a href="/Robotic-Telepresence/" id="subtitle">Electronic Engineering BEng final project</a>
         </h2>
       
     </div>
@@ -106,17 +106,17 @@ ga('send', 'pageview');
   </div>
   <div class="article-entry" itemprop="articleBody">
     
-      <h5 id="Discussion-about-the-previous-week’s-work"><a href="#Discussion-about-the-previous-week’s-work" class="headerlink" title="Discussion about the previous week’s work"></a>Discussion about the previous week’s work</h5><p>I tried to explain the problems I was having with <code>.dlls</code>.<br>I had some potentially useful tips about how to get them to work with arrays. I should look into <a href="https://msdn.microsoft.com/en-us/library/system.runtime.interopservices.marshal.aspx" target="_blank" rel="external">marshal functions</a> and <a href="https://msdn.microsoft.com/en-us/library/04fy9ya1.aspx" target="_blank" rel="external">interop</a>.<br>To analyse the extent of ‘name mangling’, I can put the <code>.dll</code> through <a href="http://www.dependencywalker.com/" target="_blank" rel="external">Dependency Walker</a>.<br>I came across these in the past week, I think I should have more experience and knowledge with C# besides Unity scripting for this to be successful.</p>
+      <h4 id="Discussion-about-the-previous-week’s-work"><a href="#Discussion-about-the-previous-week’s-work" class="headerlink" title="Discussion about the previous week’s work"></a>Discussion about the previous week’s work</h4><p>I tried to explain the problems I was having with <code>.dlls</code>.<br>I had some potentially useful tips about how to get them to work with arrays. I should look into <a href="https://msdn.microsoft.com/en-us/library/system.runtime.interopservices.marshal.aspx" target="_blank" rel="external">marshal functions</a> and <a href="https://msdn.microsoft.com/en-us/library/04fy9ya1.aspx" target="_blank" rel="external">interop</a>.<br>To analyse the extent of ‘name mangling’, I can put the <code>.dll</code> through <a href="http://www.dependencywalker.com/" target="_blank" rel="external">Dependency Walker</a>.<br>I came across these in the past week, I think I should have more experience and knowledge with C# besides Unity scripting for this to be successful.</p>
 <p>We have decided it would be much better to move away from compiling <code>.dlls</code> as Unity plugins, and instead use a compiled console application in Windows to receive the messages into RAM, and get Unity to poll the most recent values.<br>I have been talking to James, who is trying to implement UDP communication in Unity with ROS.</p>
 <p>In terms of the networking layout, the VR PC will be subscribing directly from Baxter (who has an internal ROS publisher) and publishing to the linux computer connected to Baxter, which will be calculating the inverse kinematics from the hand target positions.<br>We thing a position and a pose is required for this, so I will need the quaternions of the rotations of each hand.<br>Unity works with quaternions so this doesn’t sound too much of a challenge, but to start with I might well fix the pose to have the hands facing forwards.</p>
 <p>I wasn’t able to filter the joints that were in the public <code>urdf</code> and those in the <code>rosbag</code>. Maybe Baxter’s urdf is a previous verion?<br>I was also strange that the gripper messages were arriving separately.</p>
-<h5 id="Interim-report"><a href="#Interim-report" class="headerlink" title="Interim report"></a>Interim report</h5><p>The same examiner(s) who marks this will mark the final dissertation.<br>Therefore, don’t commit to work which is unlikely to come to fruition. Light exaggeration could back me into a corner.<br>Also, there will be some overlap between the interim report and the final submission. They have to exist as separate entities, but maybe not a total copy.</p>
+<h4 id="Interim-report"><a href="#Interim-report" class="headerlink" title="Interim report"></a>Interim report</h4><p>The same examiner(s) who marks this will mark the final dissertation.<br>Therefore, don’t commit to work which is unlikely to come to fruition. Light exaggeration could back me into a corner.<br>Also, there will be some overlap between the interim report and the final submission. They have to exist as separate entities, but maybe not a total copy.</p>
 <p>I have two weeks left before Christmas. If I want any useful feedback (I do) I should have a report structure by <a href="/Robotic-Telepresence/2016/12/13/Project-meeting-7/">next meeting</a>.</p>
 
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Project-meeting-6/" data-id="cizqf2rgb0012w89rhav0duj0" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Project-meeting-6/" data-id="cizvl9s890010cs9rdhp1zrcl" class="article-share-link">Share</a>
     
      
   </footer>
@@ -162,7 +162,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
     </div>
   </div>
 

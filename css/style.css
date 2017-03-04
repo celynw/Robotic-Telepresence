@@ -202,7 +202,8 @@ body {
   font-weight: bold;
 }
 .article-inner,
-.archive-article-inner {
+.archive-article-inner,
+#page-nav {
   background: #ddd;
   -webkit-box-shadow: 1px 2px 3px #000;
   box-shadow: 1px 2px 3px #000;
@@ -505,7 +506,7 @@ body {
 .article-inner {
   overflow: hidden;
   border: 0px transparent #000;
-  border-radius: 8px;
+  border-radius: 6px;
 }
 .article-meta:before,
 .article-meta:after {
@@ -1037,11 +1038,8 @@ a.article-title:hover {
 }
 #page-nav {
   margin: 20px auto;
-  background: #fff;
-  -webkit-box-shadow: 1px 2px 3px #ddd;
-  box-shadow: 1px 2px 3px #ddd;
-  border: 1px solid #ddd;
-  border-radius: 3px;
+  border: 0px transparent #000;
+  border-radius: 6px;
   text-align: center;
   color: #999;
   overflow: hidden;
@@ -1065,7 +1063,11 @@ a.article-title:hover {
   text-decoration: none;
 }
 #page-nav a:hover {
-  background: #999;
+  background: #258fb8;
+  -webkit-transition: background 0.2s, color 0.2s;
+  -moz-transition: background 0.2s, color 0.2s;
+  -ms-transition: background 0.2s, color 0.2s;
+  transition: background 0.2s, color 0.2s;
   color: #fff;
 }
 #page-nav .prev {

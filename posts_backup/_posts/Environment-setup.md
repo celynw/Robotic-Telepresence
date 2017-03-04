@@ -6,7 +6,7 @@ tags:
 The first thing I can do without doing any research is to set up my environment.
 I know I will probably change my mind as things progress.
 
-### Things I did
+#### Things I did
 I installed stock Ubuntu in a virtual machine, as I already had the disc image downloaded.
 It was very easy, but I really didn't, and still don't like the Unity desktop environment.
 It also comes preinstalled with a lot of things I never use.
@@ -19,7 +19,7 @@ I used mercurial a lot on placement and it seems easier than git, so once things
 I know how to use virtual environments and pip with python, but I won't do this until I know I need it.
 I'll be trying to take regular screenshots/photos to stick in here.
 
-### Markdown
+#### Markdown
 I need any notes to be portable between computers and operating systems (This means no Microsoft Office!)
 Microsoft Office provide an online version of Office which is surprisingly good. But I'll have to worry about logging in, inserting media into the documents and no organisation between documents beside what I can do with folders.
 I already have an excellent Markdown editor (Sublime Text) which doubles for code.
@@ -52,7 +52,7 @@ Using [pandoc](http://pandoc.org/), one can easily convert between many formats,
 There are a huge number of purely online editors, such as [Stackedit](https://stackedit.io/editor)
 Some of them look very good, but I would not have full control over the files.
 
-### Other things
+#### Other things
 
 In the last project meeting, Rich asked about how the graphics are drawn to the headset. I didn't give a clear answer, but here it is:
 - Direct mode: Graphics are drawn directly to the HMD (head-mounted display). Better VR (virtual reality) performance.

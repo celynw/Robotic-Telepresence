@@ -27,7 +27,7 @@ Fixed!
 The solution was: `windows.h` was #defining `ERROR`, which was being used in `ros/Log.h`.
 Adding a `#undef ERROR` at the start made it build.
 
-### Putting ROS messages into shared memory
+#### Putting ROS messages into shared memory
 The example uses `CopyMemory()` to put a string into shared memory.
 I'll need to know the size of the message.
 Looking at `JointState.h` in the ROS library in Windows, I was able to see how the joint messages were built and how to determine their sizes

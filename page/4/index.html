@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Robotic Telepresence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Robotic Telepresence">
+<meta property="og:url" content="https://celynwalters.github.io/Robotic-Telepresence/page/4/index.html">
+<meta property="og:site_name" content="Robotic Telepresence">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Robotic Telepresence">
+  
+    <link rel="alternate" href="/atom.xml" title="Robotic Telepresence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/Robotic-Telepresence/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/Robotic-Telepresence/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-87037949-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/Robotic-Telepresence/" id="logo">Robotic Telepresence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/Robotic-Telepresence/" id="subtitle">Electronic Engineering BEng final project</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/">Home</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/Project-objectives">Project Objectives</a>
+        
+          <a class="main-nav-link" href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1">Gantt Chart</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://celynwalters.github.io/Robotic-Telepresence"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-Named-shared-memory-Episode-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/12/03/Named-shared-memory-Episode-2/">Named shared memory: Episode 2</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/12/03/Named-shared-memory-Episode-2/" class="article-date">
+  <time datetime="2016-12-03T01:07:37.000Z" itemprop="datePublished">Sat 03/12/2016 01:07</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>I did a lot of looking around, and I could find very occasional signs that some people had been able to get named shared memory working with Unity.<br>Eventually I found <a href="http://answers.unity3d.com/questions/1249732/how-to-use-shared-memory-in-unity.html" target="_blank" rel="external">this forum question</a> which showed some example code for Unity C# and other C++.<br>The C++ code I could tell had been adapted from the <a href="https://msdn.microsoft.com/en-us/library/aa366551.aspx" target="_blank" rel="external">MSDN page</a> I got mine from, which had been adapted.<br>I adapted it some more to fit the other end and made it into a Unity Script.</p>
+<p>After learning I needed to use unsafe operations, I found out that to enable them you had to add a file in yout assets called <code>smcs.rsp</code>.<br>This turned out to be different if you enabled the full .NET 2.0 API compatibility level, being <code>gmcs.rsp</code>.<br>This also turned out to be depreceated, so I used <code>mcs.rsp</code> instead.<br>It should contain the line:<br><figure class="highlight plain"><figcaption><span>mcs.rsp</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-unsafe</div></pre></td></tr></table></figure></p>
+<p>I couldn’t get the ends to connect. I tried removing the <code>Global\\</code> from the file mapping name. Now administrator access is no longer required.<br>In the console, It showed signs of life at the other end:<br><img src="/Robotic-Telepresence/2016/12/03/Named-shared-memory-Episode-2/Life.png" alt="Although I haven&#39;t even checked what data transfer is supposed to be happening"></p>
+<p>I’ve somehow broken my Visual Studio projects which use the ROS library.<br>Including <code>&lt;windows.h&gt;</code> somehow conflicts with <code>&quot;ros.h&quot;</code>.<br>I <em>need</em> <code>windows.h</code> for <code>CreateFileMapping()</code>.<br>Fixed!<br>The solution was: <code>windows.h</code> was #defining <code>ERROR</code>, which was being used in <code>ros/Log.h</code>.<br>Adding a <code>#undef ERROR</code> at the start made it build.</p>
+<h4 id="Putting-ROS-messages-into-shared-memory"><a href="#Putting-ROS-messages-into-shared-memory" class="headerlink" title="Putting ROS messages into shared memory"></a>Putting ROS messages into shared memory</h4><p>The example uses <code>CopyMemory()</code> to put a string into shared memory.<br>I’ll need to know the size of the message.<br>Looking at <code>JointState.h</code> in the ROS library in Windows, I was able to see how the joint messages were built and how to determine their sizes</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/03/Named-shared-memory-Episode-2/" data-id="cizvl9s7m000qcs9raluiool8" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Named-shared-memory" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/12/02/Named-shared-memory/">Named shared memory</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/12/02/Named-shared-memory/" class="article-date">
+  <time datetime="2016-12-02T10:56:53.000Z" itemprop="datePublished">Fri 02/12/2016 10:56</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>There seem to be more easily found resources for these.</p>
+<ul>
+<li>Memory is broken into pages, so buffer space is rounded to the next available size</li>
+</ul>
+<p>In order for the data to be accessible globally, you must set the <code>Global</code> flag in its name:<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">TCHAR szName[] = TEXT(<span class="string">"Global\\MyFileMappingObject"</span>);</div></pre></td></tr></table></figure></p>
+<p>This requires Administrator privileges (<code>SeCreateGlobalPrivilege, SE_CREATE_GLOBAL_NAME</code>).<br>Running Visual Studio as administrator is supposed to make it so that any program run in the debugger is also run with privileges.<br>This was true, as the return value from <code>GetLastError()</code> went from <code>5</code> (cannot access) to <code>2</code> (no idea).<br>I couldn’t solve this, but running the built executables outside as administrator worked as expected.</p>
+<p>While I’m on the subject of learning how Visual Studio actually works, I’ve repackaged and renamed each project and put them all into one solution, which accesses a single instance of the built <code>ros_lib</code> library for <code>rosserial_windows</code>.</p>
+<p>I was just trying to create a file mapping in a Unity script…</p>
+<blockquote>
+<p>error CS0234: The type or namespace name <code>MemoryMappedFiles</code> does not exist in the namespace <code>System.IO</code></p>
+</blockquote>
+<p>System.IO.MemoryMappedFiles is only available in .NET 4.0 or later, and Unity is still using .NET 3.5 (.NET 2.0 CLR), not likely to be updated for a long time. Bummer.</p>
+<p>It looks like there could be a wrapper, <a href="https://github.com/tomasr/filemap/tree/master" target="_blank" rel="external">filemap</a>.<br>I got it to compile, and I’m left with a <code>.dll</code>. I’m not sure how to use it (the repository has no documentation) and I’m pretty sure I’ll have to edit it to make it compaitble with Unity so I’m not very hopeful.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/02/Named-shared-memory/" data-id="cizvl9s7p000rcs9r2h2d8llz" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Named-pipe-dll" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/12/01/Named-pipe-dll/">Named pipe dll</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/12/01/Named-pipe-dll/" class="article-date">
+  <time datetime="2016-12-01T20:56:37.000Z" itemprop="datePublished">Thu 01/12/2016 20:56</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>I had to enable CLR support for the <code>System</code> namespaces.</p>
+<blockquote>
+<p>Project &gt; rosserial_unity Properties &gt; Configuration Properties &gt; General &gt; Project Defaults &gt; Common Language Runtime Support &gt; enable /clr</p>
+</blockquote>
+<p>I didn’t know that Unity keeps a track of all global classes in the assets (seems obvious now). I moved the StreamString class definition to a separate script.<br>I moved the pipe server code into a DLL. It compiled and could run, but caused Unity to hang.<br>I moved the while loop out of the <code>Main()</code> function and put it into a separate function which is to be called by Unity’s <code>Update()</code>.<br>This meant I had to make <code>PipeServer::server</code> global, which caused <code>server == null</code> to happen in some places.</p>
+<p>It took a while! I ended up with this structure:</p>
+<ul>
+<li>A <code>.dll</code> to open a named pipe called “rospipe”. When the pipe is connected to, it would send “Hello Unity”, and then close it.</li>
+<li>A <code>GameObject</code> to call the <code>.dll</code> and open the pipe. Once it’s confirmed to be open, it enables the next <code>GameObject</code>:</li>
+<li>A <code>GameObject</code> which connects to the pipe “rospipe” if it exists, and listens for messages.</li>
+</ul>
+<p><img src="/Robotic-Telepresence/2016/12/01/Named-pipe-dll/Debug Log.png" alt="Proof. The string exists only in the .dll, and no other programs were running"></p>
+<p>Maybe I will have to use <code>WaitNamedPipe</code> (<a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa365800.aspx" target="_blank" rel="external">MSDN</a>)? When trying to debug, I got an error in Visual Studio:</p>
+<blockquote>
+<p>Exception thrown: ‘System.IO.IOException’ in System.Core.dll<br>An unhandled exception of type ‘System.IO.IOException’ occurred in System.Core.dll<br>Additional information: All pipe instances are busy.</p>
+</blockquote>
+<p>I also added a <code>close_pipe</code> function, now that we don’t want to necessarily close straight after initilasing. It should trigger when I stop the game using the <code>OnApplicationQuit()</code> callback.<br>It doesn’t seem to work, though.<br>Every second time I try to run the game, Unity crashes.<br>I’m using <code>PipeServer.Close()</code> which runs, but <code>PipeServer.Disconnect()</code> and <code>PipeDispose.()</code> crashed things immediately.<br>After a long time, I realised it was caused by the <code>.dll</code> having <code>close_pipe()</code> as a <code>void</code> return, but Unity had it as a <code>bool</code> return. D’Oh!<br>Now I can run the code a few times before crashing. Wow!</p>
+<p>I’ve set the PipeDirection in the <code>.dll</code> to ‘Out’ rather than 2-way.<br>It took me too long to realise I had to change the other end to ‘In’…</p>
+<h3 id="Oops"><a href="#Oops" class="headerlink" title="Oops."></a>Oops.</h3><p>As educational this was, I’m trying to write values which overwrite the old ones, regardless of whether they were read or not.<br>The data in named pipes MUST be read on the receiving end in the same order, FIFO.<br>I have, however, gained a much better understanding of how all of this works, and some new keywords for Googling.<br><a href="https://msdn.microsoft.com/en-us/library/aa365574%28v=vs.85%29.aspx" target="_blank" rel="external">Here</a> is a list of IPC (inter-process communication) methods provided by Windows.<br>I’ll choose one of these.</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>Info</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><del>Clipboard</del></td>
+<td>The user might want to use this/overwrite the data</td>
+</tr>
+<tr>
+<td><del>COM</del></td>
+<td>This looks like it is built for other purposes, it uses ActiveX Object Services</td>
+</tr>
+<tr>
+<td>Data Copy</td>
+<td></td>
+</tr>
+<tr>
+<td><del>DDE</del></td>
+<td>“Not as efficient as newer technologies”. We need this to be as fast as possible</td>
+</tr>
+<tr>
+<td><strong>File Mapping</strong></td>
+<td>This sounds good. Programs treat the memory as their own. You can even do <em>named</em> file mapping. Many other IPC methods are based on this so generally have poorer performance</td>
+</tr>
+<tr>
+<td><del>Mailslots</del></td>
+<td>Messages are short (400 bytes) and are FIFO</td>
+</tr>
+<tr>
+<td><del>Pipes</del></td>
+<td>As mentioned, is strictly FIFO</td>
+</tr>
+<tr>
+<td>RPC</td>
+<td></td>
+</tr>
+<tr>
+<td>Windows Sockets</td>
+<td>Intended for network communications, can be TCP or UDP. Not so high performance</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Named-pipe-dll/" data-id="cizvl9s7i000mcs9rylc1hxgs" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Data-to-Unity-from-RAM" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/">Data to Unity from RAM</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/" class="article-date">
+  <time datetime="2016-12-01T17:18:29.000Z" itemprop="datePublished">Thu 01/12/2016 17:18</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>I started by copying code from the “rosserial_hello_world” and “rosserial_unity” (<code>.dll</code> code) solutions into a new solution.</p>
+<p>I’m looking up how to create shared memory in Windows for sharing the data.<br>You can’t feasibly do this in a <code>.dll</code> because the space would have to be initialised statically.<br>The way to do this seems to be using <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa366551.aspx" target="_blank" rel="external">Named Shared Memory</a>.<br>Unfortunately, it seems that I might still have to worry about marshal functions or ‘unsafe’ code because of the C# in Unity.<br>An alternative could be <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa365590.aspx" target="_blank" rel="external">Named Pipes</a>.</p>
+<h4 id="Named-pipes"><a href="#Named-pipes" class="headerlink" title="Named pipes"></a>Named pipes</h4><p>I made <em>another</em> visual studio solution to test this, and created an empty <code>GameObject</code> in Unity with a new script for the other end.<br>In order for some classes to be valid such as <code>System.IO.Pipes</code>, I changed the project settings to handle the full .Net 2.0:</p>
+<blockquote>
+<p>Edit &gt; Project Settings &gt; Player &gt; Other Settings &gt; Optimization &gt; Api Compitbility Level &gt; “.NET 2.0”<br>(rather than “.NET 2.0 Subset”)</p>
+</blockquote>
+<p>For the Unity side, I found some recent example code on the <a href="http://answers.unity3d.com/questions/483123/how-do-i-get-named-pipes-to-work-in-unity.html#answer-1272634" target="_blank" rel="external">Unity3D forums</a>.<br>It pointed me to the <a href="https://msdn.microsoft.com/en-us/library/bb546085%28v=vs.110%29.aspx" target="_blank" rel="external">“How to use names pipes for network interprocess communication” MSDN page</a>.<br>I copied the C++ code from the example just to see if it would compile, or work in any way.<br>I made sure that the <code>NamedPipeClientStream</code> for each end had the same name (“testpipe” for now).<br>At first, I was successful, except Unity got stuck in the starting state, and became unresponsive and needed to be forced quit.<br><img src="/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/Connection.png" alt="The &#39;PipeDataSend&#39; Windows console application, after running Unity"><br>With a bit of tweaking in the Unity script, I was able to get the expected message into Unity.<br>I had to cut out a <code>getPipedData()</code> function, which sounds like it’s defeating the point.<br>However, the functionality is repeated exactly in the <code>Setup()</code> of the Unity script, which works.<br><img src="/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/Success.png" alt="The &quot;I am the one true server&quot; string was defined in the &#39;PipeDataSend&#39; Windows console application"><br><figure class="highlight cs"><figcaption><span>The part of PipeDataReceive.cs which was commented out</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">getPipedData</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="comment">//UnityEngine.Debug.Log("Thread Called - Start");</span></div><div class="line">	StreamString ss = <span class="keyword">new</span> StreamString(pipeClient);</div><div class="line">	UnityEngine.Debug.Log(ss.ReadString());</div><div class="line">	<span class="comment">//UnityEngine.Debug.Log("Thread Called - End");</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>I noticed afterwards that after Unity gets stuck, closing the console applications un-freezes Unity which returns with:</p>
+<blockquote>
+<p>OverflowException: Number overflow.<br>StreamString.ReadString() (at Assets/_Scripts/PipeDataReceive.cs:51)<br>PipeDataReceive.getPipedData() (at Assets/_Scripts/PipeDataReceive.cs:33)<br>PipeDataReceive.Update() (at Assets/_Scripts/PipeDataReceive.cs:27)</p>
+</blockquote>
+<p>I lowered the threads from 4 to 1.<br>I had missed the part about reading from and writing to a file for example purposes, so I stripped it out.<br>The <code>PipeDataSend</code> and <code>PipeDataReceive</code> files are about as short and compact as I can make them now.<br>They work well. The <code>PipeDataSend</code> waits for a connection. As soon as <code>PipeDataReceive</code> is started, <code>PipeDataSend</code> send over “Hello Unity!” and then finishes.<br>However, you must not stop the Unity game before the pipe server or it will crash…</p>
+<p>Next step: See how this performs after integrating with <code>rosserial_windows</code> in Unity.<br><figure class="highlight cpp"><figcaption><span>PipeDataSend.cpp</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#using <span class="meta-string">&lt;System.Core.dll&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> System;</div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> System::IO;</div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> System::IO::Pipes;</div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> System::Text;</div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> System::Threading;</div><div class="line"></div><div class="line"><span class="keyword">public</span> ref <span class="keyword">class</span> StreamString &#123;</div><div class="line"><span class="keyword">private</span>:</div><div class="line">	Stream^ ioStream;</div><div class="line">	UnicodeEncoding^ streamEncoding;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">	StreamString(Stream^ ioStream) &#123;</div><div class="line">		<span class="keyword">this</span>-&gt;ioStream = ioStream;</div><div class="line">		streamEncoding = gcnew UnicodeEncoding();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	String^ ReadString() &#123;</div><div class="line">		<span class="keyword">int</span> len;</div><div class="line"></div><div class="line">		len = ioStream-&gt;ReadByte() * <span class="number">256</span>;</div><div class="line">		len += ioStream-&gt;ReadByte();</div><div class="line">		<span class="built_in">array</span>&lt;Byte&gt;^ inBuffer = gcnew <span class="built_in">array</span>&lt;Byte&gt;(len);</div><div class="line">		ioStream-&gt;Read(inBuffer, <span class="number">0</span>, len);</div><div class="line"></div><div class="line">		<span class="keyword">return</span> streamEncoding-&gt;GetString(inBuffer);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">int</span> <span class="title">WriteString</span><span class="params">(String^ outString)</span> </span>&#123;</div><div class="line">		<span class="built_in">array</span>&lt;Byte&gt;^ outBuffer = streamEncoding-&gt;GetBytes(outString);</div><div class="line">		<span class="keyword">int</span> len = outBuffer-&gt;Length;</div><div class="line">		<span class="keyword">if</span> (len &gt; UInt16::MaxValue)</div><div class="line">			len = (<span class="keyword">int</span>)UInt16::MaxValue;</div><div class="line">		ioStream-&gt;WriteByte((Byte)(len / <span class="number">256</span>));</div><div class="line">		ioStream-&gt;WriteByte((Byte)(len &amp; <span class="number">255</span>));</div><div class="line">		ioStream-&gt;Write(outBuffer, <span class="number">0</span>, len);</div><div class="line">		ioStream-&gt;Flush();</div><div class="line"></div><div class="line">		<span class="keyword">return</span> outBuffer-&gt;Length + <span class="number">2</span>;</div><div class="line">	&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">public</span> ref <span class="keyword">class</span> PipeServer &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span><span class="params">()</span> </span>&#123;</div><div class="line">		Console::WriteLine(<span class="string">"Pipe server started"</span>);</div><div class="line">		Console::WriteLine(<span class="string">"Waiting for client connection..."</span>);</div><div class="line">		Thread^ server = gcnew Thread(gcnew ThreadStart(&amp;ServerThread));</div><div class="line">		server-&gt;Start();</div><div class="line">		Thread::Sleep(<span class="number">250</span>);</div><div class="line">		<span class="keyword">while</span> (<span class="literal">true</span>) &#123;</div><div class="line">			<span class="keyword">if</span> (server != <span class="literal">nullptr</span>) &#123;</div><div class="line">				<span class="comment">// Check if it has gone. If so, remove it.</span></div><div class="line">				<span class="keyword">if</span> (server-&gt;Join(<span class="number">250</span>)) &#123;</div><div class="line">					Console::WriteLine(<span class="string">"Server thread finished."</span>, server-&gt;ManagedThreadId);</div><div class="line">					server = <span class="literal">nullptr</span>;</div><div class="line">					<span class="keyword">break</span>;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		Console::WriteLine(<span class="string">"Finished."</span>);</div><div class="line">	&#125;</div><div class="line"><span class="keyword">private</span>:</div><div class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">ServerThread</span><span class="params">()</span> </span>&#123;</div><div class="line">		NamedPipeServerStream^ pipeServer = gcnew NamedPipeServerStream(<span class="string">"rospipe"</span>, PipeDirection::InOut);</div><div class="line"></div><div class="line">		<span class="comment">// Wait for a client to connect</span></div><div class="line">		pipeServer-&gt;WaitForConnection();</div><div class="line"></div><div class="line">		Console::WriteLine(<span class="string">"Client connected"</span>);</div><div class="line">		<span class="comment">// Do my data transfer here!</span></div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			StreamString^ ss = gcnew StreamString(pipeServer);</div><div class="line"></div><div class="line">			ss-&gt;WriteString(<span class="string">"Hello Unity!"</span>);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">catch</span> (IOException^ e) &#123;</div><div class="line">			Console::WriteLine(<span class="string">"ERROR: &#123;0&#125;"</span>, e-&gt;Message);</div><div class="line">		&#125;</div><div class="line">		pipeServer-&gt;Close();</div><div class="line">	&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	PipeServer::Main();</div><div class="line">	Console::WriteLine(<span class="string">"\nPlease close this window."</span>);</div><div class="line">	<span class="keyword">while</span> (<span class="number">1</span>) &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight cs"><figcaption><span>PipeDataReceive.cs</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> UnityEngine;</div><div class="line"><span class="keyword">using</span> System.Collections;</div><div class="line"><span class="keyword">using</span> System.IO;</div><div class="line"><span class="keyword">using</span> System.IO.Pipes;</div><div class="line"><span class="keyword">using</span> System.Threading;</div><div class="line"><span class="keyword">using</span> System.Text;</div><div class="line"><span class="keyword">using</span> System;</div><div class="line"><span class="keyword">using</span> System.Security.Principal;</div><div class="line"><span class="keyword">using</span> System.Diagnostics;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">PipeDataReceive</span> : <span class="title">MonoBehaviour</span> &#123;</div><div class="line">	<span class="keyword">public</span> NamedPipeClientStream pipeClient = <span class="keyword">new</span> NamedPipeClientStream(<span class="string">"."</span>, <span class="string">"rospipe"</span>, PipeDirection.InOut, PipeOptions.Asynchronous);</div><div class="line">	<span class="keyword">public</span> StreamString ss;</div><div class="line">	Thread readThread;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Start</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		UnityEngine.Debug.Log(<span class="string">"Connecting to pipe server..."</span>);</div><div class="line">		pipeClient.Connect();</div><div class="line">		Thread.Sleep(<span class="number">250</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Update</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		getPipedData();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">getPipedData</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		StreamString ss = <span class="keyword">new</span> StreamString(pipeClient);</div><div class="line">		UnityEngine.Debug.Log(<span class="string">"piped: "</span>+ss.ReadString());</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">StreamString</span> &#123;</div><div class="line">	<span class="keyword">private</span> Stream ioStream;</div><div class="line">	<span class="keyword">private</span> UnicodeEncoding streamEncoding;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">StreamString</span>(<span class="params">Stream ioStream</span>) </span>&#123;</div><div class="line">		<span class="keyword">this</span>.ioStream = ioStream;</div><div class="line">		streamEncoding = <span class="keyword">new</span> UnicodeEncoding();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">string</span> <span class="title">ReadString</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="keyword">int</span> len;</div><div class="line">		len = ioStream.ReadByte() * <span class="number">256</span>;</div><div class="line">		len += ioStream.ReadByte();</div><div class="line">		<span class="keyword">byte</span>[] inBuffer = <span class="keyword">new</span> <span class="keyword">byte</span>[len];</div><div class="line">		ioStream.Read(inBuffer, <span class="number">0</span>, len);</div><div class="line">		<span class="keyword">string</span> outString = streamEncoding.GetString(inBuffer);</div><div class="line"></div><div class="line">		<span class="keyword">return</span> outString;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">WriteString</span>(<span class="params"><span class="keyword">string</span> outString</span>) </span>&#123;</div><div class="line">		<span class="keyword">byte</span>[] outBuffer = streamEncoding.GetBytes(outString);</div><div class="line">		<span class="keyword">int</span> len = outBuffer.Length;</div><div class="line">		<span class="keyword">if</span> (len &gt; UInt16.MaxValue)</div><div class="line">			len = (<span class="keyword">int</span>)UInt16.MaxValue;</div><div class="line">		ioStream.WriteByte((<span class="keyword">byte</span>)(len / <span class="number">256</span>));</div><div class="line">		ioStream.WriteByte((<span class="keyword">byte</span>)(len &amp; <span class="number">255</span>));</div><div class="line">		ioStream.Write(outBuffer, <span class="number">0</span>, len);</div><div class="line">		ioStream.Flush();</div><div class="line"></div><div class="line">		<span class="keyword">return</span> outBuffer.Length + <span class="number">2</span>;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/" data-id="cizvl9s6w0006cs9rfeh41i8v" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Project-meeting-6" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/12/01/Project-meeting-6/">Project meeting 6</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/12/01/Project-meeting-6/" class="article-date">
+  <time datetime="2016-12-01T16:57:35.000Z" itemprop="datePublished">Thu 01/12/2016 16:57</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <h4 id="Discussion-about-the-previous-week’s-work"><a href="#Discussion-about-the-previous-week’s-work" class="headerlink" title="Discussion about the previous week’s work"></a>Discussion about the previous week’s work</h4><p>I tried to explain the problems I was having with <code>.dlls</code>.<br>I had some potentially useful tips about how to get them to work with arrays. I should look into <a href="https://msdn.microsoft.com/en-us/library/system.runtime.interopservices.marshal.aspx" target="_blank" rel="external">marshal functions</a> and <a href="https://msdn.microsoft.com/en-us/library/04fy9ya1.aspx" target="_blank" rel="external">interop</a>.<br>To analyse the extent of ‘name mangling’, I can put the <code>.dll</code> through <a href="http://www.dependencywalker.com/" target="_blank" rel="external">Dependency Walker</a>.<br>I came across these in the past week, I think I should have more experience and knowledge with C# besides Unity scripting for this to be successful.</p>
+<p>We have decided it would be much better to move away from compiling <code>.dlls</code> as Unity plugins, and instead use a compiled console application in Windows to receive the messages into RAM, and get Unity to poll the most recent values.<br>I have been talking to James, who is trying to implement UDP communication in Unity with ROS.</p>
+<p>In terms of the networking layout, the VR PC will be subscribing directly from Baxter (who has an internal ROS publisher) and publishing to the linux computer connected to Baxter, which will be calculating the inverse kinematics from the hand target positions.<br>We thing a position and a pose is required for this, so I will need the quaternions of the rotations of each hand.<br>Unity works with quaternions so this doesn’t sound too much of a challenge, but to start with I might well fix the pose to have the hands facing forwards.</p>
+<p>I wasn’t able to filter the joints that were in the public <code>urdf</code> and those in the <code>rosbag</code>. Maybe Baxter’s urdf is a previous verion?<br>I was also strange that the gripper messages were arriving separately.</p>
+<h4 id="Interim-report"><a href="#Interim-report" class="headerlink" title="Interim report"></a>Interim report</h4><p>The same examiner(s) who marks this will mark the final dissertation.<br>Therefore, don’t commit to work which is unlikely to come to fruition. Light exaggeration could back me into a corner.<br>Also, there will be some overlap between the interim report and the final submission. They have to exist as separate entities, but maybe not a total copy.</p>
+<p>I have two weeks left before Christmas. If I want any useful feedback (I do) I should have a report structure by <a href="/Robotic-Telepresence/2016/12/13/Project-meeting-7/">next meeting</a>.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Project-meeting-6/" data-id="cizvl9s890010cs9rdhp1zrcl" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Rosbag-communication" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/11/28/Rosbag-communication/">Rosbag communication</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/11/28/Rosbag-communication/" class="article-date">
+  <time datetime="2016-11-28T15:11:18.000Z" itemprop="datePublished">Mon 28/11/2016 15:11</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>I’ll be trying to get full rosbag communication into Unity, and communication in the other direction too.<br>Ideally this will be configurable inside Unity, I’m not sure how dynamic I can/need to make this.<br>The first step is to get virtual Baxter to move as the bag plays.</p>
+<p>From the <a href="http://wiki.ros.org/Names" target="_blank" rel="external">documentation</a>, ROS topic names can be composed of the following characters: <code>0-9</code>, <code>a-z</code>, <code>A-Z</code>, <code>_</code>, <code>/</code>.<br>So long as I use a different delimiter in the message formatting for my Unity interface this won’t cause problems.<br>I’d like to keep this concise to minimize latency and parsing effort.<br>For now, I’m transmitting the names in the same order as they are in the bag (alphabetical) next to their values, separated with <code>=</code>.</p>
+<p>I set up a post-build task to copy the resulting <code>.dll</code> to the <code>plugins/</code> folder in the Unity assets.<br>I’m still getting lots of ‘sync lost’ messages, one every second.<br>It may be something to do with <code>nh_spinOnce()</code>, but I should be calling it every Unity loop.<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[ WARN] [1480349686.965718293]: Sync with device lost.</div></pre></td></tr></table></figure></p>
+<p>There doesn’t seem to be a whole lot of error checking.<br>For instance, trying to read an <code>int</code> return value from a <code>.dll</code> function which has a void return type happily works.<br>If the socket connection cannot be made, it’s easy to create a block which will not allow the Unity application to start, and it becomes unresponsive and has to be forced to quit.</p>
+<p>The hard part is that the data from the <code>rosbag</code> is being received in a callback.<br>The way to get data out from the <code>.dll</code> and into Unity seems to be using return values from functions which are called in a Unity script.<br>I could make a set of variables which are updated with the most recent values.<br>This would be OK in the way that the model only has to be up to date and doesn’t need to show every position transmitted, except I would need to know the variables I am expecting before compiling the <code>.dll</code>.<br>Alternatively, I could preallocate a large number of variables to fill in, and the Unity client would know what is coming and in what order because of the imported robot <code>URDF</code>.<br>For now I will hard-code it and maybe ask in the project meeting.</p>
+<p>I can’t pass strings out of the <code>.dll</code>. This seems to be misunderstanding <code>.dlls</code> or Unity.<br>I’m trying to think of a way to get the data out.<br>I could provide pointers to data from Unity into the <code>.dll</code> which match up with the subscription, but I still need a better callback.<br>At the end of <a href="http://wiki.ros.org/rosserial_windows/Tutorials/Receiving%20Messages" target="_blank" rel="external">this tutorial</a> it mentions:</p>
+<blockquote>
+<p>It’s possible to subclass the Subscriber class for a more object-oriented approach. In that case, instead of registering with the call back above simply instantiate the new class and pass that in to the subscribe call.</p>
+</blockquote>
+<p>This sounds more like what I want?<br>I’ll try with <code>rosserial_hello_world</code> first.<br>I’ve replaced all the <code>printf</code> functions with a better C++ approach (<code>cout</code> streams).</p>
+<p>I couldn’t work out what the page meant.<br>I tried creating a dictionary of joints and angles in Unity and feeding that into the <code>.dll</code>, but I needed to ‘use’ <code>System.Collections.Generic</code> and I couldn’t work out how to do that either.<br>I managed to pass a string as an argument into a <code>.dll</code> function, by casting <code>char*</code>:<br><figure class="highlight cs"><figcaption><span>Unity script</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line">[DllImport (<span class="string">"rosserial_unity"</span>)]</div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">extern</span> <span class="keyword">double</span> <span class="title">getValue</span>(<span class="params"><span class="keyword">string</span> key</span>)</span>;</div><div class="line">...</div></pre></td></tr></table></figure></p>
+<figure class="highlight cpp"><figcaption><span>dll code</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line"><span class="function">DLLEXPORT <span class="keyword">double</span> <span class="title">getValue</span><span class="params">(<span class="keyword">char</span>* key)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> ((<span class="built_in">string</span>)key == <span class="string">"head_pan"</span>)</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>Now I will go through the robot hierarchy in Unity, filter out the <code>GameObjects</code> which are tagged “URDF joints”, sort them alphabetically and then request their values from the socket stream.<br>Unfortunately, the list of <code>GameObjects</code> is much longer (48) than those contained within the stream (18), and I can’t differentiate.<br>I will either have to check one by one somehow or find out what makes the ones in the <code>rosbag</code> special.<br>I’ll just hard code it for now…<br>This is difficult too.<br>There is no pattern to the messages with 18 joints, or the ones which just contain a right or left gripper.</p>
+<p>It’s pretty annoying having to restart Unity every time I’ve updated the <code>.dll</code>.</p>
+<h4 id="Some-success"><a href="#Some-success" class="headerlink" title="Some success"></a>Some success</h4><p>I resorted to the most god-awful code, but I’ve finally got joint angles into Unity.<br>This will DEFINITELY need changing, but I can progress with making sure that I have the update rate etc.</p>
+<p>I’ve managed to get <em>some</em> form of the ros bag onto virtual Baxter.<br>The ‘sync lost’ messages have stopped, I’m not sure why, because the update loop isn’t going much faster or slower than before.<br>I’ll have to set additional attributes to each link during the import to record which axis rotates, and the effort limits.</p>
+<p>I’ve made a script with private variables for just axis to start with, and modified the import script to attach it to every joint.<br>I’ll also have to do the same to the origin values to keep a reference to them.<br>I also attach the <code>rosserial</code> script to the root by default.</p>
+<p>After some playing around with rotations, I got it to work:<br><div class="video-container"><iframe src="//www.youtube.com/embed/0TW5gbRr-oQ" frameborder="0" allowfullscreen></iframe></div></p>
+<p>The jerkiness can be down to many things:</p>
+<ul>
+<li>Only the most recent message is stored</li>
+<li>If that message was a gripper, the rest of the values are empty</li>
+<li>The messages are only read every Unity frame at the moment, probably 60FPS</li>
+</ul>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/28/Rosbag-communication/" data-id="cizvl9s8l001ecs9rk8v3cggz" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Exploring-rosbags" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/11/23/Exploring-rosbags/">Exploring rosbags</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/11/23/Exploring-rosbags/" class="article-date">
+  <time datetime="2016-11-23T23:02:48.000Z" itemprop="datePublished">Wed 23/11/2016 23:02</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>In the <a href="/Robotic-Telepresence/2016/11/22/Project-meeting-5/">last project meeting</a>, we recorded about 60 seconds worth of Baxter waving his arms around and saved it as a rosbag.<br>The uncompressed version is 8.5GB, and to view it in RViz for example will probably require it to be loaded into RAM.<br>Oscar recommended using a RAMdisk to speed things up.<br>Since I have <em>too much</em> RAM (64GB), I thought it would be easier to just put the whole Ubuntu virtual machine into the RAMdisk.</p>
+<p>First, make sure roscore is running.<br>In each separate terminal, I remember I have to source the <code>workspace/devel/setup.zsh</code> file.<br><figure class="highlight zsh"><figcaption><span>Command line 1</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> ~/catkin_ws</div><div class="line">$ . ./devel/setup.zsh</div><div class="line">$ roscore</div></pre></td></tr></table></figure></p>
+<p>From here, I can do<br><figure class="highlight zsh"><figcaption><span>Command line 2</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">$ rosbag info ~/Downloads/baxter.bag</div><div class="line">path:        /home/celynwalters/Downloads/baxter.bag</div><div class="line">version:     2.0</div><div class="line">duration:    1:03s (63s)</div><div class="line">start:       Nov 22 2016 16:49:25.44 (1479833365.44)</div><div class="line">end:         Nov 22 2016 16:50:28.49 (1479833428.49)</div><div class="line">size:        7.9 GB</div><div class="line">messages:    37025</div><div class="line">compression: none [866/866 chunks]</div><div class="line">types:       octomap_msgs/Octomap    [9a45536b45c5e409<span class="built_in">cd</span>49f04bb2d9999f]</div><div class="line">             sensor_msgs/JointState  [3066dcd76a6cfaef579bd0f34173e9fd]</div><div class="line">             sensor_msgs/PointCloud2 [1158d486dd51d683ce2f1be655c3c181]</div><div class="line">             tf2_msgs/TFMessage      [94810edda583a504dfda3829e70d7eec]</div><div class="line">topics:      /camera/depth_registered/points     865 msgs    : sensor_msgs/PointCloud2</div><div class="line">             /octomap_full                        55 msgs    : octomap_msgs/Octomap   </div><div class="line">             /robot/joint_states               24149 msgs    : sensor_msgs/JointState  (2 connections)</div><div class="line">             /tf                               11954 msgs    : tf2_msgs/TFMessage      (7 connections)</div><div class="line">             /tf_static                            2 msgs    : tf2_msgs/TFMessage      (2 connections)</div></pre></td></tr></table></figure></p>
+<p>Great, I can see all of the ROS topics it contains.<br>I know from my <code>rosserial</code> experiments that I can listen to a topic using <code>rostopic echo</code> even if it isn’t visible yet.<br>In a separate shell I did this for the joint angles as this is the ‘easiest’ to integrate into Unity for now.<br><figure class="highlight zsh"><figcaption><span>Command line 3</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ rostopic <span class="built_in">echo</span> /robot/joint_states</div></pre></td></tr></table></figure></p>
+<p>Back in this shell, I played back the bag:<br><figure class="highlight zsh"><figcaption><span>Command line 2</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ rosbag play ~/Downloads/baxter.bag</div><div class="line">[ INFO] [1479942083.502475169]: Opening /home/celynwalters/Downloads/baxter.bag</div><div class="line"></div><div class="line">Waiting 0.2 seconds after advertising topics... done.</div><div class="line"></div><div class="line">Hit space to toggle paused, or <span class="string">'s'</span> to step.</div><div class="line"> [RUNNING]  Bag Time: 1479833369.512015   Duration: 4.075116 / 63.055731</div></pre></td></tr></table></figure></p>
+<p>This gives a very fast output of each frame for each topic:<br><figure class="highlight zsh"><figcaption><span>Command line 3</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">header: </div><div class="line">  seq: 387581</div><div class="line">  stamp: </div><div class="line">    secs: 1479833365</div><div class="line">    nsecs: 441285362</div><div class="line">  frame_id: <span class="string">''</span></div><div class="line">name: [<span class="string">'head_nod'</span>, <span class="string">'head_pan'</span>, <span class="string">'left_e0'</span>, <span class="string">'left_e1'</span>, <span class="string">'left_s0'</span>, <span class="string">'left_s1'</span>, <span class="string">'left_w0'</span>, <span class="string">'left_w1'</span>, <span class="string">'left_w2'</span>, <span class="string">'right_e0'</span>, <span class="string">'right_e1'</span>, <span class="string">'right_s0'</span>, <span class="string">'right_s1'</span>, <span class="string">'right_w0'</span>, <span class="string">'right_w1'</span>, <span class="string">'right_w2'</span>, <span class="string">'torso_t0'</span>]</div><div class="line">position: [0.0, 0.03029612056073692, -1.405126401703039, 1.2931458041874038, -0.04832039481839053, 0.030679615757708275, 1.5991749713705439, 1.3537380453088776, -0.4636456931383663, 1.647111870991963, 1.5945730290068876, -0.18676216092504913, 0.13537380453088776, -1.5872866202644318, 1.491029325824622, -0.9004467224887379, -12.565987119160338]</div><div class="line">velocity: [0.0, 0.003926990816250607, -0.009817477040626518, -0.005497787142750851, -0.005890486224375911, -0.00510508806112579, -0.012959069693627005, 0.003926990816250607, -0.01021017612225158, 0.011780972448751823, 0.01649336142825255, 0.0007853981632501215, 0.023561944897503646, -0.009032078877376396, -0.01531526418337737, -0.009817477040626518, 0.0]</div><div class="line">effort: [0.0, 0.0, -18.58, -0.312, 0.216, -7.88, 0.896, 0.2, 0.14, 21.096, 1.26, 1.088, -4.268, 0.828, -0.052, -0.036, -20.48]</div><div class="line">---</div><div class="line">header: </div><div class="line">  seq: 387582</div><div class="line">  stamp: </div><div class="line">    secs: 1479833365</div><div class="line">    nsecs: 451285944</div><div class="line">  frame_id: <span class="string">''</span></div><div class="line">name: [<span class="string">'head_nod'</span>, <span class="string">'head_pan'</span>, <span class="string">'left_e0'</span>, <span class="string">'left_e1'</span>, <span class="string">'left_s0'</span>, <span class="string">'left_s1'</span>, <span class="string">'left_w0'</span>, <span class="string">'left_w1'</span>, <span class="string">'left_w2'</span>, <span class="string">'right_e0'</span>, <span class="string">'right_e1'</span>, <span class="string">'right_s0'</span>, <span class="string">'right_s1'</span>, <span class="string">'right_w0'</span>, <span class="string">'right_w1'</span>, <span class="string">'right_w2'</span>, <span class="string">'torso_t0'</span>]</div><div class="line">position: [0.0, 0.03029612056073692, -1.4043594113090963, 1.2931458041874038, -0.04793689962141918, 0.03106311095467963, 1.5991749713705439, 1.3537380453088776, -0.464412683532309, 1.6455778902040776, 1.5934225434159734, -0.18561167533413506, 0.1357572997278591, -1.5869031250674606, 1.491029325824622, -0.9004467224887379, -12.565987119160338]</div><div class="line">velocity: [0.0, -0.0047123889795007284, 0.010995574285501701, 0.02120575040775328, -0.003926990816250607, 0.01688606050987761, -0.001570796326500243, -0.00039269908162506076, 0.006675884387626033, 0.014529866020127248, -0.006283185306000972, 0.01649336142825255, 0.02552544030562895, -0.0047123889795007284, 0.023169245815878585, 0.01021017612225158, 0.0]</div><div class="line">effort: [0.0, 0.0, -18.42, -0.248, 0.404, -7.912, 0.924, 0.216, 0.128, 20.932, 1.228, 1.184, -4.368, 0.816, -0.064, -0.028, -20.48]</div><div class="line">---</div><div class="line">...</div></pre></td></tr></table></figure></p>
+<p>I’m going to adapt the <code>rosserial_hello_world</code> code to subscribe instead of publish.<br>The <a href="http://wiki.ros.org/rosserial/Overview/Publishers%20and%20Subscribers" target="_blank" rel="external">documentation</a> says that you need to include the header file for the sort of message you want to use.<br>Thankfully, the built <code>lib/</code> folder on the windows side includes baxter’s message descriptions.<br>You then “create a function that returns void and takes a constant reference of your message type as its argument”.<br>“Then to actually setup the connection we have to create a statically allocated ros::Subscriber which is templated on your message type and call NodeHandle::subscribe within the setup() function”<br>Sounds easy enough…</p>
+<p>After I spent ages trying to make sense of the <code>baxter_core_msgs/JointCommand.h</code> header file, I eventually found out which messages to use.<br>To find out, play the <code>rosbag</code>, and in another shell do:<br><figure class="highlight zsh"><figcaption><span>Command line 3</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">$ rostopic list -v</div><div class="line"></div><div class="line">Published topics:</div><div class="line"> * /robot/joint_states [sensor_msgs/JointState] 1 publisher</div><div class="line"> * /camera/depth_registered/points [sensor_msgs/PointCloud2] 1 publisher</div><div class="line"> * /octomap_full [octomap_msgs/Octomap] 1 publisher</div><div class="line"> * /rosout [rosgraph_msgs/Log] 1 publisher</div><div class="line"> * /tf [tf2_msgs/TFMessage] 1 publisher</div><div class="line"> * /tf_static [tf2_msgs/TFMessage] 1 publisher</div><div class="line"> * /clock [rosgraph_msgs/Clock] 1 publisher</div><div class="line"> * /rosout_agg [rosgraph_msgs/Log] 1 publisher</div><div class="line"></div><div class="line">Subscribed topics:</div><div class="line"> * /rosout [rosgraph_msgs/Log] 1 subscriber</div></pre></td></tr></table></figure></p>
+<p>So actually, the joint angles use the <code>sensor_msgs/JointState</code> message,<br>I had to move some lines around, correct some typos, syntax errors etc. etc.<br>I wasn’t sure about printing actual joint angles yet, but I know I can print <code>position_length</code>, which presumably means how many joint positions there are.</p>
+<p>It worked! The screenshot (often…) shows there are 17 angles. This almost definitely corresponds to:</p>
+<ul>
+<li>14 arm joints (2x7)</li>
+<li>2 head joints</li>
+<li>1 torso joint</li>
+</ul>
+<p><img src="/Robotic-Telepresence/2016/11/23/Exploring-rosbags/Subscriber.png" alt="Left side is Ubuntu running ROS playing the Baxter rosbag, right side is Windows subscribing to it"><br>With a little more tweaking, and it’s actually pretty easy!<br>I can pull the names out and format it in any way I choose to suit my Unity needs.</p>
+<p><img src="/Robotic-Telepresence/2016/11/23/Exploring-rosbags/Named.png" alt="The &#39;1&#39; position_length messages are revealed to be for the grippers"></p>
+<p>Next stop, compiling this code into the Unity <code>.dll</code>, and then getting the joints to mirror the <code>rosbag</code>.<br>NICE.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/23/Exploring-rosbags/" data-id="cizvl9s700009cs9rv0l4r6pi" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Project-meeting-5" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/11/22/Project-meeting-5/">Project meeting 5</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/11/22/Project-meeting-5/" class="article-date">
+  <time datetime="2016-11-22T23:02:04.000Z" itemprop="datePublished">Tue 22/11/2016 23:02</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>I’m definitely working on the right track, but whenever I get asked specifics about my plans I come up blank.<br>It’s becoming increasingly clear that I need to update my Gantt chart! This will be done by next week I swear.</p>
+<p>I learned about the octree.<br>While the kinect only has a line-of-sight view of the world, the octree retains data of geometry which is obstructed.<br>This geometry can only be removed if it is confirmed to not be there anymore, at which point its probability of being there is lowered gradually.</p>
+<p>I filled out the health and safety forms for Baxter and the robot lab.<br>I should be able to go in and get some real experience with <code>ROS</code>.<br>(My swipe access might work now as well)</p>
+<p>The most useful thing for me to do now would be to see if I could get specific communication using <code>rosserial</code>, not just general Boolean confirmation that it’s happening.<br>We recorded Baxter waving his arms around for about 60 seconds.<br>This data was compiled into a <code>rosbag</code>, which supposedly can be swapped out for real data being streamed from Baxter with very little changes experienced.<br>In this <code>rosbag</code> we included:</p>
+<ul>
+<li>The joint angles.<br>This should plug in to the Unity project because I already have the URDF and virtual representation</li>
+<li>The point cloud data from the Kinect<br>I don’t know how to do this yet, but there has got to be ways to do it, I’m not too worried.</li>
+<li>The octrees<br>I’ll have to think about this, but I’m sure it will be possible somehow.<br>To use the <code>rosbags</code>, you can do<figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ rosbag (record | play) baxter.bag</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>It plays back in RViz fine. Lasts about 60 seconds.<br>We confirmed its integrity by transferring it to another computer and directly playing it back to Baxter.<br>Oscar will send me a dropbox link with the rosbag, it is quite large (~8.5GB) and we had trouble putting it on a USB stick (possibly because of the 4GB Fat32 filesize limit?)<br>Apparently a RAMdisk might be helpful for the rosbag.<br>If I need to translate coordinate frames relative to Baxter, the frame is ‘base’”?<br>I knew I wouldn’t remember everything but I know these things exist to ask about.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/22/Project-meeting-5/" data-id="cizvl9s8b0013cs9rm1dgdgg8" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+
+
+  <nav id="page-nav">
+    <a class="extend prev" rel="prev" href="/Robotic-Telepresence/page/3/">&laquo; Previous</a><a class="page-number" href="/Robotic-Telepresence/">1</a><a class="page-number" href="/Robotic-Telepresence/page/2/">2</a><a class="page-number" href="/Robotic-Telepresence/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/Robotic-Telepresence/page/5/">5</a><a class="page-number" href="/Robotic-Telepresence/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/Robotic-Telepresence/page/8/">8</a><a class="extend next" rel="next" href="/Robotic-Telepresence/page/5/">Next &raquo;</a>
+  </nav>
+
+</section>
+        <!-- MANUALLY ADDED FOR GANTT CHART -->
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Celyn Walters<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/Robotic-Telepresence/" class="mobile-nav-link">Home</a>
+  
+    <a href="/Robotic-Telepresence/Project-objectives" class="mobile-nav-link">Project Objectives</a>
+  
+    <a href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1" class="mobile-nav-link">Gantt Chart</a>
+  
+    <a href="/Robotic-Telepresence/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/Robotic-Telepresence/fancybox/jquery.fancybox.css">
+  <script src="/Robotic-Telepresence/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/Robotic-Telepresence/js/script.js"></script>
+
+  </div>
+</body>
+</html>

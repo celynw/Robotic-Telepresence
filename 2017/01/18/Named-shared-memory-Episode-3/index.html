@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="Robotic Telepresence">
 <meta property="og:description" content="Inter-process communicationFollowing the success of Named Shared Memory: Episode 2, it wasn’t too far to be able to see the message generated in one process in the Unity debug log.As long as it’s know">
 <meta property="og:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/18/Named-Shared-Memory-Episode-3/Message.png">
-<meta property="og:updated_time" content="2017-02-25T13:12:14.711Z">
+<meta property="og:updated_time" content="2017-03-02T22:09:04.204Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Named shared memory: Episode 3">
 <meta name="twitter:description" content="Inter-process communicationFollowing the success of Named Shared Memory: Episode 2, it wasn’t too far to be able to see the message generated in one process in the Unity debug log.As long as it’s know">
@@ -21,7 +21,7 @@
     <link rel="alternate" href="/atom.xml" title="Robotic Telepresence" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.ico">
+    <link rel="icon" href="/Robotic-Telepresence/favicon.ico">
   
   
     <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
@@ -56,7 +56,7 @@ ga('send', 'pageview');
       </h1>
       
         <h2 id="subtitle-wrap">
-          <a href="/Robotic-Telepresence/" id="subtitle">Year 3 project notes/blog</a>
+          <a href="/Robotic-Telepresence/" id="subtitle">Electronic Engineering BEng final project</a>
         </h2>
       
     </div>
@@ -108,7 +108,7 @@ ga('send', 'pageview');
   </div>
   <div class="article-entry" itemprop="articleBody">
     
-      <h3 id="Inter-process-communication"><a href="#Inter-process-communication" class="headerlink" title="Inter-process communication"></a>Inter-process communication</h3><p>Following the success of <a href="/Robotic-Telepresence/2016/12/03/Named-Shared-Memory-Episode-2/">Named Shared Memory: Episode 2</a>, it wasn’t too far to be able to see the message generated in one process in the Unity debug log.<br>As long as it’s known what data is expected at which offsets it can be reconstructed.<br>The only function data types available are:</p>
+      <h4 id="Inter-process-communication"><a href="#Inter-process-communication" class="headerlink" title="Inter-process communication"></a>Inter-process communication</h4><p>Following the success of <a href="/Robotic-Telepresence/2016/12/03/Named-Shared-Memory-Episode-2/">Named Shared Memory: Episode 2</a>, it wasn’t too far to be able to see the message generated in one process in the Unity debug log.<br>As long as it’s known what data is expected at which offsets it can be reconstructed.<br>The only function data types available are:</p>
 <blockquote>
 <ul>
 <li>Byte</li>
@@ -121,12 +121,12 @@ ga('send', 'pageview');
 <p>Luckily these can be cast to whatever you like.</p>
 <p><img src="/Robotic-Telepresence/2017/01/18/Named-Shared-Memory-Episode-3/Message.png" alt="Process writing the message can be started before or after Unity starts"></p>
 <p>I’ve had trouble casting to floats from Int32s.<br>I’ve come across ‘BitConverter.ToSingle’ which does the same task as the byte/float union in my console application.<br>Perhaps I could use a <code>.dll</code> after all.</p>
-<h3 id="Project-structure"><a href="#Project-structure" class="headerlink" title="Project structure"></a>Project structure</h3><p>I’ve decided to make the console application the smallest middle-man possible, so it will only transfer the data to the shared memory.<br>Any multithreading will be solely handled by Unity.<br>I’ve managed to get this working, but it has not reduced the time yet (still at ~19 seconds for a single frame).<br>I think this is because earlier it was reading from a stream, writing to another stream and having that stream being read which could pipeline.<br>Now it’s only doint the first read from a stream.<br>I will see what it’s like by combining the <code>NamedSharedMemory</code> project and the <code>rosserial</code> projects, cutting out any streams.</p>
+<h4 id="Project-structure"><a href="#Project-structure" class="headerlink" title="Project structure"></a>Project structure</h4><p>I’ve decided to make the console application the smallest middle-man possible, so it will only transfer the data to the shared memory.<br>Any multithreading will be solely handled by Unity.<br>I’ve managed to get this working, but it has not reduced the time yet (still at ~19 seconds for a single frame).<br>I think this is because earlier it was reading from a stream, writing to another stream and having that stream being read which could pipeline.<br>Now it’s only doint the first read from a stream.<br>I will see what it’s like by combining the <code>NamedSharedMemory</code> project and the <code>rosserial</code> projects, cutting out any streams.</p>
 
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/18/Named-shared-memory-Episode-3/" data-id="cizqf2rfq000mw89rw4b3iz82" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/18/Named-shared-memory-Episode-3/" data-id="cizvl9s7l000pcs9r4v6npa9s" class="article-share-link">Share</a>
     
      
   </footer>
@@ -172,7 +172,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
     </div>
   </div>
 

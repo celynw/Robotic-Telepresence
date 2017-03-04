@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="Robotic Telepresence">
 <meta property="og:description" content="I did a lot of looking around, and I could find very occasional signs that some people had been able to get named shared memory working with Unity.Eventually I found this forum question which showed s">
 <meta property="og:image" content="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/03/Named-shared-memory-Episode-2/Life.png">
-<meta property="og:updated_time" content="2017-02-25T13:17:50.716Z">
+<meta property="og:updated_time" content="2017-03-02T22:09:10.382Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Named shared memory: Episode 2">
 <meta name="twitter:description" content="I did a lot of looking around, and I could find very occasional signs that some people had been able to get named shared memory working with Unity.Eventually I found this forum question which showed s">
@@ -21,7 +21,7 @@
     <link rel="alternate" href="/atom.xml" title="Robotic Telepresence" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.ico">
+    <link rel="icon" href="/Robotic-Telepresence/favicon.ico">
   
   
     <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
@@ -56,7 +56,7 @@ ga('send', 'pageview');
       </h1>
       
         <h2 id="subtitle-wrap">
-          <a href="/Robotic-Telepresence/" id="subtitle">Year 3 project notes/blog</a>
+          <a href="/Robotic-Telepresence/" id="subtitle">Electronic Engineering BEng final project</a>
         </h2>
       
     </div>
@@ -112,12 +112,12 @@ ga('send', 'pageview');
 <p>After learning I needed to use unsafe operations, I found out that to enable them you had to add a file in yout assets called <code>smcs.rsp</code>.<br>This turned out to be different if you enabled the full .NET 2.0 API compatibility level, being <code>gmcs.rsp</code>.<br>This also turned out to be depreceated, so I used <code>mcs.rsp</code> instead.<br>It should contain the line:<br><figure class="highlight plain"><figcaption><span>mcs.rsp</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-unsafe</div></pre></td></tr></table></figure></p>
 <p>I couldn’t get the ends to connect. I tried removing the <code>Global\\</code> from the file mapping name. Now administrator access is no longer required.<br>In the console, It showed signs of life at the other end:<br><img src="/Robotic-Telepresence/2016/12/03/Named-shared-memory-Episode-2/Life.png" alt="Although I haven&#39;t even checked what data transfer is supposed to be happening"></p>
 <p>I’ve somehow broken my Visual Studio projects which use the ROS library.<br>Including <code>&lt;windows.h&gt;</code> somehow conflicts with <code>&quot;ros.h&quot;</code>.<br>I <em>need</em> <code>windows.h</code> for <code>CreateFileMapping()</code>.<br>Fixed!<br>The solution was: <code>windows.h</code> was #defining <code>ERROR</code>, which was being used in <code>ros/Log.h</code>.<br>Adding a <code>#undef ERROR</code> at the start made it build.</p>
-<h3 id="Putting-ROS-messages-into-shared-memory"><a href="#Putting-ROS-messages-into-shared-memory" class="headerlink" title="Putting ROS messages into shared memory"></a>Putting ROS messages into shared memory</h3><p>The example uses <code>CopyMemory()</code> to put a string into shared memory.<br>I’ll need to know the size of the message.<br>Looking at <code>JointState.h</code> in the ROS library in Windows, I was able to see how the joint messages were built and how to determine their sizes</p>
+<h4 id="Putting-ROS-messages-into-shared-memory"><a href="#Putting-ROS-messages-into-shared-memory" class="headerlink" title="Putting ROS messages into shared memory"></a>Putting ROS messages into shared memory</h4><p>The example uses <code>CopyMemory()</code> to put a string into shared memory.<br>I’ll need to know the size of the message.<br>Looking at <code>JointState.h</code> in the ROS library in Windows, I was able to see how the joint messages were built and how to determine their sizes</p>
 
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/03/Named-shared-memory-Episode-2/" data-id="cizqf2rfs000pw89rbdmv9eee" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/03/Named-shared-memory-Episode-2/" data-id="cizvl9s7m000qcs9raluiool8" class="article-share-link">Share</a>
     
      
   </footer>
@@ -163,7 +163,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
     </div>
   </div>
 

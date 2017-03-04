@@ -11,7 +11,7 @@ The way to do this seems to be using [Named Shared Memory](https://msdn.microsof
 Unfortunately, it seems that I might still have to worry about marshal functions or 'unsafe' code because of the C# in Unity.
 An alternative could be [Named Pipes](https://msdn.microsoft.com/en-us/library/windows/desktop/aa365590.aspx).
 
-###### Named pipes
+#### Named pipes
 I made _another_ visual studio solution to test this, and created an empty `GameObject` in Unity with a new script for the other end.
 In order for some classes to be valid such as `System.IO.Pipes`, I changed the project settings to handle the full .Net 2.0:
 > Edit > Project Settings > Player > Other Settings > Optimization > Api Compitbility Level > ".NET 2.0"
@@ -22,11 +22,11 @@ It pointed me to the ["How to use names pipes for network interprocess communica
 I copied the C++ code from the example just to see if it would compile, or work in any way.
 I made sure that the `NamedPipeClientStream` for each end had the same name ("testpipe" for now).
 At first, I was successful, except Unity got stuck in the starting state, and became unresponsive and needed to be forced quit.
-![The 'PipeDataSend' Windows console application, after running Unity](/Robotic-Telepresence/2016/12/01/Standalone-rosserial-application/Connection.png)
+![The 'PipeDataSend' Windows console application, after running Unity](/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/Connection.png)
 With a bit of tweaking in the Unity script, I was able to get the expected message into Unity.
 I had to cut out a `getPipedData()` function, which sounds like it's defeating the point.
 However, the functionality is repeated exactly in the `Setup()` of the Unity script, which works.
-![The "I am the one true server" string was defined in the 'PipeDataSend' Windows console application](/Robotic-Telepresence/2016/12/01/Standalone-rosserial-application/Success.png)
+![The "I am the one true server" string was defined in the 'PipeDataSend' Windows console application](/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/Success.png)
 ```cs The part of PipeDataReceive.cs which was commented out
 private void getPipedData() {
 	//UnityEngine.Debug.Log("Thread Called - Start");

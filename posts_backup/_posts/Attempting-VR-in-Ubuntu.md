@@ -5,18 +5,18 @@ tags:
 ---
 To see whether this is plausible, I'll be trying to get it to work.
 There seem to be three options.
-### VRUI
+#### VRUI
 Since trying to get OpenVR to work, I have found some software called `Vrui`.
 It is developed by Oliver Kreylos, an associate researcher for virtual reality at [UC Davis](http://www.ucdavis.edu/), goes under the name [doc-ok](http://doc-ok.org/?page_id=6).
 It can be found [here](http://idav.ucdavis.edu/~okreylos/ResDev/Vrui/), and supposedly the next release will add Vive support
 It is being actively updated.
 
-### OSVR
+#### OSVR
 It's an open source virtual reality project, which has a hardware and a software branch.
 At the time of writing, there is no Vive support released, but this may change in the near future.
 There's already some Vive-related material on the official Github fork.
 
-### OpenVR in Xubuntu
+#### OpenVR in Xubuntu
 Native support may be coming in the near future, particularly as SteamOS is Debian-based.
 
 I will first try OpenVR by itself, without Unity.

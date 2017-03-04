@@ -8,24 +8,24 @@ In order to import values and heirarchical structure from the file into Unity au
 I can ignore many parts of the `urdf` specification as I don't need them yet.
 There are a few options:
 
-- ### Scene files
+- #### Scene files
 The scene files in Unity hold the structure of `GameObjects`, their configuration, and how the world is laid out.
 The online documentation for Unity states that the scene files can be saved in a [text-based format](https://docs.unity3d.com/Manual/TextSceneFormat.html).
 One option could be to use a program or script to create a new scene file with the `urdf` parameters within.
 
-- ### Prefab
+- #### Prefab
 Unity `GameObjects` can be instances of a `Prefab`. Usually, the `GameObjects` are instantiated from the pre-existing `Prefab`.
 However, `Prefabs` can be retroactively created from a `GameObject`, and then the `GameObject` becomes an instance of that new `Prefab`.
 One idea could have been to create `Prefabs` outside of Unity and then import them, but it looks like `Prefabs` are binary files (not zip files), and there's no documentation of the format.
 
-- ### Unity script
+- #### Unity script
 There are methods in Unity for creating, instantiating, modifying and destroying `GameObjects`.
 Scripts attached to `GameObjects` usually execute when the scene is set to run, but there are other ways they can be used to enhance the workflow of the developer.
 If I can achieve a sufficient level of functionality with `C#` this seems like the best solution.
 
 	Enter `AssetPostProcessor`.
 
-### AssetPostProcessor
+#### AssetPostProcessor
 According to the [docs](https://docs.unity3d.com/ScriptReference/AssetPostprocessor.html):
 > **AssetPostprocessor** lets you hook into the import pipeline and run scripts prior or after importing assets.
 

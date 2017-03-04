@@ -3,12 +3,12 @@ title: Coordinate system converted
 date: 2016-11-09 13:04:25
 tags:
 ---
-### Differences
+#### Differences
 ROS uses a right-handed coordinate system.
 Unity uses a left-handed coordinate system.
 ([handedness](https://en.wikipedia.org/wiki/Right-hand_rule))
 
-### Translation
+#### Translation
 ROS uses [this convention](http://www.ros.org/reps/rep-0103.html):
 > 
 | Axis  | ROS Direction |
@@ -29,7 +29,7 @@ In relation to Baxter, the Unity coordinate system is:
 When the parent-most GameObject is rotated so that Baxter is upright, the child XYZ frame is also rotated.
 So for translation, all I need to do is negate the X translation.
 
-### Rotation
+#### Rotation
 The following table describes what an increase in rotation value for each axis looks like in ROS and Unity (using local rotations).
 As the axes for translations can now match up, disregarding negativity they should for rotations.
 > 

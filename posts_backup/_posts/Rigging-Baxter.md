@@ -75,7 +75,7 @@ I think the rotations are being done in the wrong order.
 
 I found somebody trying to do exactly what I am, [here](https://forum.unity3d.com/threads/problem-with-setting-game-object-rotation.426902/), but their problem is related to gimbal lock with eurler angles.
 
-### Looking at an example
+#### Looking at an example
 If I could get `Gazebo` to work in a virtual machine, I can see what baxter looks like at time=0 on one monitor, and have Unity on the other.
 I had some problems getting it to run.
 The problems were caused by VirtualBox Additions, for shared folders/clipboard, resolution fixes etc.

@@ -74,3 +74,12 @@ However, the length is still zero with no data being transmitted.
 By reducing the actual length by 1, so making it 1x639, the message was reported to have length of 224.
 Not sure where this is being limited, but I'll try the real point cloud from the `rosbag`.
 The same thing happens as before.
+
+Reverting back to the example point cloud, made up of just [X, Y, Z], the limit seems to be `256` bytes.
+as `22` points gives a `data_length` of `252` (4*3*22), but `23` points gives a length of `8` bytes.
+
+Can read exactly 367 times more memory in `data[]` than I thought I could? (32 bytes, proper point cloud)
+3056 times with simple point cloud
+
+Windows application seems to make a buffer of arbitrary size, we should read until `data_length` even though the array doesn't end there.
+Adapted python program to only print one point cloud and then quit.

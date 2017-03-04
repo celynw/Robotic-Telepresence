@@ -3,7 +3,7 @@ title: Project meeting 6
 date: 2016-12-01 16:57:35
 tags:
 ---
-##### Discussion about the previous week's work
+#### Discussion about the previous week's work
 I tried to explain the problems I was having with `.dlls`.
 I had some potentially useful tips about how to get them to work with arrays. I should look into [marshal functions](https://msdn.microsoft.com/en-us/library/system.runtime.interopservices.marshal.aspx) and [interop](https://msdn.microsoft.com/en-us/library/04fy9ya1.aspx).
 To analyse the extent of 'name mangling', I can put the `.dll` through [Dependency Walker](http://www.dependencywalker.com/).
@@ -19,7 +19,7 @@ Unity works with quaternions so this doesn't sound too much of a challenge, but 
 I wasn't able to filter the joints that were in the public `urdf` and those in the `rosbag`. Maybe Baxter's urdf is a previous verion?
 I was also strange that the gripper messages were arriving separately.
 
-##### Interim report
+#### Interim report
 The same examiner(s) who marks this will mark the final dissertation.
 Therefore, don't commit to work which is unlikely to come to fruition. Light exaggeration could back me into a corner.
 Also, there will be some overlap between the interim report and the final submission. They have to exist as separate entities, but maybe not a total copy.
