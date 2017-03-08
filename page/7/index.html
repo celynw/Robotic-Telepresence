@@ -82,6 +82,93 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-Jekyll-site" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/10/26/Jekyll-site/">Jekyll site</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/10/26/Jekyll-site/" class="article-date">
+  <time datetime="2016-10-26T17:35:15.000Z" itemprop="datePublished">Wed 26/10/2016 18:35</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>After some research I’ve found a possibly good solution.<br>Currently I’m keeping my notes as markdown on a USB stick under source control (Mercurial).<br>If I push them to my bitbucket repository, they can be hosted under the URL:</p>
+<blockquote>
+<p><strong>USERNAME</strong>.bitbucket.io</p>
+</blockquote>
+<p>The page can host anything static. No PHP, but you can do a lot with JS and CSS.<br>Set up the <code>Aerobatic</code> BitBucket plugin. It’s supposed to support jekyll, so that I can just push new Markdown to the repo and it will rebuild the site for me.</p>
+<p>I’ve got jekyll to work, however I’ve found out that the Aerobatic plugin for BitBucket only has 5 publishes per 24 hours.<br>I’m going to see if I can run it locally to preview before pushing, but this could be a dealbreaker.<br>I’ve got jekyll to work locally.<br>I can’t get the automatic updating when a file is edited to work, but it doesn’t matter so much.</p>
+<p>Currently my notes are one big markdown file, I’m going to split them into individual posts.</p>
+<p>I’ve run into some problems with the index page.<br>Aerobatic couldn’t find the index.html.<br>It’s not in the jekyll folder in the repo, I assumed everything would be OK seeing as though it served locally well.<br>It turns out the problem was that local Jekyll was using <code>index.md</code>, and Aerobatic was <em>specifically</em> looking for <code>index.html</code></p>
+<p>Aerobatic won’t populate the index.html either, it needs to work on <code>.md</code> files. Hmm. Will sort it out another time.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/26/Jekyll-site/" data-id="cj00vgmx1000gik9r9ii2qwqe" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Project-meeting-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/10/26/Project-meeting-2/">Project meeting 2</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/10/26/Project-meeting-2/" class="article-date">
+  <time datetime="2016-10-26T15:08:54.000Z" itemprop="datePublished">Wed 26/10/2016 16:08</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <h4 id="Housekeeping"><a href="#Housekeeping" class="headerlink" title="Housekeeping"></a>Housekeeping</h4><ul>
+<li>I haven’t filled out the project health and safety form. Bring it to the next meeting!</li>
+<li>I’m required to take notes. I should also keep them in a format which Rich can read<br>  In the past people have used Google Docs. I like the idea of keeping my notes in Markdown so I might end up using an online host for that.</li>
+<li>When will I have something shiny to show?<br>  I’ve made a Gantt chart, but I didn’t bring it.<br>  I may need to change it over the next few weeks as well<br>  If I’m taking screenshots and hosting my notes, it will be easier to write my midterm/final report.</li>
+<li>Poke Oscar about giving me some point cloud data.</li>
+</ul>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/26/Project-meeting-2/" data-id="cj00vgmy8000zik9r3vlawc2o" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
     <article id="post-ROS-tutorials" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -110,7 +197,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/25/ROS-tutorials/" data-id="cizvl9s8f0018cs9rvklh5khb" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/25/ROS-tutorials/" data-id="cj00vgmym0019ik9rg63kbel3" class="article-share-link">Share</a>
     
      
   </footer>
@@ -148,7 +235,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/23/Gazebo-VR/" data-id="cizvl9s75000ccs9rndc840cw" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/23/Gazebo-VR/" data-id="cj00vgmww000bik9rmdrvsu0f" class="article-share-link">Share</a>
     
      
   </footer>
@@ -197,7 +284,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/23/Robot-models/" data-id="cizvl9s8g0019cs9rqrysyry2" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/23/Robot-models/" data-id="cj00vgmyz001cik9ruw6atn7c" class="article-share-link">Share</a>
     
      
   </footer>
@@ -241,7 +328,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/21/Project-meeting-1/" data-id="cizvl9s82000ucs9rlhlbc18k" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/21/Project-meeting-1/" data-id="cj00vgmy5000xik9rgdnbvs46" class="article-share-link">Share</a>
     
      
   </footer>
@@ -287,7 +374,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/21/Introduction-to-ROS/" data-id="cizvl9s79000gcs9r8ylhysk7" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/21/Introduction-to-ROS/" data-id="cj00vgmx1000hik9rpxobaem7" class="article-share-link">Share</a>
     
      
   </footer>
@@ -329,129 +416,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/20/Unity3D-in-Xubuntu/" data-id="cizvl9s8p001hcs9r4brblo96" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Attempting-VR-in-Ubuntu" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2016/10/19/Attempting-VR-in-Ubuntu/">Attempting VR in Ubuntu</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2016/10/19/Attempting-VR-in-Ubuntu/" class="article-date">
-  <time datetime="2016-10-19T10:42:15.000Z" itemprop="datePublished">Wed 19/10/2016 11:42</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>To see whether this is plausible, I’ll be trying to get it to work.<br>There seem to be three options.</p>
-<h4 id="VRUI"><a href="#VRUI" class="headerlink" title="VRUI"></a>VRUI</h4><p>Since trying to get OpenVR to work, I have found some software called <code>Vrui</code>.<br>It is developed by Oliver Kreylos, an associate researcher for virtual reality at <a href="http://www.ucdavis.edu/" target="_blank" rel="external">UC Davis</a>, goes under the name <a href="http://doc-ok.org/?page_id=6" target="_blank" rel="external">doc-ok</a>.<br>It can be found <a href="http://idav.ucdavis.edu/~okreylos/ResDev/Vrui/" target="_blank" rel="external">here</a>, and supposedly the next release will add Vive support<br>It is being actively updated.</p>
-<h4 id="OSVR"><a href="#OSVR" class="headerlink" title="OSVR"></a>OSVR</h4><p>It’s an open source virtual reality project, which has a hardware and a software branch.<br>At the time of writing, there is no Vive support released, but this may change in the near future.<br>There’s already some Vive-related material on the official Github fork.</p>
-<h4 id="OpenVR-in-Xubuntu"><a href="#OpenVR-in-Xubuntu" class="headerlink" title="OpenVR in Xubuntu"></a>OpenVR in Xubuntu</h4><p>Native support may be coming in the near future, particularly as SteamOS is Debian-based.</p>
-<p>I will first try OpenVR by itself, without Unity.<br>It includes an application callled HelloVR.<br>Get <a href="this fork">https://github.com/ChristophHaag/openvr</a> of OpenVR:<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ git <span class="built_in">clone</span> https://github.com/ChristophHaag/openvr.git</div><div class="line">$ <span class="built_in">cd</span> openvr</div><div class="line">$ mkdir build</div><div class="line">$ <span class="built_in">cd</span> !$</div><div class="line">$ cmake -DCMAKE_BUILD_TYPE=Release ../</div><div class="line">$ make</div></pre></td></tr></table></figure></p>
-<p>Turns out I needed a couple of other packages:<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install libsdl2-dev</div><div class="line">$ sudo apt-get install libglew-dev</div></pre></td></tr></table></figure></p>
-<p>Now <strong>plug in the Vive</strong>.<br>Set up some permissions for the device:<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo chmod a+rw /dev/hidraw*</div></pre></td></tr></table></figure></p>
-<p>It seems I will have to install Steam and SteamVR after all. Let’s see what happens.<br>At time of writing in May 2016, apparently the beta branch of SteamVR did not work.<br>Supposedly the lighthouse drivers are included and working though.<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install steam</div></pre></td></tr></table></figure></p>
-<p>Once it is installed, clicking on the VR icon as you would to run VR in Windows doesn’t start anything.<br>The following script should enable this to work:<br><figure class="highlight zsh"><figcaption><span>vrcmd</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/zsh</span></div><div class="line"><span class="built_in">export</span> openvr=~/openvr</div><div class="line"><span class="built_in">export</span> steam=~/.steam</div><div class="line"><span class="built_in">export</span> steamvr=<span class="variable">$steam</span>/steam/steamapps/common/SteamVR</div><div class="line"></div><div class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=<span class="variable">$LD_LIBRARY_PATH</span>:\</div><div class="line">/usr/lib/:\</div><div class="line">/usr/lib32/:\</div><div class="line"><span class="variable">$openvr</span>/lib/linux32/:\</div><div class="line"><span class="variable">$openvr</span>/lib/linux64/:\</div><div class="line"><span class="variable">$steam</span>/ubuntu12_32/steam-runtime/i386/lib/i386-linux-gnu/:\</div><div class="line"><span class="variable">$steam</span>/ubuntu12_32/steam-runtime/amd64/lib/x86_64-linux-gnu/:\</div><div class="line"><span class="variable">$steamvr</span>/bin/linux32/:\</div><div class="line"><span class="variable">$steamvr</span>/bin/linux64/:\</div><div class="line"><span class="variable">$steamvr</span>/drivers/lighthouse/bin/linux32/:\</div><div class="line"><span class="variable">$steamvr</span>/drivers/lighthouse/bin/linux64/</div></pre></td></tr></table></figure></p>
-<p>Now you run <code>vrcmd</code> from the command line.<br>I got stuck here. The headset wasn’t found.</p>
-<p>The <a href="https://github.com/OpenHMD/OpenHMD/blob/master/README.md" target="_blank" rel="external">OpenHMD readme</a> suggested this method to set permissions permanently:<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">echo</span> <span class="string">'SUBSYSTEM=="usb", ATTR&#123;idVendor&#125;=="0bb4", MODE="0666", GROUP="plugdev"'</span> &gt;&gt; /etc/udev/rules.d/83-hmd.rules</div><div class="line">$ <span class="built_in">echo</span> <span class="string">'SUBSYSTEM=="usb", ATTR&#123;idVendor&#125;=="28de", MODE="0666", GROUP="plugdev"'</span> &gt;&gt; /etc/udev/rules.d/83-hmd.rules</div><div class="line">$ udevadm control --reload-rules</div></pre></td></tr></table></figure></p>
-<p>I tried doing this to fix the problem.<br>The file <code>/etc/udev/rules.d/83-hmd.rules</code> didn’t exist yet, it was created.<br>I ran <code>dmesg</code> and these were related to plugging in the Vive:</p>
-<figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[23323.256741] hid-generic 0003:0BB4:2C87.0006: hiddev0,hidraw5: USB HID v1.11 Device [HTC HTC Vive] on usb-0000:08:00.0-2.1.5/input0</div><div class="line">[23328.501417] hid-generic 0003:28DE:2101.0007: hiddev0,hidraw6: USB HID v1.11 Device [Valve Software Watchman Dongle] on usb-0000:08:00.0-2.1.6/input0</div><div class="line">[23328.797700] hid-generic 0003:28DE:2101.0008: hiddev0,hidraw7: USB HID v1.11 Device [Valve Software Watchman Dongle] on usb-0000:08:00.0-2.1.7/input0</div><div class="line">[23329.090160] hid-generic 0003:28DE:2000.0009: hiddev0,hidraw8: USB HID v1.01 Device [Valve Software Lighthouse FPGA RX] on usb-0000:08:00.0-2.1.1/input0</div><div class="line">[23329.091253] hid-generic 0003:28DE:2000.000A: hiddev0,hidraw9: USB HID v1.01 Device [Valve Software Lighthouse FPGA RX] on usb-0000:08:00.0-2.1.1/input1</div><div class="line">[23329.447498] hid-generic 0003:0D8C:0012.000B: input,hidraw10: USB HID v1.00 Device [C-Media Electronics Inc. USB Audio Device] on usb-0000:08:00.0-2.1.4/input3</div><div class="line">[23329.647254] usb 3-2.1.2: new high-speed USB device number 11 using xhci_hcd</div></pre></td></tr></table></figure>
-<p>The vendor IDs, <code>0BB4</code> and <code>28DE</code> matched the rules entered earlier.<br>There is an extra one for the audio, <code>0D8C</code>. I’m not sure if this is related, I may have to add this as a rule somewhere later.</p>
-<p>This potential fix didn’t help.</p>
-<p>Poking around I noticed that the <code>vrcmd</code> script wasn’t running properly.<br>It turned out that it was using Windows line endings. I converted them to Unix line endings.<br>Still no help.<br>The only discernable message from running <code>vrcmd</code> is</p>
-<figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">libdbus-1.so.3: no version information available</div><div class="line">libgpg-error.so.0: no version information available</div></pre></td></tr></table></figure>
-<p>Installing these does not make any difference, I suspect there’s a PATH issue maybe it’s not too important.</p>
-<p>I <em>did</em> notice that the HMD display has turned up in the Displays settings for Xubuntu. As an additional monitor.<br><img src="/Robotic-Telepresence/2016/10/19/Attempting-VR-in-Ubuntu/Displays Preferences.png" alt="Xubuntu Display Settings"><br>Changing the display projection enabled the Vive to be used as a screen:<br><img src="/Robotic-Telepresence/2016/10/19/Attempting-VR-in-Ubuntu/VR Screen.jpg" alt="Photo of screen through lenses. It&#39;s split over each eye"><br>After a reboot, <code>vrcmd</code> didn’t give a million broken pipe errors, but it had the same effective result. Running it as root doesn’t help.<br>I tried mashing the script into one command:<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">export</span> LD_LIBRARY_PATH=<span class="variable">$LD_LIBRARY_PATH</span>:/usr/lib/:/usr/lib32/:~/openvr/lib/linux32/:~/openvr/lib/linux64/:~/.steam/ubuntu12_32/steam-runtime/i386/lib/i386-linux-gnu/:~/.steam/ubuntu12_32/steam-runtime/amd64/lib/x86_64-linux-gnu/:~/.steam/steam/steamapps/common/SteamVR/bin/linux32/:~/.steam/steam/steamapps/common/SteamVR/bin/linux64/:~/.steam/steam/steamapps/common/SteamVR/drivers/lighthouse/bin/linux32/:~/.steam/steam/steamapps/common/SteamVR/drivers/lighthouse/bin/linux64/</div><div class="line">$ ./.steam/steam/steamapps/common/SteamVR/bin/linux64/vrserver</div></pre></td></tr></table></figure></p>
-<p>Now <code>vrserver</code> will run without error instead of not detecting a headset, but it still doesn’t detect one. <code>vrcmd</code> still doesn’t detect it either.<br>When the Vive is unplugged though, it only gives this message:<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">VR_IsHmdPresent returned <span class="literal">false</span> to indicate that there are no attached HMDs.</div></pre></td></tr></table></figure></p>
-<p>This means it is detected in some way.</p>
-<p>This took a long time, so I will give up for now.</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/19/Attempting-VR-in-Ubuntu/" data-id="cizvl9s6l0003cs9r4f87hw11" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Environment-setup" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2016/10/15/Environment-setup/">Environment setup</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2016/10/15/Environment-setup/" class="article-date">
-  <time datetime="2016-10-15T13:29:38.000Z" itemprop="datePublished">Sat 15/10/2016 14:29</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>The first thing I can do without doing any research is to set up my environment.<br>I know I will probably change my mind as things progress.</p>
-<h4 id="Things-I-did"><a href="#Things-I-did" class="headerlink" title="Things I did"></a>Things I did</h4><p>I installed stock Ubuntu in a virtual machine, as I already had the disc image downloaded.<br>It was very easy, but I really didn’t, and still don’t like the Unity desktop environment.<br>It also comes preinstalled with a lot of things I never use.</p>
-<p>I opted for Xubuntu, which uses XFCE, and I made a physical partition. I’m pleased with the results.<br>I will continue to use Sublime Text 3 as my text editor, and a customised <code>zsh</code> shell environment.</p>
-<p>I will be keeping my project files under source control.<br>I used mercurial a lot on placement and it seems easier than git, so once things get rolling I’ll be doing this.<br>I know how to use virtual environments and pip with python, but I won’t do this until I know I need it.<br>I’ll be trying to take regular screenshots/photos to stick in here.</p>
-<h4 id="Markdown"><a href="#Markdown" class="headerlink" title="Markdown"></a>Markdown</h4><p>I need any notes to be portable between computers and operating systems (This means no Microsoft Office!)<br>Microsoft Office provide an online version of Office which is surprisingly good. But I’ll have to worry about logging in, inserting media into the documents and no organisation between documents beside what I can do with folders.<br>I already have an excellent Markdown editor (Sublime Text) which doubles for code.<br>I know the GitHub ‘about’ pages are written in Markdown, so it must have good support for inserting code snippets.</p>
-<p>After looking around, I’m installing <code>markmon</code>, an automatic markdown preview tool, which generates platform-independent HTML on-the-fly as I write.</p>
-<ul>
-<li>Install Package Control for Sublime Text</li>
-<li><p>Install <code>markmon</code> to autogenerate the markdown preview<br>  Has some external dependencies:</p>
-  <figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ sudo ln <span class="_">-s</span> /usr/bin/nodejs /usr/bin/node</div><div class="line">$ sudo apt-get install npm</div><div class="line">$ sudo npm install -g markmon</div><div class="line">$ sudo apt-get install pandoc</div></pre></td></tr></table></figure>
-</li>
-<li><p>I’ve added a keyboard shortcut <code>alt+m</code> to serve and bring up the HTML page.<br>  Markmon works on Windows, but doesn’t appear to be able to use Cygwin.<br>  I had to go into the markmon settings and modify them like this:</p>
-  <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">"executable": "markmon.cmd"</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>Here’s a screenshot of it in action:</p>
-<p><img src="/Robotic-Telepresence/2016/10/15/Environment-setup/Markmon.png" alt="These notes are now out of date!"></p>
-<p>Using <a href="http://pandoc.org/" target="_blank" rel="external">pandoc</a>, one can easily convert between many formats, including HTML, docx, LaTeX etc. I may use this to insert parts of my notes into my reports.</p>
-<p>There are a huge number of purely online editors, such as <a href="https://stackedit.io/editor" target="_blank" rel="external">Stackedit</a><br>Some of them look very good, but I would not have full control over the files.</p>
-<h4 id="Other-things"><a href="#Other-things" class="headerlink" title="Other things"></a>Other things</h4><p>In the last project meeting, Rich asked about how the graphics are drawn to the headset. I didn’t give a clear answer, but here it is:</p>
-<ul>
-<li>Direct mode: Graphics are drawn directly to the HMD (head-mounted display). Better VR (virtual reality) performance.</li>
-<li>Extended mode: HMD display is treated like an additional monitor.</li>
-<li>OpenVR: <strong>Proprietary</strong> VR abstraction layer which supports a number of HMDs.</li>
-<li>OSVR: <strong>Open source</strong> abstraction layer which supports a number of HMDs (including the Vive).</li>
-<li>OpenHMD: Supports some HMDs but not the Vive.</li>
-</ul>
-<p>(Info found at <a href="http://www.vronlinux.com/articles/adventures-with-openvr-and-the-vive-on-linux.8" target="_blank" rel="external">vronlinux</a>)<br>(<a href="https://www.gamingonlinux.com/articles/first-steps-with-openvr-and-the-vive-on-linux.7229" target="_blank" rel="external">This one</a> is a slightly more up to date version)</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/15/Environment-setup/" data-id="cizvl9s6z0008cs9rwnuka51e" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/20/Unity3D-in-Xubuntu/" data-id="cj00vgmz4001iik9ryu9gkopr" class="article-share-link">Share</a>
     
      
   </footer>
@@ -484,7 +449,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
     </div>
   </div>
 

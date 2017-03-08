@@ -82,6 +82,124 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-Point-cloud-from-actual-data" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/12/07/Point-cloud-from-actual-data/">Point cloud from actual data</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/12/07/Point-cloud-from-actual-data/" class="article-date">
+  <time datetime="2016-12-07T13:03:08.000Z" itemprop="datePublished">Wed 07/12/2016 13:03</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>There were some errors in the <a href="/Robotic-Telepresence/2016/12/05/Point-Clouds-in-Unity/">previous post</a>.<br>There were 9,830,400 individual numbers in a single frame of the point cloud in the <code>rosbag</code>.<br>Looking at the <a href="http://docs.ros.org/api/sensor_msgs/html/msg/PointCloud2.html" target="_blank" rel="external">documentation</a> for the message type, and the header of the message, the number of points is far fewer.<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$ rostopic <span class="built_in">echo</span> --noarr --nostr /camera/depth_registered/points</div><div class="line">header: </div><div class="line">  seq: 16832</div><div class="line">  stamp: </div><div class="line">    secs: 1479833365</div><div class="line">    nsecs: 438671766</div><div class="line">height: 480</div><div class="line">width: 640</div><div class="line">is_bigendian: False</div><div class="line">point_step: 32</div><div class="line">row_step: 20480</div><div class="line">is_dense: False</div><div class="line">---</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><figcaption><span>Message header</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">fields: </div><div class="line">  - </div><div class="line">    name: x</div><div class="line">    offset: 0</div><div class="line">    datatype: 7</div><div class="line">    count: 1</div><div class="line">  - </div><div class="line">    name: y</div><div class="line">    offset: 4</div><div class="line">    datatype: 7</div><div class="line">    count: 1</div><div class="line">  - </div><div class="line">    name: z</div><div class="line">    offset: 8</div><div class="line">    datatype: 7</div><div class="line">    count: 1</div><div class="line">  - </div><div class="line">    name: rgb</div><div class="line">    offset: 16</div><div class="line">    datatype: 7</div><div class="line">    count: 1</div></pre></td></tr></table></figure>
+<p>The width and height of the cloud from the Kinect 1 is 640x480, with 32 bytes for each point.<br><code>9830400 / (640 * 480) = 32</code><br>According to the documentation for the <a href="http://docs.ros.org/api/sensor_msgs/html/msg/PointField.html" target="_blank" rel="external">PointField</a> message, each datum uses <code>datatype: 7</code>, which is a <code>FLOAT32</code>. This means 32 bits, or 4 bytes.<br>The data values in the PointCloud2 message are of type <code>uint8</code>, which uses 8 bits, or 1 byte.<br>This means that for each point in the message, there’s space for 8x <code>float32</code>.</p>
+<p>Examining the first 32 bytes of the first message, the fields described in the message header are visible:<br><figure class="highlight plain"><figcaption><span>First point in first message</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">0 0 192 127 //x</div><div class="line">0 0 192 127 //y</div><div class="line">0 0 192 127 //z</div><div class="line">0 0 0 0</div><div class="line">131 115 115 255 //rgb</div><div class="line">0 0 0 0</div><div class="line">0 0 0 0</div><div class="line">0 0 0 0</div></pre></td></tr></table></figure></p>
+<p>For some reason, playing the rosbag with a windows listener subscribed to the point cloud, causes the <code>socket_node</code> to hang, even on one message, with network activity dropping to zero.<br>This happens even when minimally changed from subscribing to <code>JointStates</code>, (which works perfectly), and not storing or printing the output.<br>The same happens with octomap, which has significatnly smaller messages.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/07/Point-cloud-from-actual-data/" data-id="cj00vgmy4000wik9rf3h5c43n" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Point-clouds-in-Unity" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/12/05/Point-clouds-in-Unity/">Point clouds in Unity</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/12/05/Point-clouds-in-Unity/" class="article-date">
+  <time datetime="2016-12-05T23:41:03.000Z" itemprop="datePublished">Mon 05/12/2016 23:41</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>Giving the <code>NamedSharedMemory</code> a bit of a break while I focus on point clouds.<br>If I can’t get <code>NamedSharedMemory</code> to work, I’ve always got the slower less efficient stdout redirection into Unity.</p>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p>The example point clouds which I was provided with were very large.</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Size</th>
+<th>Vertices</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kinect_Aligned_ColourFromOscar_Subsampled.ply</td>
+<td>6.7MB</td>
+<td>419,033</td>
+</tr>
+<tr>
+<td>Oscar_Monocular_Reconstruction_Cloud.ply</td>
+<td>17.9MB</td>
+<td>396,257</td>
+</tr>
+<tr>
+<td>Kinect_Aligned.ply</td>
+<td>449.7MB</td>
+<td>37,478,946</td>
+</tr>
+<tr>
+<td>Kinect_Aligned_ColourFromOscar.ply</td>
+<td>599.7MB</td>
+<td>37,478,946</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><img src="/Robotic-Telepresence/2016/12/05/Point-Clouds-in-Unity/Subsampled.png" alt="The smallest point cloud, which has been edited by hand"><br>The best way to draw them would be to take advantage of the GPU.<br>By using a vertex shader, we can make each point in the cloud a vertex.<br>I grabbed some code from <a href="http://www.kamend.com/2014/05/rendering-a-point-cloud-inside-unity/" target="_blank" rel="external">here</a> to adapt and try out.<br>Unity only allows 65,534 vertices for each mesh, at which it is split into multiple meshes.<br>My computer, with the recommended GPU for entry-level VR had no trouble at all rendering 60,000 points in a cube.<br><img src="/Robotic-Telepresence/2016/12/05/Point-Clouds-in-Unity/60k Cube.png" alt=""><br>This is ~500 times fewer points than in the largest <code>.ply</code> file, but I don’t know how large it will <em>need</em> to be.<br>I couldn’t work out how to vary the point size. The functionality should be enabled by a script attached to the camera which specifies:<br><figure class="highlight cs"><figcaption><span>PointCLoudConfig.cs</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> UInt32 GL_VERTEX_PROGRAM_POINT_SIZE = <span class="number">0x8642</span>;</div><div class="line">glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);</div></pre></td></tr></table></figure></p>
+<h4 id="rosbag-Point-Cloud"><a href="#rosbag-Point-Cloud" class="headerlink" title="rosbag Point Cloud"></a><code>rosbag</code> Point Cloud</h4><p>In order to find how many points I should expect, I ran the <code>rosbag</code> step by step until a message containing the output was printed, which I redirected to a file.<br>The file caused my text editor to not be very responsive. I found the commas were only present in the list of points, so I counted them without opening the file.<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ rosbag play ~/Downloads/baxter.bag --pause <span class="_">-l</span></div><div class="line">$ rostopic <span class="built_in">echo</span> /camera/depth_registered/points | tee ~/PointCloud.txt</div><div class="line">$ fgrep -o <span class="string">","</span> ~/PointCloud.txt | wc <span class="_">-l</span></div><div class="line">9830399</div></pre></td></tr></table></figure></p>
+<p>This gave a file of 36.5MB, with 9,830,400 points, which would split into 151 meshes.</p>
+<p>I wrote a little script which would create <code>X</code> number of child <code>GameObjects</code>, each drawing 60,000 points in the new shader, offset by 10 units.<br><figure class="highlight cs"><figcaption><span>CreatePointCloudObject.cs</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> System.Collections;</div><div class="line"><span class="keyword">using</span> System.Collections.Generic;</div><div class="line"><span class="keyword">using</span> UnityEngine;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">CreatePointCloudObjects</span> : <span class="title">MonoBehaviour</span> &#123;</div><div class="line">	<span class="keyword">public</span> <span class="keyword">int</span> num_clouds = <span class="number">0</span>;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Start</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		Material mat = Resources.Load(<span class="string">"PointCloud"</span>, <span class="keyword">typeof</span>(Material)) <span class="keyword">as</span> Material;</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;num_clouds; i++) &#123;</div><div class="line">			GameObject gameObject = <span class="keyword">new</span> GameObject(<span class="string">"PointCloud fragment"</span>);</div><div class="line">			gameObject.transform.SetParent(<span class="keyword">this</span>.transform);</div><div class="line">			gameObject.AddComponent&lt;PointCloud&gt;(); <span class="comment">//MeshRenderer and MeshFilter already added by script</span></div><div class="line">			gameObject.GetComponent&lt;MeshRenderer&gt;().material = mat;</div><div class="line">			gameObject.transform.position = <span class="keyword">new</span> Vector3((<span class="keyword">float</span>)i*<span class="number">10</span>, <span class="number">0.0</span>f, <span class="number">0.0</span>f);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>When increasing <code>X</code> to 164, it also seemed to run without issue.<br><img src="/Robotic-Telepresence/2016/12/05/Point-Clouds-in-Unity/All Points.png" alt="Drawing 9,840,000 vertices with random vertex colours, at 1px per vertex"></p>
+<h4 id="Changing-point-size"><a href="#Changing-point-size" class="headerlink" title="Changing point size"></a>Changing point size</h4><p>I realised that whist the <code>GL_VERTEX_PROGRAM_POINT_SIZE</code> was being enabled, it wasn’t being enabled because I was running in DirectX11.<br>By going to <code>Edit &gt; Project Settings &gt; Player &gt; Other Settings</code> and unchecking <code>Auto Graphics API for Windows</code>, I was given the option to enable OpenGLCore and move it to the top of the list.<br>Now the property was being enabled (only when viewing through the scene camera, not the editor) but I wasn’t seeing any changes.<br>I still can’t get it to work.<br><a href="http://1darray.com/blog/2012/09/01/xyz-point-cloud-data-viewer-dx11/" target="_blank" rel="external">This guy</a> seems to have a very capable asset package for point clouds, but he won’t give any information away because he’s selling his work.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/05/Point-clouds-in-Unity/" data-id="cj00vgmy2000uik9rpcggm26a" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
     <article id="post-Named-shared-memory-Episode-2" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -113,7 +231,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/03/Named-shared-memory-Episode-2/" data-id="cizvl9s7m000qcs9raluiool8" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/03/Named-shared-memory-Episode-2/" data-id="cj00vgmxm000oik9rxbqaeftx" class="article-share-link">Share</a>
     
      
   </footer>
@@ -162,7 +280,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/02/Named-shared-memory/" data-id="cizvl9s7p000rcs9r2h2d8llz" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/02/Named-shared-memory/" data-id="cj00vgmxq000qik9rqmnwdypr" class="article-share-link">Share</a>
     
      
   </footer>
@@ -265,7 +383,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Named-pipe-dll/" data-id="cizvl9s7i000mcs9rylc1hxgs" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Named-pipe-dll/" data-id="cj00vgmxo000pik9rpx75yjjv" class="article-share-link">Share</a>
     
      
   </footer>
@@ -315,7 +433,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/" data-id="cizvl9s6w0006cs9rfeh41i8v" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/" data-id="cj00vgmwr0008ik9ry99vk5pb" class="article-share-link">Share</a>
     
      
   </footer>
@@ -357,7 +475,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Project-meeting-6/" data-id="cizvl9s890010cs9rdhp1zrcl" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Project-meeting-6/" data-id="cj00vgmyc0012ik9rakvbedlj" class="article-share-link">Share</a>
     
      
   </footer>
@@ -417,108 +535,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/28/Rosbag-communication/" data-id="cizvl9s8l001ecs9rk8v3cggz" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Exploring-rosbags" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2016/11/23/Exploring-rosbags/">Exploring rosbags</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2016/11/23/Exploring-rosbags/" class="article-date">
-  <time datetime="2016-11-23T23:02:48.000Z" itemprop="datePublished">Wed 23/11/2016 23:02</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>In the <a href="/Robotic-Telepresence/2016/11/22/Project-meeting-5/">last project meeting</a>, we recorded about 60 seconds worth of Baxter waving his arms around and saved it as a rosbag.<br>The uncompressed version is 8.5GB, and to view it in RViz for example will probably require it to be loaded into RAM.<br>Oscar recommended using a RAMdisk to speed things up.<br>Since I have <em>too much</em> RAM (64GB), I thought it would be easier to just put the whole Ubuntu virtual machine into the RAMdisk.</p>
-<p>First, make sure roscore is running.<br>In each separate terminal, I remember I have to source the <code>workspace/devel/setup.zsh</code> file.<br><figure class="highlight zsh"><figcaption><span>Command line 1</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> ~/catkin_ws</div><div class="line">$ . ./devel/setup.zsh</div><div class="line">$ roscore</div></pre></td></tr></table></figure></p>
-<p>From here, I can do<br><figure class="highlight zsh"><figcaption><span>Command line 2</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">$ rosbag info ~/Downloads/baxter.bag</div><div class="line">path:        /home/celynwalters/Downloads/baxter.bag</div><div class="line">version:     2.0</div><div class="line">duration:    1:03s (63s)</div><div class="line">start:       Nov 22 2016 16:49:25.44 (1479833365.44)</div><div class="line">end:         Nov 22 2016 16:50:28.49 (1479833428.49)</div><div class="line">size:        7.9 GB</div><div class="line">messages:    37025</div><div class="line">compression: none [866/866 chunks]</div><div class="line">types:       octomap_msgs/Octomap    [9a45536b45c5e409<span class="built_in">cd</span>49f04bb2d9999f]</div><div class="line">             sensor_msgs/JointState  [3066dcd76a6cfaef579bd0f34173e9fd]</div><div class="line">             sensor_msgs/PointCloud2 [1158d486dd51d683ce2f1be655c3c181]</div><div class="line">             tf2_msgs/TFMessage      [94810edda583a504dfda3829e70d7eec]</div><div class="line">topics:      /camera/depth_registered/points     865 msgs    : sensor_msgs/PointCloud2</div><div class="line">             /octomap_full                        55 msgs    : octomap_msgs/Octomap   </div><div class="line">             /robot/joint_states               24149 msgs    : sensor_msgs/JointState  (2 connections)</div><div class="line">             /tf                               11954 msgs    : tf2_msgs/TFMessage      (7 connections)</div><div class="line">             /tf_static                            2 msgs    : tf2_msgs/TFMessage      (2 connections)</div></pre></td></tr></table></figure></p>
-<p>Great, I can see all of the ROS topics it contains.<br>I know from my <code>rosserial</code> experiments that I can listen to a topic using <code>rostopic echo</code> even if it isn’t visible yet.<br>In a separate shell I did this for the joint angles as this is the ‘easiest’ to integrate into Unity for now.<br><figure class="highlight zsh"><figcaption><span>Command line 3</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ rostopic <span class="built_in">echo</span> /robot/joint_states</div></pre></td></tr></table></figure></p>
-<p>Back in this shell, I played back the bag:<br><figure class="highlight zsh"><figcaption><span>Command line 2</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ rosbag play ~/Downloads/baxter.bag</div><div class="line">[ INFO] [1479942083.502475169]: Opening /home/celynwalters/Downloads/baxter.bag</div><div class="line"></div><div class="line">Waiting 0.2 seconds after advertising topics... done.</div><div class="line"></div><div class="line">Hit space to toggle paused, or <span class="string">'s'</span> to step.</div><div class="line"> [RUNNING]  Bag Time: 1479833369.512015   Duration: 4.075116 / 63.055731</div></pre></td></tr></table></figure></p>
-<p>This gives a very fast output of each frame for each topic:<br><figure class="highlight zsh"><figcaption><span>Command line 3</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">header: </div><div class="line">  seq: 387581</div><div class="line">  stamp: </div><div class="line">    secs: 1479833365</div><div class="line">    nsecs: 441285362</div><div class="line">  frame_id: <span class="string">''</span></div><div class="line">name: [<span class="string">'head_nod'</span>, <span class="string">'head_pan'</span>, <span class="string">'left_e0'</span>, <span class="string">'left_e1'</span>, <span class="string">'left_s0'</span>, <span class="string">'left_s1'</span>, <span class="string">'left_w0'</span>, <span class="string">'left_w1'</span>, <span class="string">'left_w2'</span>, <span class="string">'right_e0'</span>, <span class="string">'right_e1'</span>, <span class="string">'right_s0'</span>, <span class="string">'right_s1'</span>, <span class="string">'right_w0'</span>, <span class="string">'right_w1'</span>, <span class="string">'right_w2'</span>, <span class="string">'torso_t0'</span>]</div><div class="line">position: [0.0, 0.03029612056073692, -1.405126401703039, 1.2931458041874038, -0.04832039481839053, 0.030679615757708275, 1.5991749713705439, 1.3537380453088776, -0.4636456931383663, 1.647111870991963, 1.5945730290068876, -0.18676216092504913, 0.13537380453088776, -1.5872866202644318, 1.491029325824622, -0.9004467224887379, -12.565987119160338]</div><div class="line">velocity: [0.0, 0.003926990816250607, -0.009817477040626518, -0.005497787142750851, -0.005890486224375911, -0.00510508806112579, -0.012959069693627005, 0.003926990816250607, -0.01021017612225158, 0.011780972448751823, 0.01649336142825255, 0.0007853981632501215, 0.023561944897503646, -0.009032078877376396, -0.01531526418337737, -0.009817477040626518, 0.0]</div><div class="line">effort: [0.0, 0.0, -18.58, -0.312, 0.216, -7.88, 0.896, 0.2, 0.14, 21.096, 1.26, 1.088, -4.268, 0.828, -0.052, -0.036, -20.48]</div><div class="line">---</div><div class="line">header: </div><div class="line">  seq: 387582</div><div class="line">  stamp: </div><div class="line">    secs: 1479833365</div><div class="line">    nsecs: 451285944</div><div class="line">  frame_id: <span class="string">''</span></div><div class="line">name: [<span class="string">'head_nod'</span>, <span class="string">'head_pan'</span>, <span class="string">'left_e0'</span>, <span class="string">'left_e1'</span>, <span class="string">'left_s0'</span>, <span class="string">'left_s1'</span>, <span class="string">'left_w0'</span>, <span class="string">'left_w1'</span>, <span class="string">'left_w2'</span>, <span class="string">'right_e0'</span>, <span class="string">'right_e1'</span>, <span class="string">'right_s0'</span>, <span class="string">'right_s1'</span>, <span class="string">'right_w0'</span>, <span class="string">'right_w1'</span>, <span class="string">'right_w2'</span>, <span class="string">'torso_t0'</span>]</div><div class="line">position: [0.0, 0.03029612056073692, -1.4043594113090963, 1.2931458041874038, -0.04793689962141918, 0.03106311095467963, 1.5991749713705439, 1.3537380453088776, -0.464412683532309, 1.6455778902040776, 1.5934225434159734, -0.18561167533413506, 0.1357572997278591, -1.5869031250674606, 1.491029325824622, -0.9004467224887379, -12.565987119160338]</div><div class="line">velocity: [0.0, -0.0047123889795007284, 0.010995574285501701, 0.02120575040775328, -0.003926990816250607, 0.01688606050987761, -0.001570796326500243, -0.00039269908162506076, 0.006675884387626033, 0.014529866020127248, -0.006283185306000972, 0.01649336142825255, 0.02552544030562895, -0.0047123889795007284, 0.023169245815878585, 0.01021017612225158, 0.0]</div><div class="line">effort: [0.0, 0.0, -18.42, -0.248, 0.404, -7.912, 0.924, 0.216, 0.128, 20.932, 1.228, 1.184, -4.368, 0.816, -0.064, -0.028, -20.48]</div><div class="line">---</div><div class="line">...</div></pre></td></tr></table></figure></p>
-<p>I’m going to adapt the <code>rosserial_hello_world</code> code to subscribe instead of publish.<br>The <a href="http://wiki.ros.org/rosserial/Overview/Publishers%20and%20Subscribers" target="_blank" rel="external">documentation</a> says that you need to include the header file for the sort of message you want to use.<br>Thankfully, the built <code>lib/</code> folder on the windows side includes baxter’s message descriptions.<br>You then “create a function that returns void and takes a constant reference of your message type as its argument”.<br>“Then to actually setup the connection we have to create a statically allocated ros::Subscriber which is templated on your message type and call NodeHandle::subscribe within the setup() function”<br>Sounds easy enough…</p>
-<p>After I spent ages trying to make sense of the <code>baxter_core_msgs/JointCommand.h</code> header file, I eventually found out which messages to use.<br>To find out, play the <code>rosbag</code>, and in another shell do:<br><figure class="highlight zsh"><figcaption><span>Command line 3</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">$ rostopic list -v</div><div class="line"></div><div class="line">Published topics:</div><div class="line"> * /robot/joint_states [sensor_msgs/JointState] 1 publisher</div><div class="line"> * /camera/depth_registered/points [sensor_msgs/PointCloud2] 1 publisher</div><div class="line"> * /octomap_full [octomap_msgs/Octomap] 1 publisher</div><div class="line"> * /rosout [rosgraph_msgs/Log] 1 publisher</div><div class="line"> * /tf [tf2_msgs/TFMessage] 1 publisher</div><div class="line"> * /tf_static [tf2_msgs/TFMessage] 1 publisher</div><div class="line"> * /clock [rosgraph_msgs/Clock] 1 publisher</div><div class="line"> * /rosout_agg [rosgraph_msgs/Log] 1 publisher</div><div class="line"></div><div class="line">Subscribed topics:</div><div class="line"> * /rosout [rosgraph_msgs/Log] 1 subscriber</div></pre></td></tr></table></figure></p>
-<p>So actually, the joint angles use the <code>sensor_msgs/JointState</code> message,<br>I had to move some lines around, correct some typos, syntax errors etc. etc.<br>I wasn’t sure about printing actual joint angles yet, but I know I can print <code>position_length</code>, which presumably means how many joint positions there are.</p>
-<p>It worked! The screenshot (often…) shows there are 17 angles. This almost definitely corresponds to:</p>
-<ul>
-<li>14 arm joints (2x7)</li>
-<li>2 head joints</li>
-<li>1 torso joint</li>
-</ul>
-<p><img src="/Robotic-Telepresence/2016/11/23/Exploring-rosbags/Subscriber.png" alt="Left side is Ubuntu running ROS playing the Baxter rosbag, right side is Windows subscribing to it"><br>With a little more tweaking, and it’s actually pretty easy!<br>I can pull the names out and format it in any way I choose to suit my Unity needs.</p>
-<p><img src="/Robotic-Telepresence/2016/11/23/Exploring-rosbags/Named.png" alt="The &#39;1&#39; position_length messages are revealed to be for the grippers"></p>
-<p>Next stop, compiling this code into the Unity <code>.dll</code>, and then getting the joints to mirror the <code>rosbag</code>.<br>NICE.</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/23/Exploring-rosbags/" data-id="cizvl9s700009cs9rv0l4r6pi" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Project-meeting-5" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2016/11/22/Project-meeting-5/">Project meeting 5</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2016/11/22/Project-meeting-5/" class="article-date">
-  <time datetime="2016-11-22T23:02:04.000Z" itemprop="datePublished">Tue 22/11/2016 23:02</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>I’m definitely working on the right track, but whenever I get asked specifics about my plans I come up blank.<br>It’s becoming increasingly clear that I need to update my Gantt chart! This will be done by next week I swear.</p>
-<p>I learned about the octree.<br>While the kinect only has a line-of-sight view of the world, the octree retains data of geometry which is obstructed.<br>This geometry can only be removed if it is confirmed to not be there anymore, at which point its probability of being there is lowered gradually.</p>
-<p>I filled out the health and safety forms for Baxter and the robot lab.<br>I should be able to go in and get some real experience with <code>ROS</code>.<br>(My swipe access might work now as well)</p>
-<p>The most useful thing for me to do now would be to see if I could get specific communication using <code>rosserial</code>, not just general Boolean confirmation that it’s happening.<br>We recorded Baxter waving his arms around for about 60 seconds.<br>This data was compiled into a <code>rosbag</code>, which supposedly can be swapped out for real data being streamed from Baxter with very little changes experienced.<br>In this <code>rosbag</code> we included:</p>
-<ul>
-<li>The joint angles.<br>This should plug in to the Unity project because I already have the URDF and virtual representation</li>
-<li>The point cloud data from the Kinect<br>I don’t know how to do this yet, but there has got to be ways to do it, I’m not too worried.</li>
-<li>The octrees<br>I’ll have to think about this, but I’m sure it will be possible somehow.<br>To use the <code>rosbags</code>, you can do<figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ rosbag (record | play) baxter.bag</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>It plays back in RViz fine. Lasts about 60 seconds.<br>We confirmed its integrity by transferring it to another computer and directly playing it back to Baxter.<br>Oscar will send me a dropbox link with the rosbag, it is quite large (~8.5GB) and we had trouble putting it on a USB stick (possibly because of the 4GB Fat32 filesize limit?)<br>Apparently a RAMdisk might be helpful for the rosbag.<br>If I need to translate coordinate frames relative to Baxter, the frame is ‘base’”?<br>I knew I wouldn’t remember everything but I know these things exist to ask about.</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/22/Project-meeting-5/" data-id="cizvl9s8b0013cs9rm1dgdgg8" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/28/Rosbag-communication/" data-id="cj00vgmz3001hik9rf6fqx98v" class="article-share-link">Share</a>
     
      
   </footer>
@@ -551,7 +568,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
     </div>
   </div>
 

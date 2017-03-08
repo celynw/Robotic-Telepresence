@@ -82,6 +82,186 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-Coordinate-system-converted" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/11/09/Coordinate-system-converted/">Coordinate system converted</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/11/09/Coordinate-system-converted/" class="article-date">
+  <time datetime="2016-11-09T13:04:25.000Z" itemprop="datePublished">Wed 09/11/2016 13:04</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <h4 id="Differences"><a href="#Differences" class="headerlink" title="Differences"></a>Differences</h4><p>ROS uses a right-handed coordinate system.<br>Unity uses a left-handed coordinate system.<br>(<a href="https://en.wikipedia.org/wiki/Right-hand_rule" target="_blank" rel="external">handedness</a>)</p>
+<h4 id="Translation"><a href="#Translation" class="headerlink" title="Translation"></a>Translation</h4><p>ROS uses <a href="http://www.ros.org/reps/rep-0103.html" target="_blank" rel="external">this convention</a>:</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>ROS Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>X +ve</td>
+<td>forwards</td>
+</tr>
+<tr>
+<td>Y +ve</td>
+<td>left</td>
+</tr>
+<tr>
+<td>Z +ve</td>
+<td>up</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>On importing Baxter models as a Unity assets, they come in at +90 degrees rotated around Unity’s X axis.<br>In relation to Baxter, the Unity coordinate system is:</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>Unity Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>X +ve</td>
+<td>backwards</td>
+</tr>
+<tr>
+<td>Y +ve</td>
+<td>left</td>
+</tr>
+<tr>
+<td>Z +ve</td>
+<td>up</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>When the parent-most GameObject is rotated so that Baxter is upright, the child XYZ frame is also rotated.<br>So for translation, all I need to do is negate the X translation.</p>
+<h4 id="Rotation"><a href="#Rotation" class="headerlink" title="Rotation"></a>Rotation</h4><p>The following table describes what an increase in rotation value for each axis looks like in ROS and Unity (using local rotations).<br>As the axes for translations can now match up, disregarding negativity they should for rotations.</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>Rotation</th>
+<th>Label</th>
+<th>Axis</th>
+<th>Direction in ROS</th>
+<th>Direction in Unity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Roll</td>
+<td>r</td>
+<td>X (+ve)</td>
+<td>right</td>
+<td>right</td>
+</tr>
+<tr>
+<td>Pitch</td>
+<td>p</td>
+<td>Y (+ve)</td>
+<td>forwards</td>
+<td>backwards</td>
+</tr>
+<tr>
+<td>Yaw</td>
+<td>y</td>
+<td>Z (+ve)</td>
+<td>left</td>
+<td>right</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>The order in which rotations are performed makes a difference.<br>The code in the following script was used to successfully rotate the meshes to the correct starting positions.<br><figure class="highlight cs"><figcaption><span>ConvertCoordinateSystem.cs</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> UnityEngine;</div><div class="line"><span class="keyword">using</span> System.Collections;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">InitialRotation</span> : <span class="title">MonoBehaviour</span> &#123;</div><div class="line">	<span class="keyword">public</span> Vector3 input = <span class="keyword">new</span> Vector3();</div><div class="line">	<span class="keyword">public</span> Vector3 angles = <span class="keyword">new</span> Vector3(<span class="number">0.0</span>f, <span class="number">0.0</span>f, <span class="number">0.0</span>f);</div><div class="line">	<span class="keyword">private</span> Vector3 saved;</div><div class="line"></div><div class="line">	<span class="comment">// Use this for initialization</span></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Start</span> (<span class="params"></span>) </span>&#123;</div><div class="line">		angles.x = input.x * Mathf.Rad2Deg;</div><div class="line">		angles.y = input.y * Mathf.Rad2Deg;</div><div class="line">		angles.z = input.z * Mathf.Rad2Deg;</div><div class="line"></div><div class="line">		transform.localEulerAngles = Vector3.zero;</div><div class="line">		transform.Rotate(<span class="number">0</span>, <span class="number">0</span>, -angles.z, Space.Self);</div><div class="line">		transform.Rotate(<span class="number">0</span>, -angles.y, <span class="number">0</span>, Space.Self);</div><div class="line">		transform.Rotate(angles.x, <span class="number">0</span>, <span class="number">0</span>, Space.Self);</div><div class="line">		saved = transform.localEulerAngles;</div><div class="line"></div><div class="line">		<span class="comment">//Don't switch to the game window</span></div><div class="line">		UnityEditor.SceneView.FocusWindowIfItsOpen(<span class="keyword">typeof</span>(UnityEditor.SceneView));</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">// Update is called once per frame</span></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Update</span> (<span class="params"></span>) </span>&#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>The <code>Vector3</code> variable ‘Input’ was used to manually enter the values from the <code>.xacro.urdf</code> file.<br>The <code>Vector3</code> variable ‘angles’ I used as an indicator to show what (additional?) rotation was being performed on the part.</p>
+<p><img src="/Robotic-Telepresence/2016/11/09/Coordinate-system-converted/Inputs.png" alt="Script inputs"></p>
+<p>To verify that the script was working, I rotated the joints using the <code>&lt;limit lower/&gt;</code> and <code>&lt;limit upper/&gt;</code> values to see if the arm would clip into another body part.<br>This showed that it worked correctly, because there was no clipping.<br>It showed that the shape of Baxter has been designed so that there are hollows for the respective protruding parts to get a larger operating range of movement.</p>
+<p><img src="/Robotic-Telepresence/2016/11/09/Coordinate-system-converted/Limits.png" alt="Verifying the joint limits"></p>
+<p>I had trouble importing E1 (lower elbow) and E0 for some reason, maybe it was a corrupt file.<br>Replacing it with a fresh one from the GitHub repository solved the issue.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/09/Coordinate-system-converted/" data-id="cj00vgmwk0006ik9r0ruvr9it" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Project-meeting-3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/11/08/Project-meeting-3/">Project meeting 3</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/11/08/Project-meeting-3/" class="article-date">
+  <time datetime="2016-11-08T20:07:40.000Z" itemprop="datePublished">Tue 08/11/2016 20:07</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>I still need to get swipe access to the robot lab.<br>After that I need to do health and safety briefing for Baxter.</p>
+<p>I confirmed my suspicions that ROS versions don’t generally mix, while the Kinetic upgrade is an especially significant change.<br>Baxter is running on Indigo and I would need a very good reason to use Kinetic instead.<br>Remember, Indigo doesn’t work on Ubuntu 16. Use 14 for the LTS.</p>
+<p>I got Oscar to send me some point cloud data</p>
+<ul>
+<li>Raw data directly from kinect (428MB)</li>
+<li>Coloured data (571MB)</li>
+<li>Coloured subsampled data (6.39MB)</li>
+<li>Monocular reconstruction cloud (17MB)</li>
+<li>Octree (53.1MB)<br>The point cloud data is in <code>.ply</code> binary format.</li>
+</ul>
+<p>He also sent me a list of libraries I’ll need to generate/view it.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">meshlab</div><div class="line">ros-indigo-octomap</div><div class="line">ros-indigo-octomap-mapping</div><div class="line">ros-indigo-octomap-msgs</div><div class="line">ros-indigo-octomap-ros</div><div class="line">ros-indigo-octomap-rviz-plugins </div><div class="line">ros-indigo-octomap-server</div><div class="line">ros-indigo-octovis</div></pre></td></tr></table></figure></p>
+<p>Also, a link to the wiki page for <a href="http://wiki.ros.org/rosserial_windows/Tutorials/Hello%20World" target="_blank" rel="external">sending serial messages to ROS from Windows</a>.</p>
+<p>Oscar also said that a Raspberry Pi may not have a fast enough internet connection to handle the point cloud data, or have very good latency.<br>This isn’t too much of a problem. In the robot lab, there’s a computer dedicated to Baxter which has university log-on (first run will apparently still be a pain)<br>The others (including the beefy one with 4x12GB VRAM) don’t, but I’ll get some help when the time comes.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/08/Project-meeting-3/" data-id="cj00vgmye0015ik9r94p3xn8l" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
     <article id="post-Site-update" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -111,7 +291,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/08/Site-update/" data-id="cizvl9s8i001ccs9rh4nswoj5" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/08/Site-update/" data-id="cj00vgmz2001fik9r3nc7z1tp" class="article-share-link">Share</a>
     
      
   </footer>
@@ -150,7 +330,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/05/Images-in-the-hexo-site/" data-id="cizvl9s76000dcs9r5nmd3a1a" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/05/Images-in-the-hexo-site/" data-id="cj00vgmwx000cik9r099ka2qv" class="article-share-link">Share</a>
     
      
   </footer>
@@ -205,7 +385,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/02/VR-with-VRUI/" data-id="cizvl9s8r001kcs9r1fkdv0z3" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/02/VR-with-VRUI/" data-id="cj00vgmzo001mik9rq6lkuatt" class="article-share-link">Share</a>
     
      
   </footer>
@@ -242,7 +422,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/31/Hexo-site/" data-id="cizvl9s77000ecs9rbmxkdmai" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/31/Hexo-site/" data-id="cj00vgmwy000dik9runmd9r5h" class="article-share-link">Share</a>
     
      
   </footer>
@@ -281,7 +461,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/30/Sorting-out-rotation/" data-id="cizvl9s8j001dcs9rggt6v22c" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/30/Sorting-out-rotation/" data-id="cj00vgmz1001eik9rfnkwlvy0" class="article-share-link">Share</a>
     
      
   </footer>
@@ -342,94 +522,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/27/Rigging-Baxter/" data-id="cizvl9s8h001acs9rsep3epd7" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Jekyll-site" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2016/10/26/Jekyll-site/">Jekyll site</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2016/10/26/Jekyll-site/" class="article-date">
-  <time datetime="2016-10-26T17:35:15.000Z" itemprop="datePublished">Wed 26/10/2016 18:35</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>After some research I’ve found a possibly good solution.<br>Currently I’m keeping my notes as markdown on a USB stick under source control (Mercurial).<br>If I push them to my bitbucket repository, they can be hosted under the URL:</p>
-<blockquote>
-<p><strong>USERNAME</strong>.bitbucket.io</p>
-</blockquote>
-<p>The page can host anything static. No PHP, but you can do a lot with JS and CSS.<br>Set up the <code>Aerobatic</code> BitBucket plugin. It’s supposed to support jekyll, so that I can just push new Markdown to the repo and it will rebuild the site for me.</p>
-<p>I’ve got jekyll to work, however I’ve found out that the Aerobatic plugin for BitBucket only has 5 publishes per 24 hours.<br>I’m going to see if I can run it locally to preview before pushing, but this could be a dealbreaker.<br>I’ve got jekyll to work locally.<br>I can’t get the automatic updating when a file is edited to work, but it doesn’t matter so much.</p>
-<p>Currently my notes are one big markdown file, I’m going to split them into individual posts.</p>
-<p>I’ve run into some problems with the index page.<br>Aerobatic couldn’t find the index.html.<br>It’s not in the jekyll folder in the repo, I assumed everything would be OK seeing as though it served locally well.<br>It turns out the problem was that local Jekyll was using <code>index.md</code>, and Aerobatic was <em>specifically</em> looking for <code>index.html</code></p>
-<p>Aerobatic won’t populate the index.html either, it needs to work on <code>.md</code> files. Hmm. Will sort it out another time.</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/26/Jekyll-site/" data-id="cizvl9s7c000ics9rhkxtbw6z" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Project-meeting-2" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2016/10/26/Project-meeting-2/">Project meeting 2</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2016/10/26/Project-meeting-2/" class="article-date">
-  <time datetime="2016-10-26T15:08:54.000Z" itemprop="datePublished">Wed 26/10/2016 16:08</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <h4 id="Housekeeping"><a href="#Housekeeping" class="headerlink" title="Housekeeping"></a>Housekeeping</h4><ul>
-<li>I haven’t filled out the project health and safety form. Bring it to the next meeting!</li>
-<li>I’m required to take notes. I should also keep them in a format which Rich can read<br>  In the past people have used Google Docs. I like the idea of keeping my notes in Markdown so I might end up using an online host for that.</li>
-<li>When will I have something shiny to show?<br>  I’ve made a Gantt chart, but I didn’t bring it.<br>  I may need to change it over the next few weeks as well<br>  If I’m taking screenshots and hosting my notes, it will be easier to write my midterm/final report.</li>
-<li>Poke Oscar about giving me some point cloud data.</li>
-</ul>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/26/Project-meeting-2/" data-id="cizvl9s85000ycs9r592xn0lf" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/27/Rigging-Baxter/" data-id="cj00vgmyr001bik9rsdmj2ubj" class="article-share-link">Share</a>
     
      
   </footer>
@@ -462,7 +555,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
     </div>
   </div>
 

@@ -82,6 +82,88 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-Native-Windows-point-cloud" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2017/02/22/Native-Windows-point-cloud/">Native Windows point cloud</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/02/22/Native-Windows-point-cloud/" class="article-date">
+  <time datetime="2017-02-22T00:21:18.000Z" itemprop="datePublished">Wed 22/02/2017 00:21</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>Most existing Unity plugins or assets seem to be focused on calculating bone positions of humans.<br>In the robot lab, I was showed how the Kinect (v1) was interfaced with using WPF C#.<br>This is the model which recorded the point cloud for the <code>ROSbag</code>, although there are v2s around which are better.</p>
+<p>I can either adapt a sample from within the <a href="https://www.microsoft.com/en-us/download/details.aspx?id=40276" target="_blank" rel="external">Kinect Developer Toolkit 1.8.0</a>, or adapt existing code already compatible with UnityScript, <a href="https://developer.microsoft.com/en-us/windows/kinect/tools" target="_blank" rel="external">Microsoft Unity Pro packages</a><br>I will still try to stream them over <code>rosserial_windows</code> as this is not turning out to be an easy sidestep of the problem.<br>Perhaps there is a way to decimate the point cloud which could solve the problem.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/22/Native-Windows-point-cloud/" data-id="cj00vgmy0000sik9r1hypwavs" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-VR-improvements" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2017/02/20/VR-improvements/">VR improvements</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/02/20/VR-improvements/" class="article-date">
+  <time datetime="2017-02-20T17:55:29.000Z" itemprop="datePublished">Mon 20/02/2017 17:55</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <h4 id="Hands"><a href="#Hands" class="headerlink" title="Hands"></a>Hands</h4><p>I’ve made it so that the correct-side gripper is drawn at the controller’s position when the trigger is pressed.<br>It’s translucent to signify a target, as well as having the green line to show the order between targets.<br>The controller models disappear when selecting a position so that it’s easier to see where to line the gripper up with.</p>
+<p>I’ve also added text to display which hand is which, as well as diagrams to show which orientation we are in.</p>
+<div class="video-container"><iframe src="//www.youtube.com/embed/Q-NrmlMVt88" frameborder="0" allowfullscreen></iframe></div>
+<h4 id="Command-queue"><a href="#Command-queue" class="headerlink" title="Command queue"></a>Command queue</h4><p>I’m not sure how to mark these steps as ‘done’ so that they can be removed from the queue, but subsequent moves are queued for Baxter’s IK solver to crunch through.</p>
+<h4 id="Still-need"><a href="#Still-need" class="headerlink" title="Still need"></a>Still need</h4><ul>
+<li>The ability to cancel the last move</li>
+<li>When swapping orientations, move the physical location of the user (fade through black?)</li>
+</ul>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/20/VR-improvements/" data-id="cj00vgmzm001lik9r2reuzr1j" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
     <article id="post-Project-meeting-10" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -109,7 +191,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/15/Project-meeting-10/" data-id="cizvl9s83000wcs9r5wz6nze6" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/15/Project-meeting-10/" data-id="cj00vgmy3000vik9r5gd7m7l1" class="article-share-link">Share</a>
     
      
   </footer>
@@ -220,7 +302,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/15/Visualising-grippers/" data-id="cizvl9s95001lcs9rvjkhllf4" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/15/Visualising-grippers/" data-id="cj00vgmzo001nik9rjxdl2hq7" class="article-share-link">Share</a>
     
      
   </footer>
@@ -258,7 +340,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/14/Kinect-with-Unity/" data-id="cizvl9s7b000hcs9r4v5bgxsy" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/14/Kinect-with-Unity/" data-id="cj00vgmx3000iik9r463r28u6" class="article-share-link">Share</a>
     
      
   </footer>
@@ -301,7 +383,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/12/VR-feature-Angle-snapping/" data-id="cizvl9s8q001ics9re9bqsp1c" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/12/VR-feature-Angle-snapping/" data-id="cj00vgmz5001jik9ramyjb62s" class="article-share-link">Share</a>
     
      
   </footer>
@@ -339,7 +421,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/08/Project-meeting-9/" data-id="cizvl9s8d0016cs9r2vmfmpcd" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/08/Project-meeting-9/" data-id="cj00vgmyg0016ik9r2tu31vky" class="article-share-link">Share</a>
     
      
   </footer>
@@ -383,89 +465,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/07/Adding-VR-to-Unity-Project/" data-id="cizvl9s6f0001cs9rpz2d4edb" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Midterm-interview" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2017/02/02/Midterm-interview/">Midterm interview</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2017/02/02/Midterm-interview/" class="article-date">
-  <time datetime="2017-02-02T20:19:49.000Z" itemprop="datePublished">Thu 02/02/2017 20:19</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <h4 id="Main-things-to-take-away"><a href="#Main-things-to-take-away" class="headerlink" title="Main things to take away"></a>Main things to take away</h4><p>I need to really be sure on what it is I’m trying to acheive. This should come across very clearly in the final report.<br>Rather than setting my work out in the order I discovered things (chronologically), it would be clearer if I start with broad information, and reading further qould increase the detail.</p>
-<p>I need to finish the project as soon as possible, to any degree of quality. Then I should work on fleshing it out.<br>Even though I work regularly there’s a risk of not finishing, which could severely limit the available marks.<br>I’ll be working on control for Baxter and implementing VR over the next couple of weeks.</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/02/Midterm-interview/" data-id="cizvl9s7g000lcs9ry9wtld78" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Project-meeting-8" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2017/02/01/Project-meeting-8/">Project meeting 8</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2017/02/01/Project-meeting-8/" class="article-date">
-  <time datetime="2017-02-01T22:33:01.000Z" itemprop="datePublished">Wed 01/02/2017 22:33</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <h4 id="Things-discussed"><a href="#Things-discussed" class="headerlink" title="Things discussed"></a>Things discussed</h4><ul>
-<li>Feedback from midterm report</li>
-<li>Tips for the midterm interview tomorrow</li>
-<li>The existing problem with point clouds</li>
-</ul>
-<p>The point clouds might be getting stuck due to the sheer size of the point cloud frames.<br>If so, then cutting the resolution down could save a lot of time and processing.<br>I could test some example (smaller) clouds.<br>However, I’d expect some response from the socket node or some network activity.</p>
-<p>It also could be down to the type of data, as it’s the only topic of its kind.</p>
-<p>At this point, it was suggested that it might be better to directly connect the Kinect to the VR computer.<br>I’ve demonstrated some functionality for a framework for viewing ROS clouds.<br>It would free up time for working on other aspects and could be relatively straight-forward to implement and achieve good results.</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/01/Project-meeting-8/" data-id="cizvl9s8c0014cs9reru0bbya" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/07/Adding-VR-to-Unity-Project/" data-id="cj00vgmw30001ik9r9tkuzknz" class="article-share-link">Share</a>
     
      
   </footer>
@@ -498,7 +498,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
     </div>
   </div>
 
