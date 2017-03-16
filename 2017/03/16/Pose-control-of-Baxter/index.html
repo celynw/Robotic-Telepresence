@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Pose control of Baxter | Robotic Telepresence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="After learning about how the IK solver works, I realised I’d have to create another ROS node, this time on the Linux PC connected to Baxter.
+Control of BaxterFollowing some of the documentation on the">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pose control of Baxter">
+<meta property="og:url" content="https://celynwalters.github.io/Robotic-Telepresence/2017/03/16/Pose-control-of-Baxter/index.html">
+<meta property="og:site_name" content="Robotic Telepresence">
+<meta property="og:description" content="After learning about how the IK solver works, I realised I’d have to create another ROS node, this time on the Linux PC connected to Baxter.
+Control of BaxterFollowing some of the documentation on the">
+<meta property="og:updated_time" content="2017-03-16T00:13:52.782Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Pose control of Baxter">
+<meta name="twitter:description" content="After learning about how the IK solver works, I realised I’d have to create another ROS node, this time on the Linux PC connected to Baxter.
+Control of BaxterFollowing some of the documentation on the">
+  
+    <link rel="alternate" href="/atom.xml" title="Robotic Telepresence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/Robotic-Telepresence/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/Robotic-Telepresence/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-87037949-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/Robotic-Telepresence/" id="logo">Robotic Telepresence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/Robotic-Telepresence/" id="subtitle">Electronic Engineering BEng final project</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/">Home</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/Project-objectives">Project Objectives</a>
+        
+          <a class="main-nav-link" href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1">Gantt Chart</a>
+        
+          <a class="main-nav-link" href="/Robotic-Telepresence/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://celynwalters.github.io/Robotic-Telepresence"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Pose-control-of-Baxter" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Pose control of Baxter
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/03/16/Pose-control-of-Baxter/" class="article-date">
+  <time datetime="2017-03-15T23:33:43.000Z" itemprop="datePublished">Thu 16/03/2017 00:33</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>After learning about how the IK solver works, I realised I’d have to create another ROS node, this time on the Linux PC connected to Baxter.</p>
+<h4 id="Control-of-Baxter"><a href="#Control-of-Baxter" class="headerlink" title="Control of Baxter"></a>Control of Baxter</h4><p>Following some of the documentation on the Baxter site, I found an example which could be useful<br>There’s an example which can be run using:<br><figure class="highlight bash"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ rosrun baxter_interface joint_trajectory_action_server</div><div class="line">$ rosrun baxter_examples joint_trajectory_client <span class="_">-l</span> left</div></pre></td></tr></table></figure></p>
+<p>This moves Baxter’s left arm to three preset positions.</p>
+<h4 id="IK-service"><a href="#IK-service" class="headerlink" title="IK service"></a>IK service</h4><p>Given a pose, this simply returns the planned path for the arm if a solution was found, it does not offer any control.<br>I can already subscribe to a pose topic from Unity.<br>The related example can be run like this:<br><figure class="highlight bash"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ rosrun baxter_interface joint_trajectory_action_server</div><div class="line">$ rosrun baxter_examples ik_service_client.py <span class="_">-l</span> left</div></pre></td></tr></table></figure></p>
+<p>This runs for a hard-coded preset point.</p>
+<p>Initially I thought about mashing these two together, but there were a few problems.</p>
+<ul>
+<li>Collision would be ignored. This is risky</li>
+<li>I have no easy way to debug, e.g. coordinate frame conversion errors</li>
+</ul>
+<h4 id="MoveIt"><a href="#MoveIt" class="headerlink" title="MoveIt"></a>MoveIt</h4><p>With some help from Rebecca, this solves some of those problems.</p>
+<p>I wrote a python script which subscribes to two topics, <code>/vr/pose_l</code> and <code>/vr/pose_r</code>, both of which published by the VR PC.<br>On receiving a message, the IK service is called. It has a suitable planning time allowance, and final position error.<br>If a solution is found, the arm will move to that location.</p>
+<p>The planned motion (and the subsequent motion) is shown in RViz.<br>Using RViz, I can also insert a primitive collision bound so that anywhere below table-height is off-limits.</p>
+<figure class="highlight plain"><figcaption><span>baxter_table.scene</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">table</div><div class="line">* table</div><div class="line">1</div><div class="line">box</div><div class="line">3 3 0.05</div><div class="line">0 0 -0.2</div><div class="line">0 0 0 1</div><div class="line">0 0 0 0</div><div class="line">.</div><div class="line"></div><div class="line"># Scene name</div><div class="line"># Object name</div><div class="line"># Number of shapes</div><div class="line"># Shape type</div><div class="line"># Size</div><div class="line"># Position</div><div class="line"># Orientation</div><div class="line"># RGBA colour</div><div class="line"># Necessary</div></pre></td></tr></table></figure>
+<p>Remember to run:<br><figure class="highlight bash"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">source</span> ../moveit_ws/devel/setup.sh</div><div class="line">$ rosrun baxter_interface joint_trajectory_action_server</div><div class="line">$ roslaunch baxter_moveit_config baxter_grippers.launch</div><div class="line">$ python ~/path-to-script.py</div></pre></td></tr></table></figure></p>
+<h4 id="Final-touches"><a href="#Final-touches" class="headerlink" title="Final touches"></a>Final touches</h4><ul>
+<li>The script can be optimised, it contains a lot of extra information found for tutorial purposes.</li>
+<li>I need feedback to Unity for when no solution could be found for a target position.</li>
+<li>I need feedback to Unity for when a target position has been reached.</li>
+<li>There are a few extra messages been published, such as messages which are all zero in initialisation. Iron out these.</li>
+</ul>
+<h4 id="Still-to-do"><a href="#Still-to-do" class="headerlink" title="Still to do!"></a>Still to do!</h4><p>‘Telepresence’ is nearly there. But it’s useless unless we can get data representing the real world in.<br>I’ll need to set up operating the grippers.<br>Once these are done I can begin the user tests.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/16/Pose-control-of-Baxter/" data-id="cj0bndpzp000x1k9re9adsid0" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/Robotic-Telepresence/2017/03/15/Pose-message-from-Unity/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Pose message from Unity</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        <!-- MANUALLY ADDED FOR GANTT CHART -->
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Celyn Walters<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/Robotic-Telepresence/" class="mobile-nav-link">Home</a>
+  
+    <a href="/Robotic-Telepresence/Project-objectives" class="mobile-nav-link">Project Objectives</a>
+  
+    <a href="https://www.teamgantt.com/gantt/schedule/?ids=702976&public_keys=1UNWW0SIdEwg&zoom=w90&font_size=12&estimated_hours=0&assigned_resources=0&percent_complete=0&documents=0&comments=0&col_width=255&menu_view=0&resource_filter=1&name_in_bar=0&name_next_to_bar=0&resource_names=1" class="mobile-nav-link">Gantt Chart</a>
+  
+    <a href="/Robotic-Telepresence/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/Robotic-Telepresence/fancybox/jquery.fancybox.css">
+  <script src="/Robotic-Telepresence/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/Robotic-Telepresence/js/script.js"></script>
+
+  </div>
+</body>
+</html>

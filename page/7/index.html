@@ -82,6 +82,143 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-Hexo-site" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/10/31/Hexo-site/">Hexo site</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/10/31/Hexo-site/" class="article-date">
+  <time datetime="2016-10-31T19:36:53.000Z" itemprop="datePublished">Mon 31/10/2016 20:36</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>There has been a lot of trial and error (mostly error) with BitBucket, Aerobatic, Jekyll, GitHub, zsh, ssh keys etc. etc.<br>Finally, <a href="https://hexo.io/" target="_blank" rel="external">hexo</a> looks like the solution I was looking for.<br>I’m still yet to edit the site layout, css, hexo configuration, but I can now post my notes.<br>It doesn’t support mercurial, but the GitHub hosting is much better than that of BitBucket.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/31/Hexo-site/" data-id="cj0bndpy7000h1k9rtppmto9w" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Sorting-out-rotation" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/10/30/Sorting-out-rotation/">Sorting out rotation</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/10/30/Sorting-out-rotation/" class="article-date">
+  <time datetime="2016-10-30T11:55:44.000Z" itemprop="datePublished">Sun 30/10/2016 12:55</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>I naïvely thought that if I rotate the object so that regardless of <em>which</em> axis is which, that all three from the <code>urdf</code> line up with those in Unity, I could then just swap them out with each other and everything would work.<br>However, this doesn’t seem to work. Maybe it’s something to do with Unity doing rotation in Z, then X, then Y according to the <a href="https://docs.unity3d.com/ScriptReference/Transform-eulerAngles.html" target="_blank" rel="external">docs</a>, whereas ROS does X, Y, Z.</p>
+<p>This was a headache until I realised that instead of using the <code>transform.localEulerAngles</code>, I can use <code>transform.Rotate</code>.<br>Rather than setting the rotation it can apply one in a single axis.<br>Changing the order of rotations in a script <em>does</em> change the result, as one might expect.<br>However, there’s no combination of rotations with 100 degrees and 90 degrees which would place the screen in the correct location!</p>
+<p>Much later - I’ve worked it out!<br>I’ve been presuming that every link definition has an origin rotation of zero.<br>This is true for all cases <em>except</em> the screen (which is a child of head_nod).<br>I think this is unique because this has display as a child which will need to be the correct way up in the simulator. D’oh!<br>I still haven’t worked out the correct rotation combinations for the script, another time.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/30/Sorting-out-rotation/" data-id="cj0bndq0p001j1k9r5kohwgaw" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Rigging-Baxter" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/10/27/Rigging-Baxter/">Rigging Baxter</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/10/27/Rigging-Baxter/" class="article-date">
+  <time datetime="2016-10-27T16:05:31.000Z" itemprop="datePublished">Thu 27/10/2016 17:05</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>I’ve managed to get the Baxter meshes into Unity, but they are completely separate parts.<br>ROS uses a <code>.urdf</code> file format to relate parts to each other, which isn’t directly compatible or convertible to a Unity supported format.<br>In order to progress, I need to manually rig Baxter.<br>I can view the official files as they are text-based (an <code>xml</code> format).<br>Within the <code>baxter.urdf</code> file, there is a header:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">baxter.urdf is DEPRECATED. It is included here for backward compatibility.</div><div class="line">Please use baxter.urdf.xacro by running:</div><div class="line">$ rosrun xacro xacro.py - -inorder `rospack find baxter_description`/urdf/baxter.urdf.xacro</div></pre></td></tr></table></figure></p>
+<p>The <code>xacro</code> format also is <code>xml</code> based.<br>It seems to be the same, but also include metadata for the materials.<br>I’ll be using this <code>.urdf.xacro</code> file for reference and ignoring the <code>.urdf</code>.</p>
+<p>I started with the torso, as that was described in the <code>baxter_base.urdf.xacro</code> as being at the origin.<br><img src="/Robotic-Telepresence/2016/10/27/Rigging-Baxter/Torso.png" alt=""><br>I am thinking of adding the collision models later when(/if) I need to.<br>There are two files in the head folder, <code>H0</code> and <code>H1</code>. The <code>urdf</code> describes <code>H1</code> being called the ‘screen’.<br>By looking at photos of a fully assembled Baxter, <code>H1</code> is a round part which appears to attach below the head part of the torso model, and the screen should attach to that.<br>Unfortunately, the coordinates in the <code>urdf</code> do not match the coordinate system in Unity.</p>
+<ul>
+<li>An decrease in <code>Z</code> in the <code>urdf</code> is an increase in <code>Y</code> in Unity.</li>
+<li>The units in the <code>urdf</code> appear to be almost 100x smaller than those in Unity.<br>Even manually moving the <code>H0</code> part to the correct Y location, it is still offset, even though the <code>urdf</code> describes the other axes as being zero.<br><img src="/Robotic-Telepresence/2016/10/27/Rigging-Baxter/Offset.png" alt="Showing the strange offset"></li>
+</ul>
+<p>I also noticed that the screen (<code>H1</code>) was rotated 90 degrees. The <code>urdf</code> describes the rotation in radians, while Unity describes it in degrees.</p>
+<p>Looking at a <code>urdf</code> <a href="http://wiki.ros.org/urdf/Tutorials/Building%20a%20Visual%20Robot%20Model%20with%20URDF%20from%20Scratch" target="_blank" rel="external">tutorial</a>, ROS uses metres as the units of distance.<br>Unity uses generic units, but in relation to the scale of the model parts this looks about correct.</p>
+<p>After writing half an email to Oscar, I worked it out.<br>I had a better look at the <code>urdf</code> and noticed that the <code>&quot;head&quot;</code> link is mentioned in some <code>joint</code> objects.<br>Specifically, the <code>&quot;head_pan&quot;</code> joint with the parent of <code>&quot;torso&quot;</code> and the child of <code>&quot;head&quot;</code> had the correct coordinates (some inverted and not the correct xyz).<br>The <code>urdf</code> is heirarchical, with inherited transformations.<br>Unity also works like this, so I can lay out Unity GameObjects in the same manner as in the <code>urdf</code>. Duh.<br>Perhaps the origin values in the links themselves could be the internal origins in the <code>.dae</code> files?</p>
+<p>I started off with the parent-most object: the <code>base</code>. Everything inherits from here.<br>As I went along, GameObjects were made for joints, links, parents, children… I started assigning Unity tags to them to remember what was what, keeping their original names.<br>The <code>head_camera</code> joint has a child link called <code>head_camera</code>, so GameObjects like these need to be separate.<br>As I was going through, it became obvious that going down the hierarchy, it alternates between joint and link.<br>Imay have to specify between <code>&quot;fixed&quot;</code> and <code>&quot;revolute&quot;</code> joint types.<br>To save myself some work, I copied the right arm to the left once I’d created all of the GameObjects.<br>There will still be a good amount of work to input all of the coordinates.<br>I think this is necessary, even if I do end up making a converter, so that I understand it and I know it works.<br>When dragging the models in, these should replace the relevant “URDF link” tagged GameObjects.</p>
+<p>I dragged in the torso, pedestal, head mount and screen.<br>The screen has some rotation which I need to work out.</p>
+<p>I can’t work out the rotation for the screen (<code>head_nod</code>), so I’ll continue adding parts for now.<br>Is the origin of each model as described in the <code>urdf</code> the origin in the DAE file? Does Unity see this?<br>If so, undoing that in the parent GameObject will be good?<br>By comparing the <code>left_torso_arm_mount</code> and the <code>right_torso_arm_mount</code>, we can see which numbers are mirrored, and so which correspond to what?</p>
+<p>I talked with a housemate who worked with Unity on placement.<br>When you drag a <code>.DAE</code> into Unity, it creates a new GameObject, which contains 3 children:</p>
+<ul>
+<li>Camera</li>
+<li>Lamp</li>
+<li>Mesh (with the same name as the GameObject)</li>
+</ul>
+<p>He pointed out that the Camera and Lamp are not created by Unity, but exported from whatever was used to design the models (Blender/3DS Max).</p>
+<p>Changing a GameObject’s parent does not move the object in the scene. As a result, a transformation is applied to counteract the change the parent’s transformation has on this GameObject.<br>I didn’t realise this until I messed up the values everywhere. Correcting…</p>
+<p>I got pretty confused with the combined rotations for the screen, so I’m going to try doing the arms.<br>Some of the transformations don’t seem to make sense. The part can be perfectly in place but have one transformation still to do.<br>I think the rotations are being done in the wrong order.</p>
+<p>I found somebody trying to do exactly what I am, <a href="https://forum.unity3d.com/threads/problem-with-setting-game-object-rotation.426902/" target="_blank" rel="external">here</a>, but their problem is related to gimbal lock with eurler angles.</p>
+<h4 id="Looking-at-an-example"><a href="#Looking-at-an-example" class="headerlink" title="Looking at an example"></a>Looking at an example</h4><p>If I could get <code>Gazebo</code> to work in a virtual machine, I can see what baxter looks like at time=0 on one monitor, and have Unity on the other.<br>I had some problems getting it to run.<br>The problems were caused by VirtualBox Additions, for shared folders/clipboard, resolution fixes etc.<br>However I still can’t get it to run. I think there’s some incompatibility between ROS Kinetic and Indigo.<br>(The <a href="http://sdk.rethinkrobotics.com/wiki/Baxter_Simulator" target="_blank" rel="external">website</a> only gives support for up to Indigo).<br>I’ve also found that Indigo isn’t supported on Ubuntu 16! Only <a href="http://answers.ros.org/question/240718/installing-indigo-after-kinetic" target="_blank" rel="external">13 and 14</a>.</p>
+<p>I created a new virtual machine, and I seemed to get close to it working, but it started quitting with no error feedback,</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/27/Rigging-Baxter/" data-id="cj0bndq0c001f1k9r8n5x5yxa" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
     <article id="post-Jekyll-site" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -117,7 +254,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/26/Jekyll-site/" data-id="cj00vgmx1000gik9r9ii2qwqe" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/26/Jekyll-site/" data-id="cj0bndpya000i1k9rr2fpzllk" class="article-share-link">Share</a>
     
      
   </footer>
@@ -159,7 +296,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/26/Project-meeting-2/" data-id="cj00vgmy8000zik9r3vlawc2o" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/26/Project-meeting-2/" data-id="cj0bndpzz00141k9r9rolo96q" class="article-share-link">Share</a>
     
      
   </footer>
@@ -197,7 +334,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/25/ROS-tutorials/" data-id="cj00vgmym0019ik9rg63kbel3" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/25/ROS-tutorials/" data-id="cj0bndq0b001d1k9rjzu334aw" class="article-share-link">Share</a>
     
      
   </footer>
@@ -235,7 +372,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/23/Gazebo-VR/" data-id="cj00vgmww000bik9rmdrvsu0f" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/23/Gazebo-VR/" data-id="cj0bndpy4000d1k9rvo8ysci0" class="article-share-link">Share</a>
     
      
   </footer>
@@ -284,139 +421,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/23/Robot-models/" data-id="cj00vgmyz001cik9ruw6atn7c" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Project-meeting-1" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2016/10/21/Project-meeting-1/">Project meeting 1</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2016/10/21/Project-meeting-1/" class="article-date">
-  <time datetime="2016-10-21T19:32:55.000Z" itemprop="datePublished">Fri 21/10/2016 20:32</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>Following meeting with Rich (21/10/16), these things were discussed:</p>
-<ul>
-<li>I need a plan, a Gantt chart.<br>  It should also take into account other things like exams, coursework, and holidays.</li>
-<li>I don’t need to do it all on Linux if I’m going to be communcating with ROS anyway.<br>  ROS is specifically designed with strong communication support.<br>  Baxter and others run their own instances of ROS anyway, It’s ROS to ROS.<br>  If I had done this research first, I may have reached this conclusion.</li>
-<li>I think, ideally we’d want a ‘ROS node’ which communicates with Unity.<br>  Alternatively a Unity plugin to communicate with ROS could work but that might be horrible.</li>
-<li>Oscar mentioned octrees, how a 3D point cloud is represented in 3D space to give things surfaces.<br>  This might need to be done by me, but Unity as a game engine seems likely to have this built in, or have plugins for it.</li>
-<li>Remember <code>rvis</code> is for visualising the robot.<br>  <code>Gazebo</code> isn’t the same, that is for simulation.</li>
-</ul>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/21/Project-meeting-1/" data-id="cj00vgmy5000xik9rgdnbvs46" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Introduction-to-ROS" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2016/10/21/Introduction-to-ROS/">Introduction to ROS</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2016/10/21/Introduction-to-ROS/" class="article-date">
-  <time datetime="2016-10-21T09:31:34.000Z" itemprop="datePublished">Fri 21/10/2016 10:31</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>I’ll mostly be following the <a href="http://wiki.ros.org/kinetic/Installation/Ubuntu" target="_blank" rel="external">instructions</a> on the official ROS site, with some modifications.<br>First I had to add the ROS repository to the source list:<br><code>deb http://packages.ros.org/ros/ubuntu xenial main</code><br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 0xB01FA116</div><div class="line">$ sudo apt-get update</div><div class="line">$ sudo apt-get install ros-kinetic-desktop-full</div></pre></td></tr></table></figure></p>
-<p>Initialise <code>rosdep</code>. Can install dependencies and required for some core components of ROS.<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo rosdep init</div><div class="line">$ rosdep update</div></pre></td></tr></table></figure></p>
-<p>Set up the environment.<br><code>catkin</code> is the build system for ROS.<br>The installation instructions on the website assume you have <code>bash</code> as your shell.<br>I have <code>zsh</code>. The directory also has a set up script for <code>zsh</code> users too.<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">echo</span> <span class="string">". /opt/ros/kinetic/setup.zsh"</span> &gt;&gt; ~/.zshrc</div><div class="line">$ . ~/.zshrc</div></pre></td></tr></table></figure></p>
-<p>Get rosinstall. Distributed separately, is for downloading source trees for ROS packages.<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install python-rosinstall</div></pre></td></tr></table></figure></p>
-<h4 id="First-ROS-tests"><a href="#First-ROS-tests" class="headerlink" title="First ROS tests"></a>First ROS tests</h4><p>Checking the environment variables have been set:<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ printenv | grep ROS</div></pre></td></tr></table></figure></p>
-<p>Creating a ROS workspace:</p>
-<figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ mkdir -p ~/catkin_ws/src</div><div class="line">$ <span class="built_in">cd</span> !$</div><div class="line">$ catkin_init_workspace</div><div class="line">$ <span class="built_in">cd</span> ../</div><div class="line">$ catkin_make</div><div class="line">$ . devel/setup.zsh</div></pre></td></tr></table></figure>
-<p>Now the environment has been overlayed onto our own. Check with:<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">echo</span> <span class="variable">$ROS_PACKAGE_PATH</span></div></pre></td></tr></table></figure></p>
-<h4 id="Tutorials"><a href="#Tutorials" class="headerlink" title="Tutorials"></a>Tutorials</h4><p>Install tutorials if I haven’t got them already:<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install ros-kinetic-ros-tutorials</div></pre></td></tr></table></figure></p>
-<p>There seems to be lots of interesting tools, which are all available with tab-completion. This explains the specific zsh and bash setup scripts.</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/21/Introduction-to-ROS/" data-id="cj00vgmx1000hik9rpxobaem7" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Unity3D-in-Xubuntu" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2016/10/20/Unity3D-in-Xubuntu/">Unity3D in Xubuntu</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2016/10/20/Unity3D-in-Xubuntu/" class="article-date">
-  <time datetime="2016-10-20T14:41:58.000Z" itemprop="datePublished">Thu 20/10/2016 15:41</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>The Unity website download page only lists <strong>Windows</strong> and <strong>MacOSX</strong> availability.<br>I finally managed to find the public beta <a href="https://forum.unity3d.com/threads/unity-on-linux-release-notes-and-known-issues.350256/" target="_blank" rel="external">Forum thread</a> with the Linux downloads.<br>I have the proprietary graphics drivers installed already, for my <strong>NVidia GTX 970</strong> GPU.<br>I’m going to try the most recent one, <code>5.5.0b5</code>.</p>
-<p>I was able to get it to install and so far it appears to work flawlessly.<br><img src="/Robotic-Telepresence/2016/10/20/Unity3D-in-Xubuntu/Unity Linux.png" alt="Unity 5.5.0b5 in Xubuntu"><br>The title bar says <code>OpenGL 4.5</code>.<br>In Windows, this is what you do to enable virtual reality:<br>Install the <a href="https://www.assetstore.unity3d.com/en/#!/content/32647" target="_blank" rel="external">SteamVR Plugin</a> asset.<br>Go <code>Edit &gt; Project Settings &gt; Player &gt; Other Settings &gt; Virtual Reality Suported</code><br>But the <a href="https://docs.unity3d.com/Manual/VRDevices-OpenVR.html" target="_blank" rel="external">Unity page</a> for OpenVR states:</p>
-<blockquote>
-<p>Steam is required to run OpenVR applications, so install Steam and SteamVR. Once SteamVR is working properly with your headset, add OpenVR to the list of supported SDKs</p>
-</blockquote>
-<p>If I can get SteamVR (OpenVR) to work, this should be able to work as well, but this depends on that for now.</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/20/Unity3D-in-Xubuntu/" data-id="cj00vgmz4001iik9ryu9gkopr" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/10/23/Robot-models/" data-id="cj0bndq0e001h1k9r58pulztt" class="article-share-link">Share</a>
     
      
   </footer>
@@ -449,7 +454,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
     </div>
   </div>
 

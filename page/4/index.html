@@ -82,6 +82,129 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-Converting-point-clouds-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/">Converting point clouds 2</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/" class="article-date">
+  <time datetime="2017-01-02T13:47:58.000Z" itemprop="datePublished">Mon 02/01/2017 13:47</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>To further my investigation of why I was unable to convert the PointCloud2 messages into usable values, I tried using <code>Rviz</code>, which I know can view the data properly.<br>It’s a hassle as I have to restart my PC, and I lose access to most of my development tools (rviz won’t run in a virtual machine).<br>If I can export some of the data, I’ll have something to compare the results of my program to.<br><code>rviz</code> showed how many messages were coming through, and you could select an area of points to see their data. However, you couldn’t select <em>all</em> points, or export the data.</p>
+<p>Later, I came across a tool called <code>bag_to_pcd</code> <a href="http://re.je/notes/2013/capturing-point-clouds-with-pcl-tools/" target="_blank" rel="external">here</a>.<br>I converted each message in the bag to a <code>.pcd</code> file, and then converted the first one into other formats from there.<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ sudo add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl</div><div class="line">$ sudo apt update</div><div class="line">$ sudo apt install libpcl-all</div><div class="line">$ sudo apt install libpcl-all-dev</div><div class="line">$ sudo apt install ros-indigo-perception</div><div class="line"></div><div class="line">$ rosrun pcl_ros bag_to_pcd ~/Downloads/baxter.bag /camera/depth_registered/points ~/Downloads</div><div class="line">$ pcl_pcd2ply 1479833365.438671766.pcd output.ply</div><div class="line">$ pcl_convert_pcd_ascii_binary 1479833365.438671766.pcd output.pcd 0</div></pre></td></tr></table></figure></p>
+<p>I was left with a binary <code>.pcd</code> file, an ascii <code>.pcd</code> file, and a binary <code>.ply</code> file (which didn’t work, unexpected eof even with trailing newline)</p>
+<p>I could view them to make sure they were still OK using <code>pcd_viewer</code><br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ rosrun perception_pcl pcd_viewer output.pcd</div></pre></td></tr></table></figure></p>
+<p><img src="/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/View PCL.png" alt="Incredibly buggy in my virtual machine!"></p>
+<h4 id="New-information"><a href="#New-information" class="headerlink" title="New information"></a>New information</h4><p>When viewing the ascii <code>.pcd</code> file, it became apparent that huge sections at the start and end of the file was meaningless data.<br>This could help to explain why I wasn’t getting anywhere.<br>I also learned that a devices like a kinect will often output <code>nan</code> values if the incident ray wasn’t returned.</p>
+<p>I’ll have to re-export the <code>rosbag</code> message, so that it’s the first message in the bag. Then I can compare my results to the actual points.<br>Hopefully then I can come up with a way to filter out the bad data efficiently.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/" data-id="cj0bndpxo00061k9rhavqp8eu" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Project-meeting-7" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/12/14/Project-meeting-7/">Project meeting 7</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/12/14/Project-meeting-7/" class="article-date">
+  <time datetime="2016-12-14T12:32:16.000Z" itemprop="datePublished">Wed 14/12/2016 12:32</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <h4 id="Project-progress"><a href="#Project-progress" class="headerlink" title="Project progress"></a>Project progress</h4><p>I’m still not sure why I had so much trouble converting 3D-space points back into floats.<br>However, there should be a library in <code>ROS</code> for PCL, which is what I should be using after all.</p>
+<h4 id="Interim-report-plan-feedback"><a href="#Interim-report-plan-feedback" class="headerlink" title="Interim report plan feedback"></a>Interim report plan feedback</h4><p>I received some feedback about the structure of the report.<br>I should think about it more logically, and get somebody else to read it.<br>I’ll also be including multiple revisions of Gantt charts, including an<br>up-to-date version.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/14/Project-meeting-7/" data-id="cj0bndq0400181k9riahtdj90" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Converting-point-clouds" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/12/07/Converting-point-clouds/">Converting point clouds</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/12/07/Converting-point-clouds/" class="article-date">
+  <time datetime="2016-12-07T21:33:29.000Z" itemprop="datePublished">Wed 07/12/2016 21:33</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>I spent a long time trying to write something which formats a message into data useable by Unity for generating a vertex mesh.<br>It should have been easier, but I ran into a lot of issues.</p>
+<p>The general idea is to convert 4 bytes of the 32-byte point data to a float for each of X, Y, and Z.<br>The message even states the endian-ness of this layout (<a href="http://docs.ros.org/api/sensor_msgs/html/msg/PointCloud2.html" target="_blank" rel="external">documentation</a>).</p>
+<p>I learned of the <strong>union</strong>:<br><figure class="highlight cpp"><figcaption><span>Conversion code</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">union</span> &#123;</div><div class="line">  <span class="keyword">float</span> f;</div><div class="line">  <span class="keyword">int</span> b[<span class="number">4</span>];</div><div class="line">&#125; data;</div></pre></td></tr></table></figure></p>
+<p>I couldn’t use the whole data from a single message each time, I couldn’t even open it in a text editor as it was too large.<br>Fortunately I could split the file without even opening it.<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ split -b 200000 PointCloud.txt</div></pre></td></tr></table></figure></p>
+<p>This generated a list of 200kB files, with <code>xaa</code> being the start with the header messages.</p>
+<p>Whatever I did to the conversion program, I was always getting <code>nan</code> values, or crazily small ones.<br>I read about using the pcl library to use their methods for this rather than me implementing something myself.<br>Such methods exist in <code>pcl_ros/point_cloud.h</code>. However, this resource and the resources it depends on are part of the <code>ROS</code> environment.<br>Ideally, The Windows side would do the work, so that the Linux side only publishes the related data. It shouldn’t have to know what’s on the other end.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/07/Converting-point-clouds/" data-id="cj0bndpxf00031k9rl9lu3yz7" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
     <article id="post-Point-cloud-from-actual-data" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -113,7 +236,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/07/Point-cloud-from-actual-data/" data-id="cj00vgmy4000wik9rf3h5c43n" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/07/Point-cloud-from-actual-data/" data-id="cj0bndpzm000v1k9r0666zj2s" class="article-share-link">Share</a>
     
      
   </footer>
@@ -190,7 +313,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/05/Point-clouds-in-Unity/" data-id="cj00vgmy2000uik9rpcggm26a" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/05/Point-clouds-in-Unity/" data-id="cj0bndpzo000w1k9r2jzuztsf" class="article-share-link">Share</a>
     
      
   </footer>
@@ -231,7 +354,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/03/Named-shared-memory-Episode-2/" data-id="cj00vgmxm000oik9rxbqaeftx" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/03/Named-shared-memory-Episode-2/" data-id="cj0bndpzf000r1k9rkej87elp" class="article-share-link">Share</a>
     
      
   </footer>
@@ -280,7 +403,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/02/Named-shared-memory/" data-id="cj00vgmxq000qik9rqmnwdypr" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/02/Named-shared-memory/" data-id="cj0bndpzl000u1k9rf5w2rhpa" class="article-share-link">Share</a>
     
      
   </footer>
@@ -383,159 +506,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Named-pipe-dll/" data-id="cj00vgmxo000pik9rpx75yjjv" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Data-to-Unity-from-RAM" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/">Data to Unity from RAM</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/" class="article-date">
-  <time datetime="2016-12-01T17:18:29.000Z" itemprop="datePublished">Thu 01/12/2016 17:18</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>I started by copying code from the “rosserial_hello_world” and “rosserial_unity” (<code>.dll</code> code) solutions into a new solution.</p>
-<p>I’m looking up how to create shared memory in Windows for sharing the data.<br>You can’t feasibly do this in a <code>.dll</code> because the space would have to be initialised statically.<br>The way to do this seems to be using <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa366551.aspx" target="_blank" rel="external">Named Shared Memory</a>.<br>Unfortunately, it seems that I might still have to worry about marshal functions or ‘unsafe’ code because of the C# in Unity.<br>An alternative could be <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa365590.aspx" target="_blank" rel="external">Named Pipes</a>.</p>
-<h4 id="Named-pipes"><a href="#Named-pipes" class="headerlink" title="Named pipes"></a>Named pipes</h4><p>I made <em>another</em> visual studio solution to test this, and created an empty <code>GameObject</code> in Unity with a new script for the other end.<br>In order for some classes to be valid such as <code>System.IO.Pipes</code>, I changed the project settings to handle the full .Net 2.0:</p>
-<blockquote>
-<p>Edit &gt; Project Settings &gt; Player &gt; Other Settings &gt; Optimization &gt; Api Compitbility Level &gt; “.NET 2.0”<br>(rather than “.NET 2.0 Subset”)</p>
-</blockquote>
-<p>For the Unity side, I found some recent example code on the <a href="http://answers.unity3d.com/questions/483123/how-do-i-get-named-pipes-to-work-in-unity.html#answer-1272634" target="_blank" rel="external">Unity3D forums</a>.<br>It pointed me to the <a href="https://msdn.microsoft.com/en-us/library/bb546085%28v=vs.110%29.aspx" target="_blank" rel="external">“How to use names pipes for network interprocess communication” MSDN page</a>.<br>I copied the C++ code from the example just to see if it would compile, or work in any way.<br>I made sure that the <code>NamedPipeClientStream</code> for each end had the same name (“testpipe” for now).<br>At first, I was successful, except Unity got stuck in the starting state, and became unresponsive and needed to be forced quit.<br><img src="/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/Connection.png" alt="The &#39;PipeDataSend&#39; Windows console application, after running Unity"><br>With a bit of tweaking in the Unity script, I was able to get the expected message into Unity.<br>I had to cut out a <code>getPipedData()</code> function, which sounds like it’s defeating the point.<br>However, the functionality is repeated exactly in the <code>Setup()</code> of the Unity script, which works.<br><img src="/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/Success.png" alt="The &quot;I am the one true server&quot; string was defined in the &#39;PipeDataSend&#39; Windows console application"><br><figure class="highlight cs"><figcaption><span>The part of PipeDataReceive.cs which was commented out</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">getPipedData</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="comment">//UnityEngine.Debug.Log("Thread Called - Start");</span></div><div class="line">	StreamString ss = <span class="keyword">new</span> StreamString(pipeClient);</div><div class="line">	UnityEngine.Debug.Log(ss.ReadString());</div><div class="line">	<span class="comment">//UnityEngine.Debug.Log("Thread Called - End");</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>I noticed afterwards that after Unity gets stuck, closing the console applications un-freezes Unity which returns with:</p>
-<blockquote>
-<p>OverflowException: Number overflow.<br>StreamString.ReadString() (at Assets/_Scripts/PipeDataReceive.cs:51)<br>PipeDataReceive.getPipedData() (at Assets/_Scripts/PipeDataReceive.cs:33)<br>PipeDataReceive.Update() (at Assets/_Scripts/PipeDataReceive.cs:27)</p>
-</blockquote>
-<p>I lowered the threads from 4 to 1.<br>I had missed the part about reading from and writing to a file for example purposes, so I stripped it out.<br>The <code>PipeDataSend</code> and <code>PipeDataReceive</code> files are about as short and compact as I can make them now.<br>They work well. The <code>PipeDataSend</code> waits for a connection. As soon as <code>PipeDataReceive</code> is started, <code>PipeDataSend</code> send over “Hello Unity!” and then finishes.<br>However, you must not stop the Unity game before the pipe server or it will crash…</p>
-<p>Next step: See how this performs after integrating with <code>rosserial_windows</code> in Unity.<br><figure class="highlight cpp"><figcaption><span>PipeDataSend.cpp</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#using <span class="meta-string">&lt;System.Core.dll&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> System;</div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> System::IO;</div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> System::IO::Pipes;</div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> System::Text;</div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> System::Threading;</div><div class="line"></div><div class="line"><span class="keyword">public</span> ref <span class="keyword">class</span> StreamString &#123;</div><div class="line"><span class="keyword">private</span>:</div><div class="line">	Stream^ ioStream;</div><div class="line">	UnicodeEncoding^ streamEncoding;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">	StreamString(Stream^ ioStream) &#123;</div><div class="line">		<span class="keyword">this</span>-&gt;ioStream = ioStream;</div><div class="line">		streamEncoding = gcnew UnicodeEncoding();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	String^ ReadString() &#123;</div><div class="line">		<span class="keyword">int</span> len;</div><div class="line"></div><div class="line">		len = ioStream-&gt;ReadByte() * <span class="number">256</span>;</div><div class="line">		len += ioStream-&gt;ReadByte();</div><div class="line">		<span class="built_in">array</span>&lt;Byte&gt;^ inBuffer = gcnew <span class="built_in">array</span>&lt;Byte&gt;(len);</div><div class="line">		ioStream-&gt;Read(inBuffer, <span class="number">0</span>, len);</div><div class="line"></div><div class="line">		<span class="keyword">return</span> streamEncoding-&gt;GetString(inBuffer);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">int</span> <span class="title">WriteString</span><span class="params">(String^ outString)</span> </span>&#123;</div><div class="line">		<span class="built_in">array</span>&lt;Byte&gt;^ outBuffer = streamEncoding-&gt;GetBytes(outString);</div><div class="line">		<span class="keyword">int</span> len = outBuffer-&gt;Length;</div><div class="line">		<span class="keyword">if</span> (len &gt; UInt16::MaxValue)</div><div class="line">			len = (<span class="keyword">int</span>)UInt16::MaxValue;</div><div class="line">		ioStream-&gt;WriteByte((Byte)(len / <span class="number">256</span>));</div><div class="line">		ioStream-&gt;WriteByte((Byte)(len &amp; <span class="number">255</span>));</div><div class="line">		ioStream-&gt;Write(outBuffer, <span class="number">0</span>, len);</div><div class="line">		ioStream-&gt;Flush();</div><div class="line"></div><div class="line">		<span class="keyword">return</span> outBuffer-&gt;Length + <span class="number">2</span>;</div><div class="line">	&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">public</span> ref <span class="keyword">class</span> PipeServer &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span><span class="params">()</span> </span>&#123;</div><div class="line">		Console::WriteLine(<span class="string">"Pipe server started"</span>);</div><div class="line">		Console::WriteLine(<span class="string">"Waiting for client connection..."</span>);</div><div class="line">		Thread^ server = gcnew Thread(gcnew ThreadStart(&amp;ServerThread));</div><div class="line">		server-&gt;Start();</div><div class="line">		Thread::Sleep(<span class="number">250</span>);</div><div class="line">		<span class="keyword">while</span> (<span class="literal">true</span>) &#123;</div><div class="line">			<span class="keyword">if</span> (server != <span class="literal">nullptr</span>) &#123;</div><div class="line">				<span class="comment">// Check if it has gone. If so, remove it.</span></div><div class="line">				<span class="keyword">if</span> (server-&gt;Join(<span class="number">250</span>)) &#123;</div><div class="line">					Console::WriteLine(<span class="string">"Server thread finished."</span>, server-&gt;ManagedThreadId);</div><div class="line">					server = <span class="literal">nullptr</span>;</div><div class="line">					<span class="keyword">break</span>;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		Console::WriteLine(<span class="string">"Finished."</span>);</div><div class="line">	&#125;</div><div class="line"><span class="keyword">private</span>:</div><div class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">ServerThread</span><span class="params">()</span> </span>&#123;</div><div class="line">		NamedPipeServerStream^ pipeServer = gcnew NamedPipeServerStream(<span class="string">"rospipe"</span>, PipeDirection::InOut);</div><div class="line"></div><div class="line">		<span class="comment">// Wait for a client to connect</span></div><div class="line">		pipeServer-&gt;WaitForConnection();</div><div class="line"></div><div class="line">		Console::WriteLine(<span class="string">"Client connected"</span>);</div><div class="line">		<span class="comment">// Do my data transfer here!</span></div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			StreamString^ ss = gcnew StreamString(pipeServer);</div><div class="line"></div><div class="line">			ss-&gt;WriteString(<span class="string">"Hello Unity!"</span>);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">catch</span> (IOException^ e) &#123;</div><div class="line">			Console::WriteLine(<span class="string">"ERROR: &#123;0&#125;"</span>, e-&gt;Message);</div><div class="line">		&#125;</div><div class="line">		pipeServer-&gt;Close();</div><div class="line">	&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	PipeServer::Main();</div><div class="line">	Console::WriteLine(<span class="string">"\nPlease close this window."</span>);</div><div class="line">	<span class="keyword">while</span> (<span class="number">1</span>) &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<figure class="highlight cs"><figcaption><span>PipeDataReceive.cs</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> UnityEngine;</div><div class="line"><span class="keyword">using</span> System.Collections;</div><div class="line"><span class="keyword">using</span> System.IO;</div><div class="line"><span class="keyword">using</span> System.IO.Pipes;</div><div class="line"><span class="keyword">using</span> System.Threading;</div><div class="line"><span class="keyword">using</span> System.Text;</div><div class="line"><span class="keyword">using</span> System;</div><div class="line"><span class="keyword">using</span> System.Security.Principal;</div><div class="line"><span class="keyword">using</span> System.Diagnostics;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">PipeDataReceive</span> : <span class="title">MonoBehaviour</span> &#123;</div><div class="line">	<span class="keyword">public</span> NamedPipeClientStream pipeClient = <span class="keyword">new</span> NamedPipeClientStream(<span class="string">"."</span>, <span class="string">"rospipe"</span>, PipeDirection.InOut, PipeOptions.Asynchronous);</div><div class="line">	<span class="keyword">public</span> StreamString ss;</div><div class="line">	Thread readThread;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Start</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		UnityEngine.Debug.Log(<span class="string">"Connecting to pipe server..."</span>);</div><div class="line">		pipeClient.Connect();</div><div class="line">		Thread.Sleep(<span class="number">250</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Update</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		getPipedData();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">getPipedData</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		StreamString ss = <span class="keyword">new</span> StreamString(pipeClient);</div><div class="line">		UnityEngine.Debug.Log(<span class="string">"piped: "</span>+ss.ReadString());</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">StreamString</span> &#123;</div><div class="line">	<span class="keyword">private</span> Stream ioStream;</div><div class="line">	<span class="keyword">private</span> UnicodeEncoding streamEncoding;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">StreamString</span>(<span class="params">Stream ioStream</span>) </span>&#123;</div><div class="line">		<span class="keyword">this</span>.ioStream = ioStream;</div><div class="line">		streamEncoding = <span class="keyword">new</span> UnicodeEncoding();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">string</span> <span class="title">ReadString</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="keyword">int</span> len;</div><div class="line">		len = ioStream.ReadByte() * <span class="number">256</span>;</div><div class="line">		len += ioStream.ReadByte();</div><div class="line">		<span class="keyword">byte</span>[] inBuffer = <span class="keyword">new</span> <span class="keyword">byte</span>[len];</div><div class="line">		ioStream.Read(inBuffer, <span class="number">0</span>, len);</div><div class="line">		<span class="keyword">string</span> outString = streamEncoding.GetString(inBuffer);</div><div class="line"></div><div class="line">		<span class="keyword">return</span> outString;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">WriteString</span>(<span class="params"><span class="keyword">string</span> outString</span>) </span>&#123;</div><div class="line">		<span class="keyword">byte</span>[] outBuffer = streamEncoding.GetBytes(outString);</div><div class="line">		<span class="keyword">int</span> len = outBuffer.Length;</div><div class="line">		<span class="keyword">if</span> (len &gt; UInt16.MaxValue)</div><div class="line">			len = (<span class="keyword">int</span>)UInt16.MaxValue;</div><div class="line">		ioStream.WriteByte((<span class="keyword">byte</span>)(len / <span class="number">256</span>));</div><div class="line">		ioStream.WriteByte((<span class="keyword">byte</span>)(len &amp; <span class="number">255</span>));</div><div class="line">		ioStream.Write(outBuffer, <span class="number">0</span>, len);</div><div class="line">		ioStream.Flush();</div><div class="line"></div><div class="line">		<span class="keyword">return</span> outBuffer.Length + <span class="number">2</span>;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/" data-id="cj00vgmwr0008ik9ry99vk5pb" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Project-meeting-6" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2016/12/01/Project-meeting-6/">Project meeting 6</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2016/12/01/Project-meeting-6/" class="article-date">
-  <time datetime="2016-12-01T16:57:35.000Z" itemprop="datePublished">Thu 01/12/2016 16:57</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <h4 id="Discussion-about-the-previous-week’s-work"><a href="#Discussion-about-the-previous-week’s-work" class="headerlink" title="Discussion about the previous week’s work"></a>Discussion about the previous week’s work</h4><p>I tried to explain the problems I was having with <code>.dlls</code>.<br>I had some potentially useful tips about how to get them to work with arrays. I should look into <a href="https://msdn.microsoft.com/en-us/library/system.runtime.interopservices.marshal.aspx" target="_blank" rel="external">marshal functions</a> and <a href="https://msdn.microsoft.com/en-us/library/04fy9ya1.aspx" target="_blank" rel="external">interop</a>.<br>To analyse the extent of ‘name mangling’, I can put the <code>.dll</code> through <a href="http://www.dependencywalker.com/" target="_blank" rel="external">Dependency Walker</a>.<br>I came across these in the past week, I think I should have more experience and knowledge with C# besides Unity scripting for this to be successful.</p>
-<p>We have decided it would be much better to move away from compiling <code>.dlls</code> as Unity plugins, and instead use a compiled console application in Windows to receive the messages into RAM, and get Unity to poll the most recent values.<br>I have been talking to James, who is trying to implement UDP communication in Unity with ROS.</p>
-<p>In terms of the networking layout, the VR PC will be subscribing directly from Baxter (who has an internal ROS publisher) and publishing to the linux computer connected to Baxter, which will be calculating the inverse kinematics from the hand target positions.<br>We thing a position and a pose is required for this, so I will need the quaternions of the rotations of each hand.<br>Unity works with quaternions so this doesn’t sound too much of a challenge, but to start with I might well fix the pose to have the hands facing forwards.</p>
-<p>I wasn’t able to filter the joints that were in the public <code>urdf</code> and those in the <code>rosbag</code>. Maybe Baxter’s urdf is a previous verion?<br>I was also strange that the gripper messages were arriving separately.</p>
-<h4 id="Interim-report"><a href="#Interim-report" class="headerlink" title="Interim report"></a>Interim report</h4><p>The same examiner(s) who marks this will mark the final dissertation.<br>Therefore, don’t commit to work which is unlikely to come to fruition. Light exaggeration could back me into a corner.<br>Also, there will be some overlap between the interim report and the final submission. They have to exist as separate entities, but maybe not a total copy.</p>
-<p>I have two weeks left before Christmas. If I want any useful feedback (I do) I should have a report structure by <a href="/Robotic-Telepresence/2016/12/13/Project-meeting-7/">next meeting</a>.</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Project-meeting-6/" data-id="cj00vgmyc0012ik9rakvbedlj" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Rosbag-communication" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2016/11/28/Rosbag-communication/">Rosbag communication</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2016/11/28/Rosbag-communication/" class="article-date">
-  <time datetime="2016-11-28T15:11:18.000Z" itemprop="datePublished">Mon 28/11/2016 15:11</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>I’ll be trying to get full rosbag communication into Unity, and communication in the other direction too.<br>Ideally this will be configurable inside Unity, I’m not sure how dynamic I can/need to make this.<br>The first step is to get virtual Baxter to move as the bag plays.</p>
-<p>From the <a href="http://wiki.ros.org/Names" target="_blank" rel="external">documentation</a>, ROS topic names can be composed of the following characters: <code>0-9</code>, <code>a-z</code>, <code>A-Z</code>, <code>_</code>, <code>/</code>.<br>So long as I use a different delimiter in the message formatting for my Unity interface this won’t cause problems.<br>I’d like to keep this concise to minimize latency and parsing effort.<br>For now, I’m transmitting the names in the same order as they are in the bag (alphabetical) next to their values, separated with <code>=</code>.</p>
-<p>I set up a post-build task to copy the resulting <code>.dll</code> to the <code>plugins/</code> folder in the Unity assets.<br>I’m still getting lots of ‘sync lost’ messages, one every second.<br>It may be something to do with <code>nh_spinOnce()</code>, but I should be calling it every Unity loop.<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[ WARN] [1480349686.965718293]: Sync with device lost.</div></pre></td></tr></table></figure></p>
-<p>There doesn’t seem to be a whole lot of error checking.<br>For instance, trying to read an <code>int</code> return value from a <code>.dll</code> function which has a void return type happily works.<br>If the socket connection cannot be made, it’s easy to create a block which will not allow the Unity application to start, and it becomes unresponsive and has to be forced to quit.</p>
-<p>The hard part is that the data from the <code>rosbag</code> is being received in a callback.<br>The way to get data out from the <code>.dll</code> and into Unity seems to be using return values from functions which are called in a Unity script.<br>I could make a set of variables which are updated with the most recent values.<br>This would be OK in the way that the model only has to be up to date and doesn’t need to show every position transmitted, except I would need to know the variables I am expecting before compiling the <code>.dll</code>.<br>Alternatively, I could preallocate a large number of variables to fill in, and the Unity client would know what is coming and in what order because of the imported robot <code>URDF</code>.<br>For now I will hard-code it and maybe ask in the project meeting.</p>
-<p>I can’t pass strings out of the <code>.dll</code>. This seems to be misunderstanding <code>.dlls</code> or Unity.<br>I’m trying to think of a way to get the data out.<br>I could provide pointers to data from Unity into the <code>.dll</code> which match up with the subscription, but I still need a better callback.<br>At the end of <a href="http://wiki.ros.org/rosserial_windows/Tutorials/Receiving%20Messages" target="_blank" rel="external">this tutorial</a> it mentions:</p>
-<blockquote>
-<p>It’s possible to subclass the Subscriber class for a more object-oriented approach. In that case, instead of registering with the call back above simply instantiate the new class and pass that in to the subscribe call.</p>
-</blockquote>
-<p>This sounds more like what I want?<br>I’ll try with <code>rosserial_hello_world</code> first.<br>I’ve replaced all the <code>printf</code> functions with a better C++ approach (<code>cout</code> streams).</p>
-<p>I couldn’t work out what the page meant.<br>I tried creating a dictionary of joints and angles in Unity and feeding that into the <code>.dll</code>, but I needed to ‘use’ <code>System.Collections.Generic</code> and I couldn’t work out how to do that either.<br>I managed to pass a string as an argument into a <code>.dll</code> function, by casting <code>char*</code>:<br><figure class="highlight cs"><figcaption><span>Unity script</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line">[DllImport (<span class="string">"rosserial_unity"</span>)]</div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">extern</span> <span class="keyword">double</span> <span class="title">getValue</span>(<span class="params"><span class="keyword">string</span> key</span>)</span>;</div><div class="line">...</div></pre></td></tr></table></figure></p>
-<figure class="highlight cpp"><figcaption><span>dll code</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line"><span class="function">DLLEXPORT <span class="keyword">double</span> <span class="title">getValue</span><span class="params">(<span class="keyword">char</span>* key)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> ((<span class="built_in">string</span>)key == <span class="string">"head_pan"</span>)</div><div class="line">...</div></pre></td></tr></table></figure>
-<p>Now I will go through the robot hierarchy in Unity, filter out the <code>GameObjects</code> which are tagged “URDF joints”, sort them alphabetically and then request their values from the socket stream.<br>Unfortunately, the list of <code>GameObjects</code> is much longer (48) than those contained within the stream (18), and I can’t differentiate.<br>I will either have to check one by one somehow or find out what makes the ones in the <code>rosbag</code> special.<br>I’ll just hard code it for now…<br>This is difficult too.<br>There is no pattern to the messages with 18 joints, or the ones which just contain a right or left gripper.</p>
-<p>It’s pretty annoying having to restart Unity every time I’ve updated the <code>.dll</code>.</p>
-<h4 id="Some-success"><a href="#Some-success" class="headerlink" title="Some success"></a>Some success</h4><p>I resorted to the most god-awful code, but I’ve finally got joint angles into Unity.<br>This will DEFINITELY need changing, but I can progress with making sure that I have the update rate etc.</p>
-<p>I’ve managed to get <em>some</em> form of the ros bag onto virtual Baxter.<br>The ‘sync lost’ messages have stopped, I’m not sure why, because the update loop isn’t going much faster or slower than before.<br>I’ll have to set additional attributes to each link during the import to record which axis rotates, and the effort limits.</p>
-<p>I’ve made a script with private variables for just axis to start with, and modified the import script to attach it to every joint.<br>I’ll also have to do the same to the origin values to keep a reference to them.<br>I also attach the <code>rosserial</code> script to the root by default.</p>
-<p>After some playing around with rotations, I got it to work:<br><div class="video-container"><iframe src="//www.youtube.com/embed/0TW5gbRr-oQ" frameborder="0" allowfullscreen></iframe></div></p>
-<p>The jerkiness can be down to many things:</p>
-<ul>
-<li>Only the most recent message is stored</li>
-<li>If that message was a gripper, the rest of the values are empty</li>
-<li>The messages are only read every Unity frame at the moment, probably 60FPS</li>
-</ul>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/28/Rosbag-communication/" data-id="cj00vgmz3001hik9rf6fqx98v" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Named-pipe-dll/" data-id="cj0bndpz3000q1k9rume8e4on" class="article-share-link">Share</a>
     
      
   </footer>
@@ -568,7 +539,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
     </div>
   </div>
 

@@ -82,6 +82,226 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-Pose-control-of-Baxter" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2017/03/16/Pose-control-of-Baxter/">Pose control of Baxter</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/03/16/Pose-control-of-Baxter/" class="article-date">
+  <time datetime="2017-03-15T23:33:43.000Z" itemprop="datePublished">Thu 16/03/2017 00:33</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>After learning about how the IK solver works, I realised I’d have to create another ROS node, this time on the Linux PC connected to Baxter.</p>
+<h4 id="Control-of-Baxter"><a href="#Control-of-Baxter" class="headerlink" title="Control of Baxter"></a>Control of Baxter</h4><p>Following some of the documentation on the Baxter site, I found an example which could be useful<br>There’s an example which can be run using:<br><figure class="highlight bash"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ rosrun baxter_interface joint_trajectory_action_server</div><div class="line">$ rosrun baxter_examples joint_trajectory_client <span class="_">-l</span> left</div></pre></td></tr></table></figure></p>
+<p>This moves Baxter’s left arm to three preset positions.</p>
+<h4 id="IK-service"><a href="#IK-service" class="headerlink" title="IK service"></a>IK service</h4><p>Given a pose, this simply returns the planned path for the arm if a solution was found, it does not offer any control.<br>I can already subscribe to a pose topic from Unity.<br>The related example can be run like this:<br><figure class="highlight bash"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ rosrun baxter_interface joint_trajectory_action_server</div><div class="line">$ rosrun baxter_examples ik_service_client.py <span class="_">-l</span> left</div></pre></td></tr></table></figure></p>
+<p>This runs for a hard-coded preset point.</p>
+<p>Initially I thought about mashing these two together, but there were a few problems.</p>
+<ul>
+<li>Collision would be ignored. This is risky</li>
+<li>I have no easy way to debug, e.g. coordinate frame conversion errors</li>
+</ul>
+<h4 id="MoveIt"><a href="#MoveIt" class="headerlink" title="MoveIt"></a>MoveIt</h4><p>With some help from Rebecca, this solves some of those problems.</p>
+<p>I wrote a python script which subscribes to two topics, <code>/vr/pose_l</code> and <code>/vr/pose_r</code>, both of which published by the VR PC.<br>On receiving a message, the IK service is called. It has a suitable planning time allowance, and final position error.<br>If a solution is found, the arm will move to that location.</p>
+<p>The planned motion (and the subsequent motion) is shown in RViz.<br>Using RViz, I can also insert a primitive collision bound so that anywhere below table-height is off-limits.</p>
+<figure class="highlight plain"><figcaption><span>baxter_table.scene</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">table</div><div class="line">* table</div><div class="line">1</div><div class="line">box</div><div class="line">3 3 0.05</div><div class="line">0 0 -0.2</div><div class="line">0 0 0 1</div><div class="line">0 0 0 0</div><div class="line">.</div><div class="line"></div><div class="line"># Scene name</div><div class="line"># Object name</div><div class="line"># Number of shapes</div><div class="line"># Shape type</div><div class="line"># Size</div><div class="line"># Position</div><div class="line"># Orientation</div><div class="line"># RGBA colour</div><div class="line"># Necessary</div></pre></td></tr></table></figure>
+<p>Remember to run:<br><figure class="highlight bash"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">source</span> ../moveit_ws/devel/setup.sh</div><div class="line">$ rosrun baxter_interface joint_trajectory_action_server</div><div class="line">$ roslaunch baxter_moveit_config baxter_grippers.launch</div><div class="line">$ python ~/path-to-script.py</div></pre></td></tr></table></figure></p>
+<h4 id="Final-touches"><a href="#Final-touches" class="headerlink" title="Final touches"></a>Final touches</h4><ul>
+<li>The script can be optimised, it contains a lot of extra information found for tutorial purposes.</li>
+<li>I need feedback to Unity for when no solution could be found for a target position.</li>
+<li>I need feedback to Unity for when a target position has been reached.</li>
+<li>There are a few extra messages been published, such as messages which are all zero in initialisation. Iron out these.</li>
+</ul>
+<h4 id="Still-to-do"><a href="#Still-to-do" class="headerlink" title="Still to do!"></a>Still to do!</h4><p>‘Telepresence’ is nearly there. But it’s useless unless we can get data representing the real world in.<br>I’ll need to set up operating the grippers.<br>Once these are done I can begin the user tests.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/16/Pose-control-of-Baxter/" data-id="cj0bndpzp000x1k9re9adsid0" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Pose-message-from-Unity" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2017/03/15/Pose-message-from-Unity/">Pose message from Unity</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/03/15/Pose-message-from-Unity/" class="article-date">
+  <time datetime="2017-03-14T23:56:56.000Z" itemprop="datePublished">Wed 15/03/2017 00:56</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>I open a new shared memory file for the poses to be sent out of Unity in a <code>geometry_msgs::Pose</code> message and subscribed to by Baxter.</p>
+<p>The layout is as follows:</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>Offset</th>
+<th>Length</th>
+<th>Description</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>4</td>
+<td>Left Status bit (000X)</td>
+<td>X set to 1 if something has been updated</td>
+</tr>
+<tr>
+<td>4</td>
+<td>4</td>
+<td>Left Position X</td>
+<td>-X from Unity</td>
+</tr>
+<tr>
+<td>8</td>
+<td>4</td>
+<td>Left Position Y</td>
+<td>Y from Unity</td>
+</tr>
+<tr>
+<td>12</td>
+<td>4</td>
+<td>Left Position Z</td>
+<td>Z from Unity</td>
+</tr>
+<tr>
+<td>16</td>
+<td>4</td>
+<td>Left Orientation W</td>
+<td>W from Unity</td>
+</tr>
+<tr>
+<td>20</td>
+<td>4</td>
+<td>Left Orientation X</td>
+<td>X from Unity</td>
+</tr>
+<tr>
+<td>24</td>
+<td>4</td>
+<td>Left Orientation Y</td>
+<td>-Y from Unity</td>
+</tr>
+<tr>
+<td>28</td>
+<td>4</td>
+<td>Left Orientation Z</td>
+<td>-Z from Unity</td>
+</tr>
+<tr>
+<td>32</td>
+<td>4</td>
+<td>Right Status bit (000X)</td>
+<td>Repeats, similar to the left side</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>64</td>
+<td></td>
+<td></td>
+<td>[ended]</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>In order to get the rotation correct (Baxter is rotated -90_x from ROS coordinates to be upright in Unity), I created a dummy parent <code>GameObject</code> with the relevant transform to hold the tragets, and then just used <code>transform.localPosition</code> and <code>transform.localRotation</code>.<br>This accounts for the <em>user</em> being at the origin (which is how VR seems to operate) rather than Baxter being at the origin of his coordinate frame.</p>
+<p>I’ll have to do the same for the target models as well.<br><img src="/Robotic-Telepresence/2017/03/15/Pose-message-from-Unity/Endpoint.png" alt="You can see it&#39;s 90 degrees out. Also the endpoint for the IK service is between the ends of the grippers, while Unity thinks it&#39;s the centroid(?)"></p>
+<p>I have set it up so that any change to the number of targets in the queue will publish a message containing the pose of the frontmost (topmost) element.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/15/Pose-message-from-Unity/" data-id="cj0bndpzq000y1k9r01n9x7m8" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-CopyMemory-bug" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2017/03/15/CopyMemory-bug/">CopyMemory bug</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/03/15/CopyMemory-bug/" class="article-date">
+  <time datetime="2017-03-14T23:30:28.000Z" itemprop="datePublished">Wed 15/03/2017 00:30</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>I had a bug for many many hours, took me a while to narrow down.<br>I verified that everything worked perfectly at home.<br>However, in the lab, there was some strange behaviour with the shared memory for the hand poses.<br><code>CopyMemory</code> is defined on <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa366535" target="_blank" rel="external">MSDN</a> like this:<br><figure class="highlight cpp"><figcaption><span>CopyMemory definition</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">CopyMemory</span><span class="params">(</span></span></div><div class="line">  _In_       PVOID  Destination,</div><div class="line">  _In_ <span class="keyword">const</span> VOID   *Source,</div><div class="line">  _In_       SIZE_T Length</div><div class="line">);</div></pre></td></tr></table></figure></p>
+<p>I encapsulated the memory functions in a class for my ROS node.<br><figure class="highlight cpp"><figcaption><span>Single byte reading function</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">uint8_t</span> FileMapping::read_data(<span class="keyword">int</span> offset) &#123;</div><div class="line">	CopyMemory(data, buffer+offset, <span class="number">1</span>);</div><div class="line">	<span class="keyword">return</span> data[<span class="number">0</span>];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>However, to get things to work correctly in the lab, I had to half the offset parameter.<br><figure class="highlight cpp"><figcaption><span>Modified line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CopyMemory(data, buffer+(offset/<span class="number">2</span>), <span class="number">1</span>);</div></pre></td></tr></table></figure></p>
+<p>This problem also occurs in a <code>float FileMapping::read_data_float(int offset)</code> function.<br>I’ve been careful to use <code>sizeof(float)</code> etc. and not assume sizes of things (although I have checked, and it is defined as 4 bytes everywhere).</p>
+<p>This fix works so I’ll leave it as this, and this is the first place to look when the problem surfaces again.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/15/CopyMemory-bug/" data-id="cj0bndpxx00081k9rk5wd7pf9" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
     <article id="post-Live-joint-data" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -106,11 +326,13 @@ ga('send', 'pageview');
     
       <p>I ran the new code and project in the robot lab.<br>I appears that the jerky motion exhibited by the <code>rosbag</code> was related to the recording.<br>The computer running <code>roscore</code> connected to baxter is not connected directly to the Unity PC, but they are in the same network.<br>As there are no problems detected so far, the URDF data contained in Baxter matches the URDF file in the Unity project.</p>
 <div class="video-container"><iframe src="//www.youtube.com/embed/IKGjTFgAbt4" frameborder="0" allowfullscreen></iframe></div>
+<p>I got the ROSnode application to open with Unity, and close when the editor is stopped.<br>There isn’t any kind of message to say when it’s ready. If it’s not ready, the shared memory is mapped after a couple of failed attempts, but a 500ms delay has been added to make sure it connects first time.</p>
+<p>Initiallly I made it so a window doesn’t open at all, now it seems like internal process.<br>Any output is printed to the Unity Editor log. It’s redirected so if the window was visible there wouldn’t be anything printed anyway.<br>It’s also colour coded so it’s easy to see where messages are coming from.<br>However, when doing this, the serial client loses synchronisation after around 20 seconds for some reason.<br>I suspect it’s to do with an issue redirecting standard output and error, I didn’t get a problem when running it as before.<br>Disabling this functionality for now.</p>
 
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/08/Live-joint-data/" data-id="cj00vgmx5000kik9rrc2xj7uc" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/08/Live-joint-data/" data-id="cj0bndpye000m1k9r9kpk8hmn" class="article-share-link">Share</a>
     
      
   </footer>
@@ -279,7 +501,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/02/Memory-Structure/" data-id="cj00vgmx7000nik9ripstar12" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/02/Memory-Structure/" data-id="cj0bndpyf000n1k9rxezt9o7w" class="article-share-link">Share</a>
     
      
   </footer>
@@ -321,7 +543,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/02/Main-control-loop/" data-id="cj00vgmx6000lik9r9otk6ess" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/02/Main-control-loop/" data-id="cj0bndpyd000l1k9ry99033hc" class="article-share-link">Share</a>
     
      
   </footer>
@@ -359,7 +581,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/02/Project-meeting-12/" data-id="cj00vgmy90010ik9rkmybzx6a" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/02/Project-meeting-12/" data-id="cj0bndpzx00121k9rqbmxja2h" class="article-share-link">Share</a>
     
      
   </footer>
@@ -468,153 +690,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/28/Fixing-point-cloud-problems/" data-id="cj00vgmwz000eik9rkidg02bt" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Project-meeting-11" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2017/02/23/Project-meeting-11/">Project meeting 11</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2017/02/23/Project-meeting-11/" class="article-date">
-  <time datetime="2017-02-23T23:27:07.000Z" itemprop="datePublished">Thu 23/02/2017 23:27</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>The focus of the meeting was the midterm report.<br>Main points which came up were:</p>
-<ul>
-<li>I put content in the abstract which, if anywhere, should have been in the introduction</li>
-<li>I should always have text between subsequent headings/subheadings</li>
-<li>I shouldn’t often go below X.X subsections. Most of the writing was in X.X.X.</li>
-<li>I need to make things extremely clear<ul>
-<li>My aim</li>
-<li>My objectives</li>
-<li>The work I’ve done</li>
-</ul>
-</li>
-<li>I fell into the chronological order trap. I should structure it from broad to more specific</li>
-<li>The same goes for supporting diagrams</li>
-</ul>
-<p>I also need to come up with some ways to test the resulting applications.</p>
-<ul>
-<li>Qualitative results<ul>
-<li>Screenshots</li>
-<li>Video (viva)</li>
-<li>Demonstration</li>
-</ul>
-</li>
-<li>Quantitative results<ul>
-<li>Numerical testing values<ul>
-<li>Latency?</li>
-<li>Throughput?</li>
-<li>etc.<br>I can obtain some of these by doing user tests and asking them to complete a survey afterwards.</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>With regards to the background literature, I’l need much more for the final report.<br>Report reviews are very helpful.<br><del>Steal</del> Reference the results they already have.</p>
-<p>I’ll be using LaTeX to write the final thing.</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/23/Project-meeting-11/" data-id="cj00vgmy6000yik9r2q5ip9h0" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Started-dissertation" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2017/02/22/Started-dissertation/">Started dissertation</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2017/02/22/Started-dissertation/" class="article-date">
-  <time datetime="2017-02-22T23:28:46.000Z" itemprop="datePublished">Wed 22/02/2017 23:28</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>I am using <a href="https://www.sharelatex.com/" target="_blank" rel="external">ShareLaTeX</a>. The free features are great. I’m only missing git synchronisation, but I can still do it manually.<br>I found the <a href="https://github.com/themasterchef/computing-project-report-template" target="_blank" rel="external">Computer Science department’s template</a> which I can modify to suit my course.<br>By the next project meeting I will have a preliminary structure.</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/22/Started-dissertation/" data-id="cj00vgmz3001gik9rpkhtnebi" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Live-depth-data-in-Unity" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2017/02/22/Live-depth-data-in-Unity/">Live depth data in Unity</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2017/02/22/Live-depth-data-in-Unity/" class="article-date">
-  <time datetime="2017-02-22T16:27:47.000Z" itemprop="datePublished">Wed 22/02/2017 16:27</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>Due to the way Unity scripts work, many features in Visual Studio which are usually present are not available.<br>I wasn’t able to use <code>using Microsoft.Kinect</code>, change the references, or change project properties.<br>My only option was to keep it as a separate application or modify some existing code.<br>Since I already have external applications, it was preferable to find the functionality in an existing asset.</p>
-<p>The <a href="https://www.assetstore.unity3d.com/en/#!/content/7747" target="_blank" rel="external">Kinect with MS-SDK</a> plugin I found before, along with any others, seemed to focus more on calculating skeletal data.<br>This plugin was the most complete, and it had a demo which showed live depth data.</p>
-<p>I hacked it apart, brutally removing anything which wasn’t necessary.<br>I still don’t have direct access to the data, and I’m not sure how difficult or intensive getting point cloud data will be.<br>The supporting code seems to have some direct communication to the Kinect, and I think I will be able to do things like decimate the data if it’s too many points.<br>It should be relatively similar to the Kinect v2 as well.<br><img src="/Robotic-Telepresence/2017/02/22/Live-depth-data-in-Unity/Depth Kinect.png" alt="Me at the desk"><br>TBC this week</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/22/Live-depth-data-in-Unity/" data-id="cj00vgmx4000jik9r6xx7y8ia" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/28/Fixing-point-cloud-problems/" data-id="cj0bndpy3000c1k9rl1v2h1mm" class="article-share-link">Share</a>
     
      
   </footer>
@@ -647,7 +723,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
     </div>
   </div>
 

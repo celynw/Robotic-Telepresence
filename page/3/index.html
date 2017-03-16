@@ -82,6 +82,131 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-VR-feature-Angle-snapping" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2017/02/12/VR-feature-Angle-snapping/">VR feature: Angle snapping</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/02/12/VR-feature-Angle-snapping/" class="article-date">
+  <time datetime="2017-02-12T17:59:33.000Z" itemprop="datePublished">Sun 12/02/2017 17:59</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>I thought this would be an easy feature to add.<br>When drawing targets, holding the grip buttons would snap the new location to a 45-degree-quantised vector from the first position.</p>
+<p>At first, I thought about comparing the actual position difference to the 45-degree vectors and using the smallest angle difference.<br>This had problems with vectors 180 degrees out from each other.</p>
+<p>Then I tried normalising the position difference and comparing the position with the normalised 45-degree vectors.<br>This seems possible.</p>
+<p><img src="/Robotic-Telepresence/2017/02/12/VR-feature-Angle-snapping/Angles.png" alt="This shows the angles to snap to"></p>
+<hr>
+<p>However, I haven’t tried to use Baxter yet, and I’m not sure of how the IK solver will project the path of the hand; it may not necessarily be a straight path, so this visualisation could be misleading.<br>Maybe a better way would be to replace the controller models with ghostly grippers which will remain at the target positions until the IK solver has finished.</p>
+<p>I’ve also had a quick look into a Unity-based IK solver. They are common in games with avatars.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/12/VR-feature-Angle-snapping/" data-id="cj0bndq14001n1k9rqv19l1ta" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Project-meeting-9" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2017/02/08/Project-meeting-9/">Project meeting 9</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/02/08/Project-meeting-9/" class="article-date">
+  <time datetime="2017-02-08T17:56:01.000Z" itemprop="datePublished">Wed 08/02/2017 17:56</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <h4 id="Safety"><a href="#Safety" class="headerlink" title="Safety"></a>Safety</h4><p>Apparently ROS has a way to set initial constraints, so that for instance, commands which tell him to move his hands into the space occupied by the table can be overridden.<br>While Baxter tends to avoid collisions with his other arms and the torso, apparently he ignores the screen on the head, so I’ll have to be careful of that.<br>If I’m going to be in VR in the robot lab, I’ll need another person to be in the room at the same time. It would be possible to start with to just not wear the headset and view the game windows on a monitor.</p>
+<h4 id="Next-steps"><a href="#Next-steps" class="headerlink" title="Next steps"></a>Next steps</h4><p>Soon, another PC will be set up in the robot lab able to run Windows, then I can get started on practical development.<br>I still need to learn to use Baxter, but the environment should be set up for this already.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/08/Project-meeting-9/" data-id="cj0bndq09001b1k9rn9brhza4" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Adding-VR-to-Unity-Project" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2017/02/07/Adding-VR-to-Unity-Project/">Adding VR to Unity Project</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/02/07/Adding-VR-to-Unity-Project/" class="article-date">
+  <time datetime="2017-02-07T15:47:54.000Z" itemprop="datePublished">Tue 07/02/2017 15:47</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <h4 id="Enabling-VR"><a href="#Enabling-VR" class="headerlink" title="Enabling VR"></a>Enabling VR</h4><p>This step was very simple.<br>A preliminary step is to ensure the Steam client is installed, along with the SteamVR application.<br>In Unity, under “Player Preferences”, tick the “Virtual Reality Supported” checkbox.<br>Done.<br>Now when SteamVR is running, pressing “Play” in Unity will focus itself in the VR headset.<br>This only enables head tracking though.<br>To get more functionality, download the free SteamVR plugin from the Unity assets store.<br>You can drag the prefabs out into the base project directory and ther controllers are shown (in the same skin as the user has set in their SteamVR preferences).<br>There seem to be some great resources for getting started, I’m using <a href="https://docs.unity3d.com/Manual/OpenVRControllers.html" target="_blank" rel="external">this page</a> for controller input.</p>
+<h4 id="VR-tests"><a href="#VR-tests" class="headerlink" title="VR tests"></a>VR tests</h4><p>There seem to be many ways to access data from the headset or controllers.<br>I wrote a little script to spawn primitives at a controller’s position with a trigger press.<br>The idea is to develop it to draw commands for where to move Baxter’s hand to next.<br><figure class="highlight cs"><figcaption><span>Unity script</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> System.Collections;</div><div class="line"><span class="keyword">using</span> System.Collections.Generic;</div><div class="line"><span class="keyword">using</span> UnityEngine;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ControllerTest</span> : <span class="title">MonoBehaviour</span> &#123;</div><div class="line">	<span class="keyword">private</span> SteamVR_TrackedController controller;</div><div class="line">	<span class="keyword">private</span> PrimitiveType currentPrimitiveType = PrimitiveType.Sphere;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">bool</span> arrowStarted = <span class="literal">false</span>;</div><div class="line">	<span class="keyword">private</span> Vector3 arrowStartPos;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">OnEnable</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		controller = GetComponent&lt;SteamVR_TrackedController&gt;();</div><div class="line">		controller.TriggerClicked += handle_trigger_clicked;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">OnDisable</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		controller.TriggerClicked -= handle_trigger_clicked;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">handle_trigger_clicked</span>(<span class="params"><span class="keyword">object</span> sender, ClickedEventArgs e</span>) </span>&#123;</div><div class="line">		spawn_arrow_at_controller();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">spawn_sphere_at_controller</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="keyword">var</span> sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);</div><div class="line">		sphere.transform.position = transform.position;</div><div class="line">		sphere.transform.rotation = transform.rotation;</div><div class="line">		sphere.transform.localScale = <span class="keyword">new</span> Vector3(<span class="number">0.1</span>f, <span class="number">0.1</span>f, <span class="number">0.1</span>f);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">spawn_arrow_at_controller</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		GameObject cylinder;</div><div class="line">		<span class="keyword">if</span> (!arrowStarted) &#123;</div><div class="line">			arrowStartPos = transform.position;</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			cylinder = GameObject.CreatePrimitive(PrimitiveType.Cylinder);</div><div class="line">			cylinder.transform.position = (arrowStartPos + transform.position) / <span class="number">2</span>;</div><div class="line">			cylinder.transform.rotation = transform.rotation;</div><div class="line">			cylinder.transform.localScale = <span class="keyword">new</span> Vector3(<span class="number">0.1</span>f, <span class="number">0.1</span>f, <span class="number">0.1</span>f);</div><div class="line">		&#125;</div><div class="line">		arrowStarted = !arrowStarted;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><img src="/Robotic-Telepresence/2017/02/07/Adding-VR-to-Unity-Project/Cylinders.png" alt="First, just spawning at controller position"><br><img src="/Robotic-Telepresence/2017/02/07/Adding-VR-to-Unity-Project/Midpoints.png" alt="Then, pick two points and it instantiates at the midpoint"><br>I’ll be rotating and scaling the cylinders into arrows to view the expected path of a hand.</p>
+<h4 id="Drawing-arrows"><a href="#Drawing-arrows" class="headerlink" title="Drawing arrows"></a>Drawing arrows</h4><p>After some tweaking, I managed to get it to be able to drag the controllers to draw ‘arrows’.<br>I’ll need to offset them, because the controller origin can’t be visually pinpointed, so it’s difficult for the user to choose a precise location.<br>The image below shows the controller origin. I’m thinking of using the very centre of the ring.</p>
+<p><img src="/Robotic-Telepresence/2017/02/07/Adding-VR-to-Unity-Project/Controller.png" alt="{Red, Green, Blue} are {X, Y, Z} respectively"></p>
+<p>The script below enables functionality demonstrated in the video underneath.</p>
+<figure class="highlight cs"><figcaption><span>Final Unity Script</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> System.Collections;</div><div class="line"><span class="keyword">using</span> System.Collections.Generic;</div><div class="line"><span class="keyword">using</span> UnityEngine;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ControllerTest</span> : <span class="title">MonoBehaviour</span> &#123;</div><div class="line">	<span class="keyword">private</span> SteamVR_TrackedController controller;</div><div class="line">	<span class="keyword">private</span> PrimitiveType currentPrimitiveType = PrimitiveType.Sphere;</div><div class="line">	<span class="keyword">public</span> GameObject prefabCylinder; <span class="comment">// Fill with arrow prefab</span></div><div class="line">	<span class="keyword">private</span> GameObject arrow; <span class="comment">// Current arrow being drawn</span></div><div class="line">	<span class="keyword">private</span> Vector3 arrowStartPos;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">OnEnable</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="comment">// Register controller callbacks</span></div><div class="line">		controller = GetComponent&lt;SteamVR_TrackedController&gt;();</div><div class="line">		controller.TriggerClicked += handle_trigger_clicked;</div><div class="line">		controller.TriggerUnclicked += handle_trigger_unclicked;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">OnDisable</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="comment">// Unegister controller callbacks</span></div><div class="line">		controller.TriggerClicked -= handle_trigger_clicked;</div><div class="line">		controller.TriggerUnclicked += handle_trigger_unclicked;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">// Start drawing the arrow</span></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">handle_trigger_clicked</span>(<span class="params"><span class="keyword">object</span> sender, ClickedEventArgs e</span>) </span>&#123;</div><div class="line">		arrowStartPos = transform.position;</div><div class="line">		arrow = (GameObject)Instantiate(prefabCylinder);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">// Finished drawing the arrow</span></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">handle_trigger_unclicked</span>(<span class="params"><span class="keyword">object</span> sender, ClickedEventArgs e</span>) </span>&#123;</div><div class="line">		arrow = <span class="literal">null</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">Update</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="comment">// Handle arrow logic</span></div><div class="line">		<span class="keyword">if</span> (controller.triggerPressed) &#123;</div><div class="line">			<span class="keyword">var</span> direction = transform.position - arrowStartPos;</div><div class="line">			<span class="keyword">var</span> midpoint = direction/<span class="number">2</span>;</div><div class="line">			arrow.transform.rotation = Quaternion.FromToRotation(Vector3.up, direction);</div><div class="line">        	arrow.transform.localScale = <span class="keyword">new</span> Vector3(<span class="number">0.05</span>f, direction.magnitude/<span class="number">2</span>, <span class="number">0.05</span>f);</div><div class="line">			arrow.transform.position = midpoint + arrowStartPos;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<div class="video-container"><iframe src="//www.youtube.com/embed/0gkBvNeSKKs" frameborder="0" allowfullscreen></iframe></div>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/07/Adding-VR-to-Unity-Project/" data-id="cj0bndpxi00041k9rocqbqmal" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
     <article id="post-Midterm-interview" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -110,7 +235,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/02/Midterm-interview/" data-id="cj00vgmx6000mik9rshw9txel" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/02/Midterm-interview/" data-id="cj0bndpyw000o1k9rxk6d1yh9" class="article-share-link">Share</a>
     
      
   </footer>
@@ -154,7 +279,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/01/Project-meeting-8/" data-id="cj00vgmyi0017ik9rjg4p59qz" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/01/Project-meeting-8/" data-id="cj0bndq0600191k9rqgro0enn" class="article-share-link">Share</a>
     
      
   </footer>
@@ -196,7 +321,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/31/Final-structure/" data-id="cj00vgmwv000aik9rosore5wh" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/31/Final-structure/" data-id="cj0bndpy2000b1k9rtxebajjs" class="article-share-link">Share</a>
     
      
   </footer>
@@ -246,7 +371,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/18/Named-shared-memory-Episode-3/" data-id="cj00vgmxz000rik9r34kafidl" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/18/Named-shared-memory-Episode-3/" data-id="cj0bndpzh000s1k9rp1vfvp2b" class="article-share-link">Share</a>
     
      
   </footer>
@@ -294,130 +419,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/03/PCL-point-clouds/" data-id="cj00vgmy1000tik9rxyv2ttm3" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Converting-point-clouds-2" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/">Converting point clouds 2</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/" class="article-date">
-  <time datetime="2017-01-02T13:47:58.000Z" itemprop="datePublished">Mon 02/01/2017 13:47</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>To further my investigation of why I was unable to convert the PointCloud2 messages into usable values, I tried using <code>Rviz</code>, which I know can view the data properly.<br>It’s a hassle as I have to restart my PC, and I lose access to most of my development tools (rviz won’t run in a virtual machine).<br>If I can export some of the data, I’ll have something to compare the results of my program to.<br><code>rviz</code> showed how many messages were coming through, and you could select an area of points to see their data. However, you couldn’t select <em>all</em> points, or export the data.</p>
-<p>Later, I came across a tool called <code>bag_to_pcd</code> <a href="http://re.je/notes/2013/capturing-point-clouds-with-pcl-tools/" target="_blank" rel="external">here</a>.<br>I converted each message in the bag to a <code>.pcd</code> file, and then converted the first one into other formats from there.<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ sudo add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl</div><div class="line">$ sudo apt update</div><div class="line">$ sudo apt install libpcl-all</div><div class="line">$ sudo apt install libpcl-all-dev</div><div class="line">$ sudo apt install ros-indigo-perception</div><div class="line"></div><div class="line">$ rosrun pcl_ros bag_to_pcd ~/Downloads/baxter.bag /camera/depth_registered/points ~/Downloads</div><div class="line">$ pcl_pcd2ply 1479833365.438671766.pcd output.ply</div><div class="line">$ pcl_convert_pcd_ascii_binary 1479833365.438671766.pcd output.pcd 0</div></pre></td></tr></table></figure></p>
-<p>I was left with a binary <code>.pcd</code> file, an ascii <code>.pcd</code> file, and a binary <code>.ply</code> file (which didn’t work, unexpected eof even with trailing newline)</p>
-<p>I could view them to make sure they were still OK using <code>pcd_viewer</code><br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ rosrun perception_pcl pcd_viewer output.pcd</div></pre></td></tr></table></figure></p>
-<p><img src="/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/View PCL.png" alt="Incredibly buggy in my virtual machine!"></p>
-<h4 id="New-information"><a href="#New-information" class="headerlink" title="New information"></a>New information</h4><p>When viewing the ascii <code>.pcd</code> file, it became apparent that huge sections at the start and end of the file was meaningless data.<br>This could help to explain why I wasn’t getting anywhere.<br>I also learned that a devices like a kinect will often output <code>nan</code> values if the incident ray wasn’t returned.</p>
-<p>I’ll have to re-export the <code>rosbag</code> message, so that it’s the first message in the bag. Then I can compare my results to the actual points.<br>Hopefully then I can come up with a way to filter out the bad data efficiently.</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/" data-id="cj00vgmw60002ik9rltd3fkm2" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Project-meeting-7" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2016/12/14/Project-meeting-7/">Project meeting 7</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2016/12/14/Project-meeting-7/" class="article-date">
-  <time datetime="2016-12-14T12:32:16.000Z" itemprop="datePublished">Wed 14/12/2016 12:32</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <h4 id="Project-progress"><a href="#Project-progress" class="headerlink" title="Project progress"></a>Project progress</h4><p>I’m still not sure why I had so much trouble converting 3D-space points back into floats.<br>However, there should be a library in <code>ROS</code> for PCL, which is what I should be using after all.</p>
-<h4 id="Interim-report-plan-feedback"><a href="#Interim-report-plan-feedback" class="headerlink" title="Interim report plan feedback"></a>Interim report plan feedback</h4><p>I received some feedback about the structure of the report.<br>I should think about it more logically, and get somebody else to read it.<br>I’ll also be including multiple revisions of Gantt charts, including an<br>up-to-date version.</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/14/Project-meeting-7/" data-id="cj00vgmyd0013ik9r7yrkk2e8" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Converting-point-clouds" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2016/12/07/Converting-point-clouds/">Converting point clouds</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2016/12/07/Converting-point-clouds/" class="article-date">
-  <time datetime="2016-12-07T21:33:29.000Z" itemprop="datePublished">Wed 07/12/2016 21:33</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>I spent a long time trying to write something which formats a message into data useable by Unity for generating a vertex mesh.<br>It should have been easier, but I ran into a lot of issues.</p>
-<p>The general idea is to convert 4 bytes of the 32-byte point data to a float for each of X, Y, and Z.<br>The message even states the endian-ness of this layout (<a href="http://docs.ros.org/api/sensor_msgs/html/msg/PointCloud2.html" target="_blank" rel="external">documentation</a>).</p>
-<p>I learned of the <strong>union</strong>:<br><figure class="highlight cpp"><figcaption><span>Conversion code</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">union</span> &#123;</div><div class="line">  <span class="keyword">float</span> f;</div><div class="line">  <span class="keyword">int</span> b[<span class="number">4</span>];</div><div class="line">&#125; data;</div></pre></td></tr></table></figure></p>
-<p>I couldn’t use the whole data from a single message each time, I couldn’t even open it in a text editor as it was too large.<br>Fortunately I could split the file without even opening it.<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ split -b 200000 PointCloud.txt</div></pre></td></tr></table></figure></p>
-<p>This generated a list of 200kB files, with <code>xaa</code> being the start with the header messages.</p>
-<p>Whatever I did to the conversion program, I was always getting <code>nan</code> values, or crazily small ones.<br>I read about using the pcl library to use their methods for this rather than me implementing something myself.<br>Such methods exist in <code>pcl_ros/point_cloud.h</code>. However, this resource and the resources it depends on are part of the <code>ROS</code> environment.<br>Ideally, The Windows side would do the work, so that the Linux side only publishes the related data. It shouldn’t have to know what’s on the other end.</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/07/Converting-point-clouds/" data-id="cj00vgmwi0005ik9rvda2010e" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/03/PCL-point-clouds/" data-id="cj0bndpzi000t1k9ro0nqvrod" class="article-share-link">Share</a>
     
      
   </footer>
@@ -450,7 +452,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
     </div>
   </div>
 

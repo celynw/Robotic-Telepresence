@@ -82,6 +82,158 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-Data-to-Unity-from-RAM" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/">Data to Unity from RAM</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/" class="article-date">
+  <time datetime="2016-12-01T17:18:29.000Z" itemprop="datePublished">Thu 01/12/2016 17:18</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>I started by copying code from the “rosserial_hello_world” and “rosserial_unity” (<code>.dll</code> code) solutions into a new solution.</p>
+<p>I’m looking up how to create shared memory in Windows for sharing the data.<br>You can’t feasibly do this in a <code>.dll</code> because the space would have to be initialised statically.<br>The way to do this seems to be using <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa366551.aspx" target="_blank" rel="external">Named Shared Memory</a>.<br>Unfortunately, it seems that I might still have to worry about marshal functions or ‘unsafe’ code because of the C# in Unity.<br>An alternative could be <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa365590.aspx" target="_blank" rel="external">Named Pipes</a>.</p>
+<h4 id="Named-pipes"><a href="#Named-pipes" class="headerlink" title="Named pipes"></a>Named pipes</h4><p>I made <em>another</em> visual studio solution to test this, and created an empty <code>GameObject</code> in Unity with a new script for the other end.<br>In order for some classes to be valid such as <code>System.IO.Pipes</code>, I changed the project settings to handle the full .Net 2.0:</p>
+<blockquote>
+<p>Edit &gt; Project Settings &gt; Player &gt; Other Settings &gt; Optimization &gt; Api Compitbility Level &gt; “.NET 2.0”<br>(rather than “.NET 2.0 Subset”)</p>
+</blockquote>
+<p>For the Unity side, I found some recent example code on the <a href="http://answers.unity3d.com/questions/483123/how-do-i-get-named-pipes-to-work-in-unity.html#answer-1272634" target="_blank" rel="external">Unity3D forums</a>.<br>It pointed me to the <a href="https://msdn.microsoft.com/en-us/library/bb546085%28v=vs.110%29.aspx" target="_blank" rel="external">“How to use names pipes for network interprocess communication” MSDN page</a>.<br>I copied the C++ code from the example just to see if it would compile, or work in any way.<br>I made sure that the <code>NamedPipeClientStream</code> for each end had the same name (“testpipe” for now).<br>At first, I was successful, except Unity got stuck in the starting state, and became unresponsive and needed to be forced quit.<br><img src="/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/Connection.png" alt="The &#39;PipeDataSend&#39; Windows console application, after running Unity"><br>With a bit of tweaking in the Unity script, I was able to get the expected message into Unity.<br>I had to cut out a <code>getPipedData()</code> function, which sounds like it’s defeating the point.<br>However, the functionality is repeated exactly in the <code>Setup()</code> of the Unity script, which works.<br><img src="/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/Success.png" alt="The &quot;I am the one true server&quot; string was defined in the &#39;PipeDataSend&#39; Windows console application"><br><figure class="highlight cs"><figcaption><span>The part of PipeDataReceive.cs which was commented out</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">getPipedData</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="comment">//UnityEngine.Debug.Log("Thread Called - Start");</span></div><div class="line">	StreamString ss = <span class="keyword">new</span> StreamString(pipeClient);</div><div class="line">	UnityEngine.Debug.Log(ss.ReadString());</div><div class="line">	<span class="comment">//UnityEngine.Debug.Log("Thread Called - End");</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>I noticed afterwards that after Unity gets stuck, closing the console applications un-freezes Unity which returns with:</p>
+<blockquote>
+<p>OverflowException: Number overflow.<br>StreamString.ReadString() (at Assets/_Scripts/PipeDataReceive.cs:51)<br>PipeDataReceive.getPipedData() (at Assets/_Scripts/PipeDataReceive.cs:33)<br>PipeDataReceive.Update() (at Assets/_Scripts/PipeDataReceive.cs:27)</p>
+</blockquote>
+<p>I lowered the threads from 4 to 1.<br>I had missed the part about reading from and writing to a file for example purposes, so I stripped it out.<br>The <code>PipeDataSend</code> and <code>PipeDataReceive</code> files are about as short and compact as I can make them now.<br>They work well. The <code>PipeDataSend</code> waits for a connection. As soon as <code>PipeDataReceive</code> is started, <code>PipeDataSend</code> send over “Hello Unity!” and then finishes.<br>However, you must not stop the Unity game before the pipe server or it will crash…</p>
+<p>Next step: See how this performs after integrating with <code>rosserial_windows</code> in Unity.<br><figure class="highlight cpp"><figcaption><span>PipeDataSend.cpp</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#using <span class="meta-string">&lt;System.Core.dll&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> System;</div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> System::IO;</div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> System::IO::Pipes;</div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> System::Text;</div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> System::Threading;</div><div class="line"></div><div class="line"><span class="keyword">public</span> ref <span class="keyword">class</span> StreamString &#123;</div><div class="line"><span class="keyword">private</span>:</div><div class="line">	Stream^ ioStream;</div><div class="line">	UnicodeEncoding^ streamEncoding;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">	StreamString(Stream^ ioStream) &#123;</div><div class="line">		<span class="keyword">this</span>-&gt;ioStream = ioStream;</div><div class="line">		streamEncoding = gcnew UnicodeEncoding();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	String^ ReadString() &#123;</div><div class="line">		<span class="keyword">int</span> len;</div><div class="line"></div><div class="line">		len = ioStream-&gt;ReadByte() * <span class="number">256</span>;</div><div class="line">		len += ioStream-&gt;ReadByte();</div><div class="line">		<span class="built_in">array</span>&lt;Byte&gt;^ inBuffer = gcnew <span class="built_in">array</span>&lt;Byte&gt;(len);</div><div class="line">		ioStream-&gt;Read(inBuffer, <span class="number">0</span>, len);</div><div class="line"></div><div class="line">		<span class="keyword">return</span> streamEncoding-&gt;GetString(inBuffer);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">int</span> <span class="title">WriteString</span><span class="params">(String^ outString)</span> </span>&#123;</div><div class="line">		<span class="built_in">array</span>&lt;Byte&gt;^ outBuffer = streamEncoding-&gt;GetBytes(outString);</div><div class="line">		<span class="keyword">int</span> len = outBuffer-&gt;Length;</div><div class="line">		<span class="keyword">if</span> (len &gt; UInt16::MaxValue)</div><div class="line">			len = (<span class="keyword">int</span>)UInt16::MaxValue;</div><div class="line">		ioStream-&gt;WriteByte((Byte)(len / <span class="number">256</span>));</div><div class="line">		ioStream-&gt;WriteByte((Byte)(len &amp; <span class="number">255</span>));</div><div class="line">		ioStream-&gt;Write(outBuffer, <span class="number">0</span>, len);</div><div class="line">		ioStream-&gt;Flush();</div><div class="line"></div><div class="line">		<span class="keyword">return</span> outBuffer-&gt;Length + <span class="number">2</span>;</div><div class="line">	&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">public</span> ref <span class="keyword">class</span> PipeServer &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span><span class="params">()</span> </span>&#123;</div><div class="line">		Console::WriteLine(<span class="string">"Pipe server started"</span>);</div><div class="line">		Console::WriteLine(<span class="string">"Waiting for client connection..."</span>);</div><div class="line">		Thread^ server = gcnew Thread(gcnew ThreadStart(&amp;ServerThread));</div><div class="line">		server-&gt;Start();</div><div class="line">		Thread::Sleep(<span class="number">250</span>);</div><div class="line">		<span class="keyword">while</span> (<span class="literal">true</span>) &#123;</div><div class="line">			<span class="keyword">if</span> (server != <span class="literal">nullptr</span>) &#123;</div><div class="line">				<span class="comment">// Check if it has gone. If so, remove it.</span></div><div class="line">				<span class="keyword">if</span> (server-&gt;Join(<span class="number">250</span>)) &#123;</div><div class="line">					Console::WriteLine(<span class="string">"Server thread finished."</span>, server-&gt;ManagedThreadId);</div><div class="line">					server = <span class="literal">nullptr</span>;</div><div class="line">					<span class="keyword">break</span>;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		Console::WriteLine(<span class="string">"Finished."</span>);</div><div class="line">	&#125;</div><div class="line"><span class="keyword">private</span>:</div><div class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">ServerThread</span><span class="params">()</span> </span>&#123;</div><div class="line">		NamedPipeServerStream^ pipeServer = gcnew NamedPipeServerStream(<span class="string">"rospipe"</span>, PipeDirection::InOut);</div><div class="line"></div><div class="line">		<span class="comment">// Wait for a client to connect</span></div><div class="line">		pipeServer-&gt;WaitForConnection();</div><div class="line"></div><div class="line">		Console::WriteLine(<span class="string">"Client connected"</span>);</div><div class="line">		<span class="comment">// Do my data transfer here!</span></div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			StreamString^ ss = gcnew StreamString(pipeServer);</div><div class="line"></div><div class="line">			ss-&gt;WriteString(<span class="string">"Hello Unity!"</span>);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">catch</span> (IOException^ e) &#123;</div><div class="line">			Console::WriteLine(<span class="string">"ERROR: &#123;0&#125;"</span>, e-&gt;Message);</div><div class="line">		&#125;</div><div class="line">		pipeServer-&gt;Close();</div><div class="line">	&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	PipeServer::Main();</div><div class="line">	Console::WriteLine(<span class="string">"\nPlease close this window."</span>);</div><div class="line">	<span class="keyword">while</span> (<span class="number">1</span>) &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight cs"><figcaption><span>PipeDataReceive.cs</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> UnityEngine;</div><div class="line"><span class="keyword">using</span> System.Collections;</div><div class="line"><span class="keyword">using</span> System.IO;</div><div class="line"><span class="keyword">using</span> System.IO.Pipes;</div><div class="line"><span class="keyword">using</span> System.Threading;</div><div class="line"><span class="keyword">using</span> System.Text;</div><div class="line"><span class="keyword">using</span> System;</div><div class="line"><span class="keyword">using</span> System.Security.Principal;</div><div class="line"><span class="keyword">using</span> System.Diagnostics;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">PipeDataReceive</span> : <span class="title">MonoBehaviour</span> &#123;</div><div class="line">	<span class="keyword">public</span> NamedPipeClientStream pipeClient = <span class="keyword">new</span> NamedPipeClientStream(<span class="string">"."</span>, <span class="string">"rospipe"</span>, PipeDirection.InOut, PipeOptions.Asynchronous);</div><div class="line">	<span class="keyword">public</span> StreamString ss;</div><div class="line">	Thread readThread;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Start</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		UnityEngine.Debug.Log(<span class="string">"Connecting to pipe server..."</span>);</div><div class="line">		pipeClient.Connect();</div><div class="line">		Thread.Sleep(<span class="number">250</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Update</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		getPipedData();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">getPipedData</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		StreamString ss = <span class="keyword">new</span> StreamString(pipeClient);</div><div class="line">		UnityEngine.Debug.Log(<span class="string">"piped: "</span>+ss.ReadString());</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">StreamString</span> &#123;</div><div class="line">	<span class="keyword">private</span> Stream ioStream;</div><div class="line">	<span class="keyword">private</span> UnicodeEncoding streamEncoding;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">StreamString</span>(<span class="params">Stream ioStream</span>) </span>&#123;</div><div class="line">		<span class="keyword">this</span>.ioStream = ioStream;</div><div class="line">		streamEncoding = <span class="keyword">new</span> UnicodeEncoding();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">string</span> <span class="title">ReadString</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="keyword">int</span> len;</div><div class="line">		len = ioStream.ReadByte() * <span class="number">256</span>;</div><div class="line">		len += ioStream.ReadByte();</div><div class="line">		<span class="keyword">byte</span>[] inBuffer = <span class="keyword">new</span> <span class="keyword">byte</span>[len];</div><div class="line">		ioStream.Read(inBuffer, <span class="number">0</span>, len);</div><div class="line">		<span class="keyword">string</span> outString = streamEncoding.GetString(inBuffer);</div><div class="line"></div><div class="line">		<span class="keyword">return</span> outString;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">WriteString</span>(<span class="params"><span class="keyword">string</span> outString</span>) </span>&#123;</div><div class="line">		<span class="keyword">byte</span>[] outBuffer = streamEncoding.GetBytes(outString);</div><div class="line">		<span class="keyword">int</span> len = outBuffer.Length;</div><div class="line">		<span class="keyword">if</span> (len &gt; UInt16.MaxValue)</div><div class="line">			len = (<span class="keyword">int</span>)UInt16.MaxValue;</div><div class="line">		ioStream.WriteByte((<span class="keyword">byte</span>)(len / <span class="number">256</span>));</div><div class="line">		ioStream.WriteByte((<span class="keyword">byte</span>)(len &amp; <span class="number">255</span>));</div><div class="line">		ioStream.Write(outBuffer, <span class="number">0</span>, len);</div><div class="line">		ioStream.Flush();</div><div class="line"></div><div class="line">		<span class="keyword">return</span> outBuffer.Length + <span class="number">2</span>;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/" data-id="cj0bndpxv00071k9r6wrt6ng1" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Project-meeting-6" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/12/01/Project-meeting-6/">Project meeting 6</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/12/01/Project-meeting-6/" class="article-date">
+  <time datetime="2016-12-01T16:57:35.000Z" itemprop="datePublished">Thu 01/12/2016 16:57</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <h4 id="Discussion-about-the-previous-week’s-work"><a href="#Discussion-about-the-previous-week’s-work" class="headerlink" title="Discussion about the previous week’s work"></a>Discussion about the previous week’s work</h4><p>I tried to explain the problems I was having with <code>.dlls</code>.<br>I had some potentially useful tips about how to get them to work with arrays. I should look into <a href="https://msdn.microsoft.com/en-us/library/system.runtime.interopservices.marshal.aspx" target="_blank" rel="external">marshal functions</a> and <a href="https://msdn.microsoft.com/en-us/library/04fy9ya1.aspx" target="_blank" rel="external">interop</a>.<br>To analyse the extent of ‘name mangling’, I can put the <code>.dll</code> through <a href="http://www.dependencywalker.com/" target="_blank" rel="external">Dependency Walker</a>.<br>I came across these in the past week, I think I should have more experience and knowledge with C# besides Unity scripting for this to be successful.</p>
+<p>We have decided it would be much better to move away from compiling <code>.dlls</code> as Unity plugins, and instead use a compiled console application in Windows to receive the messages into RAM, and get Unity to poll the most recent values.<br>I have been talking to James, who is trying to implement UDP communication in Unity with ROS.</p>
+<p>In terms of the networking layout, the VR PC will be subscribing directly from Baxter (who has an internal ROS publisher) and publishing to the linux computer connected to Baxter, which will be calculating the inverse kinematics from the hand target positions.<br>We thing a position and a pose is required for this, so I will need the quaternions of the rotations of each hand.<br>Unity works with quaternions so this doesn’t sound too much of a challenge, but to start with I might well fix the pose to have the hands facing forwards.</p>
+<p>I wasn’t able to filter the joints that were in the public <code>urdf</code> and those in the <code>rosbag</code>. Maybe Baxter’s urdf is a previous verion?<br>I was also strange that the gripper messages were arriving separately.</p>
+<h4 id="Interim-report"><a href="#Interim-report" class="headerlink" title="Interim report"></a>Interim report</h4><p>The same examiner(s) who marks this will mark the final dissertation.<br>Therefore, don’t commit to work which is unlikely to come to fruition. Light exaggeration could back me into a corner.<br>Also, there will be some overlap between the interim report and the final submission. They have to exist as separate entities, but maybe not a total copy.</p>
+<p>I have two weeks left before Christmas. If I want any useful feedback (I do) I should have a report structure by <a href="/Robotic-Telepresence/2016/12/13/Project-meeting-7/">next meeting</a>.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Project-meeting-6/" data-id="cj0bndq0300171k9r1ygv7tq7" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Rosbag-communication" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/11/28/Rosbag-communication/">Rosbag communication</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/11/28/Rosbag-communication/" class="article-date">
+  <time datetime="2016-11-28T15:11:18.000Z" itemprop="datePublished">Mon 28/11/2016 15:11</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>I’ll be trying to get full rosbag communication into Unity, and communication in the other direction too.<br>Ideally this will be configurable inside Unity, I’m not sure how dynamic I can/need to make this.<br>The first step is to get virtual Baxter to move as the bag plays.</p>
+<p>From the <a href="http://wiki.ros.org/Names" target="_blank" rel="external">documentation</a>, ROS topic names can be composed of the following characters: <code>0-9</code>, <code>a-z</code>, <code>A-Z</code>, <code>_</code>, <code>/</code>.<br>So long as I use a different delimiter in the message formatting for my Unity interface this won’t cause problems.<br>I’d like to keep this concise to minimize latency and parsing effort.<br>For now, I’m transmitting the names in the same order as they are in the bag (alphabetical) next to their values, separated with <code>=</code>.</p>
+<p>I set up a post-build task to copy the resulting <code>.dll</code> to the <code>plugins/</code> folder in the Unity assets.<br>I’m still getting lots of ‘sync lost’ messages, one every second.<br>It may be something to do with <code>nh_spinOnce()</code>, but I should be calling it every Unity loop.<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[ WARN] [1480349686.965718293]: Sync with device lost.</div></pre></td></tr></table></figure></p>
+<p>There doesn’t seem to be a whole lot of error checking.<br>For instance, trying to read an <code>int</code> return value from a <code>.dll</code> function which has a void return type happily works.<br>If the socket connection cannot be made, it’s easy to create a block which will not allow the Unity application to start, and it becomes unresponsive and has to be forced to quit.</p>
+<p>The hard part is that the data from the <code>rosbag</code> is being received in a callback.<br>The way to get data out from the <code>.dll</code> and into Unity seems to be using return values from functions which are called in a Unity script.<br>I could make a set of variables which are updated with the most recent values.<br>This would be OK in the way that the model only has to be up to date and doesn’t need to show every position transmitted, except I would need to know the variables I am expecting before compiling the <code>.dll</code>.<br>Alternatively, I could preallocate a large number of variables to fill in, and the Unity client would know what is coming and in what order because of the imported robot <code>URDF</code>.<br>For now I will hard-code it and maybe ask in the project meeting.</p>
+<p>I can’t pass strings out of the <code>.dll</code>. This seems to be misunderstanding <code>.dlls</code> or Unity.<br>I’m trying to think of a way to get the data out.<br>I could provide pointers to data from Unity into the <code>.dll</code> which match up with the subscription, but I still need a better callback.<br>At the end of <a href="http://wiki.ros.org/rosserial_windows/Tutorials/Receiving%20Messages" target="_blank" rel="external">this tutorial</a> it mentions:</p>
+<blockquote>
+<p>It’s possible to subclass the Subscriber class for a more object-oriented approach. In that case, instead of registering with the call back above simply instantiate the new class and pass that in to the subscribe call.</p>
+</blockquote>
+<p>This sounds more like what I want?<br>I’ll try with <code>rosserial_hello_world</code> first.<br>I’ve replaced all the <code>printf</code> functions with a better C++ approach (<code>cout</code> streams).</p>
+<p>I couldn’t work out what the page meant.<br>I tried creating a dictionary of joints and angles in Unity and feeding that into the <code>.dll</code>, but I needed to ‘use’ <code>System.Collections.Generic</code> and I couldn’t work out how to do that either.<br>I managed to pass a string as an argument into a <code>.dll</code> function, by casting <code>char*</code>:<br><figure class="highlight cs"><figcaption><span>Unity script</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line">[DllImport (<span class="string">"rosserial_unity"</span>)]</div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">extern</span> <span class="keyword">double</span> <span class="title">getValue</span>(<span class="params"><span class="keyword">string</span> key</span>)</span>;</div><div class="line">...</div></pre></td></tr></table></figure></p>
+<figure class="highlight cpp"><figcaption><span>dll code</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line"><span class="function">DLLEXPORT <span class="keyword">double</span> <span class="title">getValue</span><span class="params">(<span class="keyword">char</span>* key)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> ((<span class="built_in">string</span>)key == <span class="string">"head_pan"</span>)</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>Now I will go through the robot hierarchy in Unity, filter out the <code>GameObjects</code> which are tagged “URDF joints”, sort them alphabetically and then request their values from the socket stream.<br>Unfortunately, the list of <code>GameObjects</code> is much longer (48) than those contained within the stream (18), and I can’t differentiate.<br>I will either have to check one by one somehow or find out what makes the ones in the <code>rosbag</code> special.<br>I’ll just hard code it for now…<br>This is difficult too.<br>There is no pattern to the messages with 18 joints, or the ones which just contain a right or left gripper.</p>
+<p>It’s pretty annoying having to restart Unity every time I’ve updated the <code>.dll</code>.</p>
+<h4 id="Some-success"><a href="#Some-success" class="headerlink" title="Some success"></a>Some success</h4><p>I resorted to the most god-awful code, but I’ve finally got joint angles into Unity.<br>This will DEFINITELY need changing, but I can progress with making sure that I have the update rate etc.</p>
+<p>I’ve managed to get <em>some</em> form of the ros bag onto virtual Baxter.<br>The ‘sync lost’ messages have stopped, I’m not sure why, because the update loop isn’t going much faster or slower than before.<br>I’ll have to set additional attributes to each link during the import to record which axis rotates, and the effort limits.</p>
+<p>I’ve made a script with private variables for just axis to start with, and modified the import script to attach it to every joint.<br>I’ll also have to do the same to the origin values to keep a reference to them.<br>I also attach the <code>rosserial</code> script to the root by default.</p>
+<p>After some playing around with rotations, I got it to work:<br><div class="video-container"><iframe src="//www.youtube.com/embed/0TW5gbRr-oQ" frameborder="0" allowfullscreen></iframe></div></p>
+<p>The jerkiness can be down to many things:</p>
+<ul>
+<li>Only the most recent message is stored</li>
+<li>If that message was a gripper, the rest of the values are empty</li>
+<li>The messages are only read every Unity frame at the moment, probably 60FPS</li>
+</ul>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/28/Rosbag-communication/" data-id="cj0bndq0d001g1k9ryooubzkz" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
     <article id="post-Exploring-rosbags" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -126,7 +278,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/23/Exploring-rosbags/" data-id="cj00vgmwp0007ik9rybsqxhas" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/23/Exploring-rosbags/" data-id="cj0bndpy0000a1k9rlsdd664e" class="article-share-link">Share</a>
     
      
   </footer>
@@ -173,7 +325,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/22/Project-meeting-5/" data-id="cj00vgmye0014ik9rr1krx8z0" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/22/Project-meeting-5/" data-id="cj0bndq0200161k9rg7lqoi09" class="article-share-link">Share</a>
     
      
   </footer>
@@ -221,7 +373,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/21/ROS-serial-Unity-plugin/" data-id="cj00vgmyk0018ik9r7wtoue87" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/21/ROS-serial-Unity-plugin/" data-id="cj0bndq09001a1k9rixu15597" class="article-share-link">Share</a>
     
      
   </footer>
@@ -271,7 +423,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/21/ROS-serial/" data-id="cj00vgmyq001aik9r4puaebxm" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/21/ROS-serial/" data-id="cj0bndq0a001c1k9r7moot7bt" class="article-share-link">Share</a>
     
      
   </footer>
@@ -316,152 +468,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/15/Project-meeting-4/" data-id="cj00vgmya0011ik9rj7sp3beh" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Baxter-imported" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2016/11/14/Baxter-imported/">Baxter imported</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2016/11/14/Baxter-imported/" class="article-date">
-  <time datetime="2016-11-14T23:39:32.000Z" itemprop="datePublished">Mon 14/11/2016 23:39</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>To import the meshes, I first tried to add new mesh filter and mesh renderer components to the created GameObjects.<br>Unfortunately, this doesn’t add the materials like it does when you drag them in, and I can’t seem to find an easy way to do add multiple, let alone choose the correct ones.<br>If a mesh had too many trianlges and was split into two, you also can’t attach both of them to the mesh filter, or attach two mesh filters to a <code>GameObject</code>.</p>
-<p>I managed to find out how to import them in a nice(ish) way:</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">string</span> path = meshNode.Attributes[<span class="string">"filename"</span>].Value;</div><div class="line">System.Uri uri = <span class="keyword">new</span> System.Uri(path);</div><div class="line">path = uri.Host + uri.PathAndQuery; <span class="comment">//Removes "package://"</span></div><div class="line">obj = GameObject.Instantiate(AssetDatabase.LoadAssetAtPath(<span class="string">"Assets/"</span>+path, <span class="keyword">typeof</span>(GameObject))) <span class="keyword">as</span> GameObject;</div></pre></td></tr></table></figure>
-<p>This keeps the extra GameObjects such as Camera, Light and the Animation component.<br>The meshes are also children of each ‘URDF_link’ <code>GameObject</code> rather that acting as them.<br>You cannot easily copy the components (mesh filter, mesh renderer) to another object.<br>Even copying the only values would be a hassle.<br>The easiest was swapping the <code>GameObjects</code> around<br>The transformations and modifications would be applied afterwards.</p>
-<p><img src="/Robotic-Telepresence/2016/11/14/Baxter-imported/Baxter.png" alt="Baxter at &#39;position zero&#39;"></p>
-<p>To run the code, you only have to drag the robot package into the assets window, and the robot is automatically added to the scene.<br>In the end, it might be better if this was saved as a <code>PreFab</code> and not added to the scene.<br>The body looks hollow because the second mesh part was not automatically imported.<br>There are still problems with multiple mesh parts, where the <code>.urdf</code> and the <code>.urdf.xacro</code> are both being parsed.</p>
-<p><img src="/Robotic-Telepresence/2016/11/14/Baxter-imported/Hierarchy.png" alt="Showing the generated hierarchy. Some of the transformations have rounding errors."></p>
-<p>I wanted to try it out on some other robots, but most the ones I could get my hands on did not contain <code>.DAE</code> files, only <code>.STL</code> files which aren’t supported by Unity.<br>Fortuantely, ROS provides a <a href="http://wiki.ros.org/collada_urdf" target="_blank" rel="external">converter</a>.</p>
-<blockquote>
-<p>To be continued</p>
-</blockquote>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/14/Baxter-imported/" data-id="cj00vgmwc0004ik9rgym4ukq3" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-URDF-importer" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2016/11/14/URDF-importer/">URDF importer</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2016/11/14/URDF-importer/" class="article-date">
-  <time datetime="2016-11-14T00:09:35.000Z" itemprop="datePublished">Mon 14/11/2016 00:09</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>Most robot repositories should have a repository with a robot description folder.<br>In Baxter’s case, this is <code>baxter_description</code>. It countains the <code>urdf</code> files and the mesh files.<br>By dragging this folder into the Unity Assets for a project, the importer script will automatically pick up the urdf files and filter down to the relevant one.<br>From here it can browse to the path of the meshes as the paths should match the existing directory layout.</p>
-<p>The updated script is able to produce the hierarchy of joints and links with their respective transforms.<br>It uses a pair of functions that alternate and recurse with each other until the ends of the hierarchy are met, creating links and joints.<br><figure class="highlight cs"><figcaption><span>udrfPostProcessor.cs excerpt, updated</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">parseURDF</span>(<span class="params"><span class="keyword">string</span> filename</span>) </span>&#123;</div><div class="line">		<span class="comment">//Load file</span></div><div class="line">		<span class="keyword">var</span> xmlData = <span class="keyword">new</span> XmlDocument();</div><div class="line">		xmlData.Load(filename);</div><div class="line">		<span class="comment">//Set root node</span></div><div class="line">		XmlNode rootNode = xmlData.DocumentElement;</div><div class="line">		<span class="keyword">string</span> name = rootNode.Attributes[<span class="string">"name"</span>].Value;</div><div class="line">		GameObject rootObj = <span class="keyword">new</span> GameObject(name);</div><div class="line">		rootObj.tag = <span class="string">"URDF link"</span>;</div><div class="line">		<span class="comment">//Start recursive alternating functions to reach bottom of hierarchy</span></div><div class="line">		XmlNodeList joints = rootNode.SelectNodes(<span class="string">"joint/parent[@link='base']"</span>);</div><div class="line">		<span class="keyword">foreach</span> (XmlNode jointNode <span class="keyword">in</span> joints)</div><div class="line">			generateJoint(jointNode, rootObj, rootNode);</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">generateJoint</span>(<span class="params">XmlNode node, GameObject parentObj, XmlNode rootNode</span>) </span>&#123;</div><div class="line">		<span class="comment">//Create joint</span></div><div class="line">		node = node.ParentNode;</div><div class="line">		<span class="keyword">string</span> name = node.Attributes[<span class="string">"name"</span>].Value;</div><div class="line">		GameObject obj = <span class="keyword">new</span> GameObject(name);</div><div class="line">		obj.transform.parent = parentObj.transform;</div><div class="line">		obj.tag = <span class="string">"URDF joint"</span>;</div><div class="line">		<span class="comment">//Get origin rotation and translation parameters</span></div><div class="line">		getOrigin(node.SelectSingleNode(<span class="string">"origin"</span>), obj);</div><div class="line">		<span class="comment">//Find the child link</span></div><div class="line">		Debug.Log(node.SelectSingleNode(<span class="string">"child"</span>).Attributes[<span class="string">"link"</span>].Value);</div><div class="line">		XmlNode link = rootNode.SelectSingleNode(<span class="string">"link[@name='"</span>+node.SelectSingleNode(<span class="string">"child"</span>).Attributes[<span class="string">"link"</span>].Value+<span class="string">"']"</span>);</div><div class="line">		generateLink(link, obj, rootNode);</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">generateLink</span>(<span class="params">XmlNode node, GameObject parentObj, XmlNode rootNode</span>) </span>&#123;</div><div class="line">		<span class="comment">//Create link</span></div><div class="line">		<span class="keyword">string</span> name = node.Attributes[<span class="string">"name"</span>].Value;</div><div class="line">		GameObject obj = <span class="keyword">new</span> GameObject(name);</div><div class="line">		obj.transform.parent = parentObj.transform;</div><div class="line">		obj.tag = <span class="string">"URDF link"</span>;</div><div class="line">		<span class="comment">//Get origin rotation and translation parameters</span></div><div class="line">		XmlNode originNode = node.SelectSingleNode(<span class="string">"visual/origin"</span>);</div><div class="line">		<span class="keyword">if</span> (originNode != <span class="literal">null</span>) <span class="comment">//Not all links have a visual node</span></div><div class="line">			getOrigin(originNode, obj);</div><div class="line">		<span class="comment">//Find all joints who have this link as a parent</span></div><div class="line">		XmlNodeList joints = rootNode.SelectNodes(<span class="string">"joint/parent[@link='"</span>+name+<span class="string">"']"</span>);</div><div class="line">		<span class="keyword">foreach</span> (XmlNode jointNode <span class="keyword">in</span> joints)</div><div class="line">			generateJoint(jointNode, obj, rootNode);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">getOrigin</span>(<span class="params">XmlNode node, GameObject obj</span>) </span>&#123;</div><div class="line">		<span class="comment">//Parse for translation</span></div><div class="line">		<span class="keyword">string</span>[] xyzStr = node.Attributes[<span class="string">"xyz"</span>].Value.Split(<span class="string">' '</span>);</div><div class="line">		Vector3 locations = <span class="keyword">new</span> Vector3();</div><div class="line">		locations.x = <span class="keyword">float</span>.Parse(xyzStr[<span class="number">0</span>]);</div><div class="line">		locations.y = <span class="keyword">float</span>.Parse(xyzStr[<span class="number">1</span>]);</div><div class="line">		locations.z = <span class="keyword">float</span>.Parse(xyzStr[<span class="number">2</span>]);</div><div class="line">		<span class="comment">//Parse for rotation</span></div><div class="line">		<span class="keyword">string</span>[] rpyStr = node.Attributes[<span class="string">"rpy"</span>].Value.Split(<span class="string">' '</span>);</div><div class="line">		Vector3 angles = <span class="keyword">new</span> Vector3();</div><div class="line">		angles.x = <span class="keyword">float</span>.Parse(rpyStr[<span class="number">0</span>]); <span class="comment">//r</span></div><div class="line">		angles.y = <span class="keyword">float</span>.Parse(rpyStr[<span class="number">1</span>]); <span class="comment">//p</span></div><div class="line">		angles.z = <span class="keyword">float</span>.Parse(rpyStr[<span class="number">2</span>]); <span class="comment">//y</span></div><div class="line">		angles = angles * Mathf.Rad2Deg;</div><div class="line">		<span class="comment">//Apply Transform</span></div><div class="line">		obj.transform.Translate(-locations.x, locations.y, locations.z);</div><div class="line">		obj.transform.Rotate(<span class="number">0</span>, <span class="number">0</span>, -angles.z, Space.Self);</div><div class="line">		obj.transform.Rotate(<span class="number">0</span>, -angles.y, <span class="number">0</span>, Space.Self);</div><div class="line">		obj.transform.Rotate(angles.x, <span class="number">0</span>, <span class="number">0</span>, Space.Self);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>An annoying run-time error which got me for a while was that a trailing slash can cause the XML parser to reach the end of the file unexpectedly.<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">node.SelectSingleNode(<span class="string">"visual/geometry/mesh/"</span>);</div></pre></td></tr></table></figure></p>
-<p>Unfortunately, adding meshes directly using scripting loses out in some of the extra functionality that goes on behind the scenes when you drag an asset into the scene.<br>Creating a mesh renderer and a mesh filter via a script for the GameObjects is possible, but attached models are bright pink (no assigned texture).<br>When you drag an asset to instantiate it, Unity knows which materials to assign (which have been automativally generated).<br>Perhaps an easier way would be to emulate this action, and then delete any superfluous components?<br>It also doesn’t handle meshes which have been split for having too many vertices very well (i.e. the torso).</p>
-<p>There’s still scope for the other parameters, such as movement limits, collision geometry, primitive shapes in place of models, and so on.</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/14/URDF-importer/" data-id="cj00vgmzd001kik9rijq6af2x" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Importing-directly-from-URDF" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2016/11/13/Importing-directly-from-URDF/">Importing directly from URDF</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2016/11/13/Importing-directly-from-URDF/" class="article-date">
-  <time datetime="2016-11-13T18:28:59.000Z" itemprop="datePublished">Sun 13/11/2016 18:28</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>The <code>urdf</code> file is an XML-based format.<br>In order to import values and heirarchical structure from the file into Unity automatically, I’ll have to parse it in some way.<br>I can ignore many parts of the <code>urdf</code> specification as I don’t need them yet.<br>There are a few options:</p>
-<ul>
-<li><h4 id="Scene-files"><a href="#Scene-files" class="headerlink" title="Scene files"></a>Scene files</h4><p>The scene files in Unity hold the structure of <code>GameObjects</code>, their configuration, and how the world is laid out.<br>The online documentation for Unity states that the scene files can be saved in a <a href="https://docs.unity3d.com/Manual/TextSceneFormat.html" target="_blank" rel="external">text-based format</a>.<br>One option could be to use a program or script to create a new scene file with the <code>urdf</code> parameters within.</p>
-</li>
-<li><h4 id="Prefab"><a href="#Prefab" class="headerlink" title="Prefab"></a>Prefab</h4><p>Unity <code>GameObjects</code> can be instances of a <code>Prefab</code>. Usually, the <code>GameObjects</code> are instantiated from the pre-existing <code>Prefab</code>.<br>However, <code>Prefabs</code> can be retroactively created from a <code>GameObject</code>, and then the <code>GameObject</code> becomes an instance of that new <code>Prefab</code>.<br>One idea could have been to create <code>Prefabs</code> outside of Unity and then import them, but it looks like <code>Prefabs</code> are binary files (not zip files), and there’s no documentation of the format.</p>
-</li>
-<li><h4 id="Unity-script"><a href="#Unity-script" class="headerlink" title="Unity script"></a>Unity script</h4><p>There are methods in Unity for creating, instantiating, modifying and destroying <code>GameObjects</code>.<br>Scripts attached to <code>GameObjects</code> usually execute when the scene is set to run, but there are other ways they can be used to enhance the workflow of the developer.<br>If I can achieve a sufficient level of functionality with <code>C#</code> this seems like the best solution.</p>
-<p>  Enter <code>AssetPostProcessor</code>.</p>
-</li>
-</ul>
-<h4 id="AssetPostProcessor"><a href="#AssetPostProcessor" class="headerlink" title="AssetPostProcessor"></a>AssetPostProcessor</h4><p>According to the <a href="https://docs.unity3d.com/ScriptReference/AssetPostprocessor.html" target="_blank" rel="external">docs</a>:</p>
-<blockquote>
-<p><strong>AssetPostprocessor</strong> lets you hook into the import pipeline and run scripts prior or after importing assets.</p>
-</blockquote>
-<p>Create an <code>Editor</code> folder in the root directory of the project, if it doesn’t exist already.<br>(You can re-import assets by right-clicking them and selecting, <code>Reimport</code>.)</p>
-<p>At first, the script runs for all assets, including itself!<br>By adding in some functions to check if the extension contains a <code>.urdf</code> file, we can filter the results.</p>
-<figure class="highlight cs"><figcaption><span>urdfPostProcessor.cs initial version</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> UnityEngine;</div><div class="line"><span class="keyword">using</span> UnityEditor;</div><div class="line"><span class="keyword">using</span> System.Collections;</div><div class="line"><span class="keyword">using</span> System.IO; <span class="comment">//For Path</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">urdfPostProcessor</span> : <span class="title">AssetPostprocessor</span></div><div class="line">&#123;</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">OnPostprocessAllAssets</span>(<span class="params"><span class="keyword">string</span>[] importedAssets, <span class="keyword">string</span>[] deletedAssets, <span class="keyword">string</span>[] movedAssets, <span class="keyword">string</span>[] movedFromPath</span>) </span>&#123;</div><div class="line">		<span class="keyword">foreach</span> (<span class="keyword">string</span> str <span class="keyword">in</span> importedAssets) &#123;</div><div class="line">			<span class="keyword">string</span> ext = Path.GetExtension(str);</div><div class="line">			<span class="keyword">if</span> (ext == <span class="string">".xacro"</span>)</div><div class="line">				ext = Path.GetExtension(Path.GetFileNameWithoutExtension(str));</div><div class="line">			<span class="keyword">if</span> (ext == <span class="string">".urdf"</span>)</div><div class="line">				Debug.Log(<span class="string">"YES: "</span>+str);</div><div class="line">			<span class="keyword">else</span></div><div class="line">				Debug.Log(<span class="string">"no: "</span>+str);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>Now that this script runs for each <code>urdf</code> file, we can try to access some of the data.<br>It is reccommended to use the system’s xml parsing.<br><figure class="highlight cs"><figcaption><span>urdfPostProcessor.cs continued</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line"><span class="keyword">using</span> System.Xml; <span class="comment">//For urdf</span></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">importURDF</span>(<span class="params"><span class="keyword">string</span> filename</span>) </span>&#123;</div><div class="line">		<span class="comment">//Load XML file</span></div><div class="line">		<span class="keyword">var</span> xmlData = <span class="keyword">new</span> XmlDocument();</div><div class="line">		xmlData.Load(filename);</div><div class="line">		<span class="comment">//Set root</span></div><div class="line">		<span class="keyword">var</span> root = xmlData.DocumentElement;<span class="comment">//.GetEnumerator();</span></div><div class="line">		<span class="comment">//Create nodelist</span></div><div class="line">		XmlNodeList nodeList;</div><div class="line">		nodeList = root.SelectNodes(<span class="string">"link"</span>);</div><div class="line">		<span class="comment">//Print out some results</span></div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;nodeList.Count; i++) &#123;</div><div class="line">			<span class="keyword">var</span> node = nodeList[i];</div><div class="line">			XmlNode ret = node.SelectSingleNode(<span class="string">"visual/origin"</span>);</div><div class="line">			<span class="keyword">if</span> (ret != <span class="literal">null</span>)</div><div class="line">				Debug.Log(node.Attributes[<span class="string">"name"</span>].Value+<span class="string">": "</span>+ret.Attributes[<span class="string">"rpy"</span>].Value);</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
-<p>The code above finds the <code>urdf</code> links which have a <code>visual</code> child, with an <code>origin</code> child of its own.<br>For each of those, it prints their names and the <code>rpy</code> values of the origin node.</p>
-<p><img src="/Robotic-Telepresence/2016/11/13/Importing-directly-from-URDF/XML Values.png" alt="Values from the XML in the debug logger in Unity"></p>
-<p>This isn’t exactly what we want, because it doesn’t follow the hierarchy. But we’re getting there.</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/13/Importing-directly-from-URDF/" data-id="cj00vgmx0000fik9rtb1bir10" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/15/Project-meeting-4/" data-id="cj0bndq0100151k9rd0v6l009" class="article-share-link">Share</a>
     
      
   </footer>
@@ -494,7 +501,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
     </div>
   </div>
 
