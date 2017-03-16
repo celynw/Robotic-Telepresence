@@ -82,6 +82,115 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-Fixing-point-cloud-problems" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2017/02/28/Fixing-point-cloud-problems/">Fixing point cloud problems</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/02/28/Fixing-point-cloud-problems/" class="article-date">
+  <time datetime="2017-02-28T22:50:35.000Z" itemprop="datePublished">Tue 28/02/2017 22:50</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>Now that the lab computer has access to the network, it was possible to attempt to communicate with the ROS machine.<br>After sorting out an issue caused by Windows Firewall, it was possible to receive joint messages over <code>rosserial_server socket_node</code>.<br>However, a single <code>PointCloud2</code> message caused CPU to skip to (over) 100%, and the serial server to hang, just as for me.<br>Oscar found a python script which would publish a custom point cloud and regularly send the message, containing just 3 white points.<br>This was able to be received!<br>It’s time to verify whether the problem was caused by the point clouds being too big, or if it was something like the colour interfering with the expected message format.</p>
+<p>New test field format</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>0-4</th>
+<th>5-8</th>
+<th>7-11</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>X</td>
+<td>Y</td>
+<td>Z</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>Old real field format</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>0-4</th>
+<th>5-8</th>
+<th>7-11</th>
+<th>12-15</th>
+<th>16-19</th>
+<th>20-23</th>
+<th>24-27</th>
+<th>28-31</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>X</td>
+<td>Y</td>
+<td>Z</td>
+<td>–</td>
+<td>C</td>
+<td>–</td>
+<td>–</td>
+<td>–</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>The python script is only able to publish point clouds in the first format.<br>I had to reverse engineer the python file using functionality in:<br><code>/opt/ros/indigo/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py</code><br>It should match the format of the existing clouds from the Kinect wth Baxter.</p>
+<p>I was able to receive three points in the new format.</p>
+<p>Since the real point cloud data is in the byte format, I’ll use random Matlab data to test.<br><figure class="highlight matlab"><figcaption><span>Matlab workspace</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">data = <span class="built_in">randn</span>(<span class="built_in">length</span>,<span class="number">8</span>);</div><div class="line">csvwrite(<span class="string">'out.csv'</span>, data)</div></pre></td></tr></table></figure></p>
+<p>I then pasted the (formatted) values directly into the python file.</p>
+<p>I found some weird problems. Looking into it:<br><code>msg.data_length</code> is:</p>
+<ul>
+<li>32 for 1 point (expected)</li>
+<li>64 for 2 points (expected)</li>
+<li>128 for 4 points (expected)</li>
+<li>ACCESS VIOLATION at 8 points when attempting to read <code>msg.data[0]</code></li>
+<li>224 for 7 points (expected)</li>
+<li>32 for 9 points</li>
+<li>Nothing received for many (&gt;100 points)<ul>
+<li>These can still be listened to locally with <code>rostopic echo &lt;path&gt;</code></li>
+<li>Everything is still responsive</li>
+</ul>
+</li>
+</ul>
+<p>On closer inspection, it seems like there is some kind of quantisation going on.<br>16 points gives the same error as for 8 points, and 9 points looks like 1 point.<br>Not quite sure why yet.<br>The python script makes <code>height = 1</code>, and <code>width = data length</code>.</p>
+<p>I tried changing the buffer sizes in the generated C++ files on the Windows PC:<br><figure class="highlight cpp"><figcaption><span>ros_lib/ros/node_handle.h excerpt</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line"><span class="keyword">namespace</span> ros &#123;</div><div class="line">  <span class="keyword">using</span> rosserial_msgs::TopicInfo;</div><div class="line">  <span class="comment">/* Node Handle */</span></div><div class="line">  <span class="keyword">template</span>&lt;<span class="keyword">class</span> Hardware,</div><div class="line">           <span class="keyword">int</span> MAX_SUBSCRIBERS=<span class="number">25</span>, <span class="comment">// Reduced from 25</span></div><div class="line">           <span class="keyword">int</span> MAX_PUBLISHERS=<span class="number">25</span>, <span class="comment">// Reduced from 25</span></div><div class="line">           <span class="keyword">int</span> INPUT_SIZE=<span class="number">200000</span>, <span class="comment">// Increased from 512</span></div><div class="line">           <span class="keyword">int</span> OUTPUT_SIZE=<span class="number">200000</span>&gt; <span class="comment">// Increased from 512</span></div><div class="line">  <span class="keyword">class</span> NodeHandle_ : <span class="keyword">public</span> NodeHandleBase_</div><div class="line">  &#123;</div><div class="line">...</div></pre></td></tr></table></figure></p>
+<p>This resulted in me being able to see large (1x640) messages!<br>However, the length is still zero with no data being transmitted.<br>By reducing the actual length by 1, so making it 1x639, the message was reported to have length of 224.<br>Not sure where this is being limited, but I’ll try the real point cloud from the <code>rosbag</code>.<br>The same thing happens as before.</p>
+<p>Reverting back to the example point cloud, made up of just [X, Y, Z], the limit seems to be <code>256</code> bytes.<br>as <code>22</code> points gives a <code>data_length</code> of <code>252</code> (4<em>3</em>22), but <code>23</code> points gives a length of <code>8</code> bytes.</p>
+<p>Can read exactly 367 times more memory in <code>data[]</code> than I thought I could? (32 bytes, proper point cloud)<br>3056 times with simple point cloud</p>
+<p>Windows application seems to make a buffer of arbitrary size, we should read until <code>data_length</code> even though the array doesn’t end there.<br>Adapted python program to only print one point cloud and then quit.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/28/Fixing-point-cloud-problems/" data-id="cj0cz5bx6000a2g9rvmhie296" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
     <article id="post-Project-meeting-11" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -142,7 +251,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/23/Project-meeting-11/" data-id="cj0bndpzt00101k9rzp5dzxh8" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/23/Project-meeting-11/" data-id="cj0cz5byz00132g9rkmnnbqo9" class="article-share-link">Share</a>
     
      
   </footer>
@@ -179,7 +288,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/22/Started-dissertation/" data-id="cj0bndq0r001k1k9rypozzm3b" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/22/Started-dissertation/" data-id="cj0cz5bzl001k2g9r55nmi9gt" class="article-share-link">Share</a>
     
      
   </footer>
@@ -218,7 +327,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/22/Live-depth-data-in-Unity/" data-id="cj0bndpyc000k1k9r1fknvn6b" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/22/Live-depth-data-in-Unity/" data-id="cj0cz5bxo000k2g9rw3lzwspj" class="article-share-link">Share</a>
     
      
   </footer>
@@ -256,7 +365,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/22/Native-Windows-point-cloud/" data-id="cj0bndpyx000p1k9rd161y7vv" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/22/Native-Windows-point-cloud/" data-id="cj0cz5byp000t2g9ruojdaze6" class="article-share-link">Share</a>
     
      
   </footer>
@@ -300,7 +409,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/20/VR-improvements/" data-id="cj0bndq15001q1k9r5y9sq1cc" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/20/VR-improvements/" data-id="cj0cz5bzn001p2g9rzfkwx246" class="article-share-link">Share</a>
     
      
   </footer>
@@ -337,7 +446,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/15/Project-meeting-10/" data-id="cj0bndpzu00111k9r2rs3v4x2" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/15/Project-meeting-10/" data-id="cj0cz5byt000y2g9rcuwjgyig" class="article-share-link">Share</a>
     
      
   </footer>
@@ -448,45 +557,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/15/Visualising-grippers/" data-id="cj0bndq15001p1k9rf8d3vrl3" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Kinect-with-Unity" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2017/02/14/Kinect-with-Unity/">Kinect with Unity</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2017/02/14/Kinect-with-Unity/" class="article-date">
-  <time datetime="2017-02-14T19:21:31.000Z" itemprop="datePublished">Tue 14/02/2017 19:21</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>To side-step the communication issues with <code>PointCloud2</code> for now, I’ll try to connect the Kinect directly to Unity and its host PC.<br><a href="https://www.youtube.com/watch?v=YLzMT_Epvpw" target="_blank" rel="external">This video</a> shows that moving point clouds are possible, but I’m not sure how out-of-the-box it will be.</p>
-<p>The official Kinect SDK apparently uses .NET 4 rather than Unity’s .NET 2.<br>I installed version 1.7.<br>I also added the “<a href="https://www.assetstore.unity3d.com/en/#!/content/7747" target="_blank" rel="external">Kinect with MS-SDK</a>“ asset from the asset store.<br>It apparently includes a simulator for the Kinect, but it didn’t seem to do anything.<br>As with most other things I’ve found, it’s geared towards calculating skeletal data, but will hopefully allow access to the point clouds.<br>This applies to what I think was being referred to for Unreal, the “<a href="http://www.opaque.media/kinect-4-unreal/" target="_blank" rel="external">Kinect 4 Unreal</a>“ plugin by Opaque Media Group.<br>I’m pretty sure this isn’t compatible in any way.</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/14/Kinect-with-Unity/" data-id="cj0bndpyb000j1k9rbb19a9yz" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/15/Visualising-grippers/" data-id="cj0cz5bzo001r2g9r62o2s1he" class="article-share-link">Share</a>
     
      
   </footer>
@@ -519,7 +590,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
     </div>
   </div>
 

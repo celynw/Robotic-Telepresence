@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Project meeting 5 | Robotic Telepresence</title>
+  <title>Point cloud problem identified | Robotic Telepresence</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="I’m definitely working on the right track, but whenever I get asked specifics about my plans I come up blank.It’s becoming increasingly clear that I need to update my Gantt chart! This will be done by">
+  <meta name="description" content="As suspected, it wasn’t the python script which was limiting the data to 8 points.Something I couldn’t check with the rosbag: running rostopic echo /camera/depth_registered/points gives an accurate re">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Project meeting 5">
-<meta property="og:url" content="https://celynwalters.github.io/Robotic-Telepresence/2016/11/22/Project-meeting-5/index.html">
+<meta property="og:title" content="Point cloud problem identified">
+<meta property="og:url" content="https://celynwalters.github.io/Robotic-Telepresence/2017/03/16/Point-cloud-problem-identified/index.html">
 <meta property="og:site_name" content="Robotic Telepresence">
-<meta property="og:description" content="I’m definitely working on the right track, but whenever I get asked specifics about my plans I come up blank.It’s becoming increasingly clear that I need to update my Gantt chart! This will be done by">
-<meta property="og:updated_time" content="2016-12-01T19:01:03.783Z">
+<meta property="og:description" content="As suspected, it wasn’t the python script which was limiting the data to 8 points.Something I couldn’t check with the rosbag: running rostopic echo /camera/depth_registered/points gives an accurate re">
+<meta property="og:updated_time" content="2017-03-16T22:34:55.177Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Project meeting 5">
-<meta name="twitter:description" content="I’m definitely working on the right track, but whenever I get asked specifics about my plans I come up blank.It’s becoming increasingly clear that I need to update my Gantt chart! This will be done by">
+<meta name="twitter:title" content="Point cloud problem identified">
+<meta name="twitter:description" content="As suspected, it wasn’t the python script which was limiting the data to 8 points.Something I couldn’t check with the rosbag: running rostopic echo /camera/depth_registered/points gives an accurate re">
   
     <link rel="alternate" href="/atom.xml" title="Robotic Telepresence" type="application/atom+xml">
   
@@ -84,7 +84,7 @@ ga('send', 'pageview');
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-Project-meeting-5" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-Point-cloud-problem-identified" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
     
@@ -92,36 +92,57 @@ ga('send', 'pageview');
         
   
     <h1 class="article-title" itemprop="name">
-      Project meeting 5
+      Point cloud problem identified
     </h1>
   
 
       </header>
     
   <div class="article-meta">
-    <a href="/Robotic-Telepresence/2016/11/22/Project-meeting-5/" class="article-date">
-  <time datetime="2016-11-22T23:02:04.000Z" itemprop="datePublished">Tue 22/11/2016 23:02</time>
+    <a href="/Robotic-Telepresence/2017/03/16/Point-cloud-problem-identified/" class="article-date">
+  <time datetime="2017-03-16T18:19:24.000Z" itemprop="datePublished">Thu 16/03/2017 19:19</time>
 </a>
     
   </div>
   <div class="article-entry" itemprop="articleBody">
     
-      <p>I’m definitely working on the right track, but whenever I get asked specifics about my plans I come up blank.<br>It’s becoming increasingly clear that I need to update my Gantt chart! This will be done by next week I swear.</p>
-<p>I learned about the octree.<br>While the kinect only has a line-of-sight view of the world, the octree retains data of geometry which is obstructed.<br>This geometry can only be removed if it is confirmed to not be there anymore, at which point its probability of being there is lowered gradually.</p>
-<p>I filled out the health and safety forms for Baxter and the robot lab.<br>I should be able to go in and get some real experience with <code>ROS</code>.<br>(My swipe access might work now as well)</p>
-<p>The most useful thing for me to do now would be to see if I could get specific communication using <code>rosserial</code>, not just general Boolean confirmation that it’s happening.<br>We recorded Baxter waving his arms around for about 60 seconds.<br>This data was compiled into a <code>rosbag</code>, which supposedly can be swapped out for real data being streamed from Baxter with very little changes experienced.<br>In this <code>rosbag</code> we included:</p>
+      <p>As suspected, it wasn’t the python script which was limiting the data to 8 points.<br>Something I couldn’t check with the rosbag: running <code>rostopic echo /camera/depth_registered/points</code> gives an accurate response.</p>
+<p>When using normal clouds:</p>
 <ul>
-<li>The joint angles.<br>This should plug in to the Unity project because I already have the URDF and virtual representation</li>
-<li>The point cloud data from the Kinect<br>I don’t know how to do this yet, but there has got to be ways to do it, I’m not too worried.</li>
-<li>The octrees<br>I’ll have to think about this, but I’m sure it will be possible somehow.<br>To use the <code>rosbags</code>, you can do<figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ rosbag (record | play) baxter.bag</div></pre></td></tr></table></figure>
-</li>
+<li>Described as {X, Y, Z}</li>
+<li>12 bytes long (4 bytes for each axis)</li>
+<li>A 21 point message reports a length of 252 (as expected)</li>
+<li>A 22 point message reports a length of 8 (264 expected)</li>
 </ul>
-<p>It plays back in RViz fine. Lasts about 60 seconds.<br>We confirmed its integrity by transferring it to another computer and directly playing it back to Baxter.<br>Oscar will send me a dropbox link with the rosbag, it is quite large (~8.5GB) and we had trouble putting it on a USB stick (possibly because of the 4GB Fat32 filesize limit?)<br>Apparently a RAMdisk might be helpful for the rosbag.<br>If I need to translate coordinate frames relative to Baxter, the frame is ‘base’”?<br>I knew I wouldn’t remember everything but I know these things exist to ask about.</p>
+<p>When using the point cloud type I need:</p>
+<ul>
+<li>Described as {X, Y, Z, _, C, _, _, _}</li>
+<li>32 bytes long</li>
+<li>A 1 point message reports a length of 32 (as expected)</li>
+<li>A 7 point message reports a length of 224 (as expected)</li>
+<li>An 8 point message reports a length of 0 (256 expected)</li>
+</ul>
+<p>It’s not the python script. It’s the serial communication.</p>
+<p>With some further investigation:<br><code>msg.data_length</code> is a <code>uint8_t</code>, which is the same length as a <code>char</code> and has a maximum of 255.<br>This is because <code>rosserial</code> was written with Arduino-like embedded devices in mind, which have much tighter hardware limitations than traditional PCs.<br>The modifications to ROS to allow for greater sizes for things such as point cloud, images etc. has been implemented for <code>Kinetic Kame</code> and the development branch of <code>Jade Turtle</code>.<br>The <code>msg.data_length</code> is now a <code>uint32_t</code>.<br>Somebody had success patching Indigo and building the source, I don’t think I have this choice.</p>
+<p>My options:</p>
+<ul>
+<li>Try to split the point cloud into chunks<br>This “<a href="https://github.com/ros-drivers/rosserial/issues/130#issuecomment-52449568" target="_blank" rel="external">sounds like a huge pain in the butt</a>“.</li>
+<li>Use <code>roscpp/winros</code> rather than <code>rosserial</code>.<br>It could be too late in the process to make the move.<br>Also I’ve heard it’s not very stable or reliable.<br>However <a href="https://github.com/ros-drivers/rosserial/issues/130#issuecomment-52449568" target="_blank" rel="external">this post</a> mentions that Hydro (before Indigo, the release we’re using) it was very usable back in 2014.</li>
+<li>Generate <code>rosserial_windows</code> libraries from Jade</li>
+<li>Try to transmit much less data.<br>Just sending locations of objects and rendering them in Unity3D. Discussed in the <a href="here">previous project meeting</a></li>
+</ul>
+<p>Here are some more people with this problem</p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/40813625/rosserial-publish-sensor-msgs-image-from-windows" target="_blank" rel="external">Recent</a></li>
+<li><a href="http://answers.ros.org/question/189571/array-size-limited-to-255-in-rosserial/" target="_blank" rel="external">Same date as Github issues linked above, no answers</a></li>
+</ul>
+<h4 id="Kinetic-rosserial-windows"><a href="#Kinetic-rosserial-windows" class="headerlink" title="Kinetic rosserial_windows"></a>Kinetic <code>rosserial_windows</code></h4><p>I set up a new virtual machine to install a fresh copy of <code>Kinetic Kame</code> to generate new <code>rosserial_windows</code> source.<br>This seems to run with no issue, even when the host <code>rosserial_server</code> is running <code>Indigo</code> (2 versions behind).<br>I modified the point cloud python script to use a single-byte point field to see exactly how much could be received.<br>Now I can send much more than 256 bytes… but there seems to be a hard limit of 1177 bytes, this would allow 36 full points…<br>Not nearly enough. Shouldn’t I be getting up to 65536 bytes (2048 points)??</p>
+<p>I even tried using the <code>Kinetic</code> environment as a host. I get the same problem, and the stability seems much worse!</p>
 
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/22/Project-meeting-5/" data-id="cj0cz5bz8001a2g9rdm8una9z" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/16/Point-cloud-problem-identified/" data-id="cj0cz5bys000x2g9rvk60vw9h" class="article-share-link">Share</a>
     
      
   </footer>
@@ -129,19 +150,10 @@ ga('send', 'pageview');
     
 <nav id="article-nav">
   
-    <a href="/Robotic-Telepresence/2016/11/23/Exploring-rosbags/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          Exploring rosbags
-        
-      </div>
-    </a>
   
-  
-    <a href="/Robotic-Telepresence/2016/11/21/ROS-serial-Unity-plugin/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/Robotic-Telepresence/2017/03/16/Pose-control-of-Baxter/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">ROS serial: Unity plugin</div>
+      <div class="article-nav-title">Pose control of Baxter</div>
     </a>
   
 </nav>
