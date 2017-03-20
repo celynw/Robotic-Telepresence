@@ -5,16 +5,19 @@
   
   <title>Extending rosserial size | Robotic Telepresence</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Mega draft notes for meManaged to get it up to 2221 points by increasing INPUT_SIZE and OUTPUT_SIZE from 512 to 1024(Repeatable):1776 using 512    3.468752221 using 1024    2.16894531254065 using 2048">
+  <meta name="description" content="This didn’t work when using a library derived from Indigo, but I was able to increasing INPUT_SIZE and OUTPUT_SIZE in node_handle.h from 512.Since an I32 is used instead now, this can be very large.
+I">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Extending rosserial size">
 <meta property="og:url" content="https://celynwalters.github.io/Robotic-Telepresence/2017/03/17/Extending-rosserial-size/index.html">
 <meta property="og:site_name" content="Robotic Telepresence">
-<meta property="og:description" content="Mega draft notes for meManaged to get it up to 2221 points by increasing INPUT_SIZE and OUTPUT_SIZE from 512 to 1024(Repeatable):1776 using 512    3.468752221 using 1024    2.16894531254065 using 2048">
-<meta property="og:updated_time" content="2017-03-20T13:33:19.614Z">
+<meta property="og:description" content="This didn’t work when using a library derived from Indigo, but I was able to increasing INPUT_SIZE and OUTPUT_SIZE in node_handle.h from 512.Since an I32 is used instead now, this can be very large.
+I">
+<meta property="og:updated_time" content="2017-03-20T23:29:47.346Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Extending rosserial size">
-<meta name="twitter:description" content="Mega draft notes for meManaged to get it up to 2221 points by increasing INPUT_SIZE and OUTPUT_SIZE from 512 to 1024(Repeatable):1776 using 512    3.468752221 using 1024    2.16894531254065 using 2048">
+<meta name="twitter:description" content="This didn’t work when using a library derived from Indigo, but I was able to increasing INPUT_SIZE and OUTPUT_SIZE in node_handle.h from 512.Since an I32 is used instead now, this can be very large.
+I">
   
     <link rel="alternate" href="/atom.xml" title="Robotic Telepresence" type="application/atom+xml">
   
@@ -106,23 +109,18 @@ ga('send', 'pageview');
   </div>
   <div class="article-entry" itemprop="articleBody">
     
-      <h2 id="Mega-draft-notes-for-me"><a href="#Mega-draft-notes-for-me" class="headerlink" title="Mega draft notes for me"></a>Mega draft notes for me</h2><p>Managed to get it up to 2221 points by increasing <code>INPUT_SIZE</code> and <code>OUTPUT_SIZE</code> from 512 to 1024<br>(Repeatable):<br>1776 using 512<br>    3.46875<br>2221 using 1024<br>    2.1689453125<br>4065 using 2048<br>    1.98486328125<br>        31<br>65468 using 65536<br>    0.99896240234375<br>        68</p>
-<p>Need 9830400 every 0.1 seconds…<br>1500 Hz at this throughput!</p>
-<p>An interesting development.<br>When publishing only just over the maximum buffer, <code>rosserial_server</code> exits without hanging:<br><figure class="highlight bash"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">terminate called after throwing an instance of <span class="string">'ros::serialization::StreamOverrunException'</span></div><div class="line">  what():  Buffer Overrun</div><div class="line">Aborted (core dumped)</div></pre></td></tr></table></figure></p>
-<p>This time, the limit is ROS in linux.<br>It’s not a compatibility issue between different versions of <code>rosserial_server</code> and <code>rosserial_windows</code> (tested it).</p>
-<figure class="highlight bash"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ mkdir -p ~/catkin_ws/src</div><div class="line">$ <span class="built_in">cd</span> !$</div><div class="line">$ catkin_init_workspace</div><div class="line">$ <span class="built_in">cd</span> src/</div><div class="line">$ git <span class="built_in">clone</span> -b indigo-devel https://github.com/ros-drivers/rosserial.git</div><div class="line">$ <span class="built_in">cd</span> ../</div><div class="line">$ catkin_make</div></pre></td></tr></table></figure>
-<p>Sending 1000x largest clouds at 100Hz.<br><code>rostopic echo</code> is as expected, takes 10 seconds.<br>Windows subscriber stops at 751, takes<br>    7.499 to 37.415 = 29.916 seconds<br>    3.666 to 32.948 = 29.282</p>
-<p>Decreasing wait in spin() loop to 1ms from 5ms<br>Did 852 this time!<br>    3.733 to 30.648 = 26.915 seconds</p>
-<p>Switching to Release in Visual Stuio causes <code>rosserial_server</code> to complain:<br><figure class="highlight bash"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[ERROR] [1489763341.521603888]: Buffer overrun when attempting to parse setup message.</div><div class="line">[ERROR] [1489763341.521666993]: Is this firmware from a pre-Groovy rosserial?</div><div class="line">[ERROR] [1489763341.521753826]: Buffer overrun when attempting to parse setup message.</div></pre></td></tr></table></figure></p>
-<p>95.63% of the CPU used was in <code>WindowsSocket::read</code>.</p>
-<p>Multi-threaded spinning?! Yes please.<br>It’s not a part of <code>rosserial_windows</code>…<br>There’s a <code>roscpp</code> folder but there’s not much in there.<br><a href="http://wiki.ros.org/roscpp/Overview/Callbacks%20and%20Spinning#Multi-threaded_Spinning" target="_blank" rel="external">http://wiki.ros.org/roscpp/Overview/Callbacks%20and%20Spinning#Multi-threaded_Spinning</a></p>
-<p>16th of optimised point cloud = 19200<br>25.5Hz at max data size (65468), limited by CPU though (single core).<br>87Hz max like this (my CPU). Ok.</p>
-<p><a href="https://www.phoronix.com/scan.php?page=article&amp;item=steamvr-linux-beta&amp;num=4" target="_blank" rel="external">https://www.phoronix.com/scan.php?page=article&amp;item=steamvr-linux-beta&amp;num=4</a></p>
+      <p>This didn’t work when using a library derived from <code>Indigo</code>, but I was able to increasing <code>INPUT_SIZE</code> and <code>OUTPUT_SIZE</code> in <code>node_handle.h</code> from 512.<br>Since an <code>I32</code> is used instead now, this can be very large.</p>
+<p>I set up a python script to publish a point cloud with a field of a single byte to see what the maximum throughput could be.<br>The highest I could get was <code>65468</code>. This now seems to be a limitation of <code>rosserial_server</code>.<br>When publishing only just over the maximum, <code>rosserial_server</code> exits without hanging:<br><figure class="highlight bash"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">terminate called after throwing an instance of <span class="string">'ros::serialization::StreamOverrunException'</span></div><div class="line">  what():  Buffer Overrun</div><div class="line">Aborted (core dumped)</div></pre></td></tr></table></figure></p>
+<p>However, sending more causes the hanging issue and 100% CPU usage.<br>Restricted to this limit, if I was to split full-size point clouds up, to publish 9,830,400 bytes every 0.1 seconds I would need to publish/subscribe at 1500 Hz!</p>
+<p>To test the rate I can send them, I’ve set up the python script to publish 1000x of the largest clouds at 100Hz.<br><code>rostopic echo</code> running locally is as expected, there is no bottleneck.<br>The Windows subscriber stops at 751, takes between 29 and 30 seconds.<br>I think this is because a backlog of messages is filled and some messages are dropped.<br>By decreasing the wait in the <code>spin()</code> loop to 1ms from 5ms gives 852, taking 27 seconds.<br>By removing the wait entirely, the performance is a little better but it isn’t good enough.<br>Using Visual Studio’s profiler, I found that I reached 100% CPU on one core (~12% total). 95.63% of the CPU used was in <code>WindowsSocket::read</code>.</p>
+<p>ROS can support <a href="http://wiki.ros.org/roscpp/Overview/Callbacks%20and%20Spinning#Multi-threaded_Spinning" target="_blank" rel="external">multi-threaded spinning</a>. However, it’s not a part of <code>rosserial_windows</code>.<br>There’s a <code>roscpp</code> folder, which is where I’d expect to find it natively, but there’s not much in there.</p>
+<p>If I can optimise the point cloud (I think half of the data being sent is all zeros), I may be able to make some compromises.</p>
+<p>=======<br>In other news, VR <a href="https://www.phoronix.com/scan.php?page=article&amp;item=steamvr-linux-beta&amp;num=4" target="_blank" rel="external">may be coming to Linux</a>, finally.<br>This could have made my project much easier, had it been out 6 months ago.</p>
 
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/17/Extending-rosserial-size/" data-id="cj0i5kat3000c7w9rvmtgy8t7" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/17/Extending-rosserial-size/" data-id="cj0iquphn000dv49r4qpn1yux" class="article-share-link">Share</a>
     
      
   </footer>
@@ -130,10 +128,19 @@ ga('send', 'pageview');
     
 <nav id="article-nav">
   
+    <a href="/Robotic-Telepresence/2017/03/17/Examining-octomap-messages/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Examining octomap messages
+        
+      </div>
+    </a>
   
-    <a href="/Robotic-Telepresence/2017/03/17/Examining-octomap-messages/" id="article-nav-older" class="article-nav-link-wrap">
+  
+    <a href="/Robotic-Telepresence/2017/03/16/Point-cloud-problem-identified/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Extending rosserial size</div>
+      <div class="article-nav-title">Point cloud problem identified</div>
     </a>
   
 </nav>

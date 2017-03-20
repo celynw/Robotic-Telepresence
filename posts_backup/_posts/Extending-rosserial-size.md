@@ -3,69 +3,34 @@ title: Extending rosserial size
 date: 2017-03-17 12:05:47
 tags:
 ---
-## Mega draft notes for me
-Managed to get it up to 2221 points by increasing `INPUT_SIZE` and `OUTPUT_SIZE` from 512 to 1024
-(Repeatable):
-1776 using 512
-	3.46875
-2221 using 1024
-	2.1689453125
-4065 using 2048
-	1.98486328125
-		31
-65468 using 65536
-	0.99896240234375
-		68
+This didn't work when using a library derived from `Indigo`, but I was able to increasing `INPUT_SIZE` and `OUTPUT_SIZE` in `node_handle.h` from 512.
+Since an `I32` is used instead now, this can be very large.
 
-Need 9830400 every 0.1 seconds...
-1500 Hz at this throughput!
-
-An interesting development.
-When publishing only just over the maximum buffer, `rosserial_server` exits without hanging:
+I set up a python script to publish a point cloud with a field of a single byte to see what the maximum throughput could be.
+The highest I could get was `65468`. This now seems to be a limitation of `rosserial_server`.
+When publishing only just over the maximum, `rosserial_server` exits without hanging:
 ```bash Command line
 terminate called after throwing an instance of 'ros::serialization::StreamOverrunException'
   what():  Buffer Overrun
 Aborted (core dumped)
 ```
-This time, the limit is ROS in linux.
-It's not a compatibility issue between different versions of `rosserial_server` and `rosserial_windows` (tested it).
+However, sending more causes the hanging issue and 100% CPU usage.
+Restricted to this limit, if I was to split full-size point clouds up, to publish 9,830,400 bytes every 0.1 seconds I would need to publish/subscribe at 1500 Hz!
 
+To test the rate I can send them, I've set up the python script to publish 1000x of the largest clouds at 100Hz.
+`rostopic echo` running locally is as expected, there is no bottleneck.
+The Windows subscriber stops at 751, takes between 29 and 30 seconds.
+I think this is because a backlog of messages is filled and some messages are dropped.
+By decreasing the wait in the `spin()` loop to 1ms from 5ms gives 852, taking 27 seconds.
+By removing the wait entirely, the performance is a little better but it isn't good enough.
+Using Visual Studio's profiler, I found that I reached 100% CPU on one core (~12% total). 95.63% of the CPU used was in `WindowsSocket::read`.
 
-```bash Command line
-$ mkdir -p ~/catkin_ws/src
-$ cd !$
-$ catkin_init_workspace
-$ cd src/
-$ git clone -b indigo-devel https://github.com/ros-drivers/rosserial.git
-$ cd ../
-$ catkin_make
-```
-Sending 1000x largest clouds at 100Hz.
-`rostopic echo` is as expected, takes 10 seconds.
-Windows subscriber stops at 751, takes
-	7.499 to 37.415 = 29.916 seconds
-	3.666 to 32.948 = 29.282
+ROS can support [multi-threaded spinning](http://wiki.ros.org/roscpp/Overview/Callbacks%20and%20Spinning#Multi-threaded_Spinning
+). However, it's not a part of `rosserial_windows`.
+There's a `roscpp` folder, which is where I'd expect to find it natively, but there's not much in there.
 
-Decreasing wait in spin() loop to 1ms from 5ms
-Did 852 this time!
-	3.733 to 30.648 = 26.915 seconds
+If I can optimise the point cloud (I think half of the data being sent is all zeros), I may be able to make some compromises.
 
-Switching to Release in Visual Stuio causes `rosserial_server` to complain:
-```bash Command line
-[ERROR] [1489763341.521603888]: Buffer overrun when attempting to parse setup message.
-[ERROR] [1489763341.521666993]: Is this firmware from a pre-Groovy rosserial?
-[ERROR] [1489763341.521753826]: Buffer overrun when attempting to parse setup message.
-```
-95.63% of the CPU used was in `WindowsSocket::read`.
-
-
-Multi-threaded spinning?! Yes please.
-It's not a part of `rosserial_windows`...
-There's a `roscpp` folder but there's not much in there.
-http://wiki.ros.org/roscpp/Overview/Callbacks%20and%20Spinning#Multi-threaded_Spinning
-
-16th of optimised point cloud = 19200
-25.5Hz at max data size (65468), limited by CPU though (single core).
-87Hz max like this (my CPU). Ok.
-
-https://www.phoronix.com/scan.php?page=article&item=steamvr-linux-beta&num=4
+=======
+In other news, VR [may be coming to Linux](https://www.phoronix.com/scan.php?page=article&item=steamvr-linux-beta&num=4), finally.
+This could have made my project much easier, had it been out 6 months ago.
