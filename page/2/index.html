@@ -82,6 +82,86 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-Main-control-loop" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2017/03/02/Main-control-loop/">Main control loop</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/03/02/Main-control-loop/" class="article-date">
+  <time datetime="2017-03-02T21:37:29.000Z" itemprop="datePublished">Thu 02/03/2017 21:37</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <h4 id="Current-objective"><a href="#Current-objective" class="headerlink" title="Current objective"></a>Current objective</h4><p>I really need to get the main control loop sorted. Each part has been demonstrated to work separately, but it needs to work all together.<br>I need to get joint angles from the robot (using a <code>rosbag</code> for now), which are published on a linux machine running <code>roscore</code>.<br>These need to be subscribed to from a Windows machine, and the data should be put into shared memory.<br>This data needs to be read by Unity in and each corresponding joint should be rotated in real time to mirror the robot.</p>
+<p>I then also need to be able to set target positions and poses for the hands using the tracked Vive controllers in VR.<br>These targets need to be put back into some shared memory, which is read by the console application and published back to ROS.</p>
+<h4 id="After-that"><a href="#After-that" class="headerlink" title="After that"></a>After that</h4><p>I still need to know how to tell Baxter to move, I aim to do that this week.<br>I also need to implement bounds, for target positions. I can do that at home.<br>Now that the grippers are in the model, I can implement messages for those too (but they don’t move in the <code>rosbag</code>)<br>I suppose I can call the executable directly from Unity, making it more seamless. Not a priority but might be useful.</p>
+<h4 id="On-the-back-burner"><a href="#On-the-back-burner" class="headerlink" title="On the back burner"></a>On the back burner</h4><p>Point clouds, grr.<br>It will (should…) be much easier to transmit a depth image over the network, so if I can work out how to convert that into a surfacein Unity, I might be able to implement functionality for the kinect, whether it’s plugged into the Windows or ROS Linux machine.<br>This isn’t taking priority right now though.</p>
+<h4 id="Development-work"><a href="#Development-work" class="headerlink" title="Development work"></a>Development work</h4><p>I had to reinstall my virtual machine as the virtual hard disk got corrupted. Probably because I previously ran it on a RAMdisk and had to copy it over each time.<br>This was not particularly useful or sensible, and should be fine on a SATA SSD.<br>I had to redownload the <code>rosbag</code> we recorded before. This time it would sit in a shared folder on the host machine, not inside the virtual hard disk.<br>To save time I used the compressed version which I didn’t notice a problem with before (1.38GB as oppposed to 7.95GB).<br>This time, the compressed bag playback halts as soon as something tries to subscribe to a topic, even when locally running <code>rostopic echo /robot/joint_states --noarr --nostr</code>.<br>The uncompressed one plays fine.</p>
+<p>I have a lot of code files and scripts floating around in various projects and folders, so it was not straight forward to remember which ones had the working code in.<br>It took around 4 hours, but I was eventually able to get everything working for data getting from ROS to Unity<br><img src="/Robotic-Telepresence/2017/03/02/Main-control-loop/Waving.png" alt="Baxter is waving as in the video in &lt;a href=/Robotic-Telepresence/2016/11/28/Rosbag-communication&gt;this post&lt;/a&gt;, but this time using lovely OOP using shared memory, rather than janky code with pipes"></p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/02/Main-control-loop/" data-id="cj0i5jec0000pys9r6qioavbj" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Project-meeting-12" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2017/03/02/Project-meeting-12/">Project meeting 12</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/03/02/Project-meeting-12/" class="article-date">
+  <time datetime="2017-03-02T10:47:16.000Z" itemprop="datePublished">Thu 02/03/2017 10:47</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>The development and issues with point clouds were discussed.<br>It may be possible to transmit a depth image over ROS rather than a point cloud.<br>If I can get the live depth image into a point cloud on the Unity client, I may be able to swap in the ROS message.</p>
+<p>However, the focus now is on getting the simple control and feedback finished, so I will be forgetting abou point clouds for now.<br>I hope to have this part near complete over this week.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/02/Project-meeting-12/" data-id="cj0i5jech0014ys9rdt2sguy1" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
     <article id="post-Fixing-point-cloud-problems" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -181,7 +261,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/28/Fixing-point-cloud-problems/" data-id="cj0cz5bx6000a2g9rvmhie296" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/28/Fixing-point-cloud-problems/" data-id="cj0i5jeav000gys9r1f5bcyze" class="article-share-link">Share</a>
     
      
   </footer>
@@ -251,7 +331,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/23/Project-meeting-11/" data-id="cj0cz5byz00132g9rkmnnbqo9" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/23/Project-meeting-11/" data-id="cj0i5jech0015ys9rd5aikd3k" class="article-share-link">Share</a>
     
      
   </footer>
@@ -288,7 +368,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/22/Started-dissertation/" data-id="cj0cz5bzl001k2g9r55nmi9gt" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/22/Started-dissertation/" data-id="cj0i5jed8001oys9rffjq5803" class="article-share-link">Share</a>
     
      
   </footer>
@@ -327,7 +407,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/22/Live-depth-data-in-Unity/" data-id="cj0cz5bxo000k2g9rw3lzwspj" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/22/Live-depth-data-in-Unity/" data-id="cj0i5jebn000lys9riy0rwt3w" class="article-share-link">Share</a>
     
      
   </footer>
@@ -365,7 +445,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/22/Native-Windows-point-cloud/" data-id="cj0cz5byp000t2g9ruojdaze6" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/22/Native-Windows-point-cloud/" data-id="cj0i5jec7000tys9rixsnbx31" class="article-share-link">Share</a>
     
      
   </footer>
@@ -409,155 +489,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/20/VR-improvements/" data-id="cj0cz5bzn001p2g9rzfkwx246" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Project-meeting-10" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2017/02/15/Project-meeting-10/">Project meeting 10</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2017/02/15/Project-meeting-10/" class="article-date">
-  <time datetime="2017-02-15T16:28:45.000Z" itemprop="datePublished">Wed 15/02/2017 16:28</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>I now have access to a PC in the robot lab.<br>It’s almost ready to go, I still need local network access so that ROS data can be communicated.<br>The first thing I want to try is the joint angles, but it would be great to get the point cloud data as well.<br>In the mean time, I’ll be looking into generating the commands for moving Baxter, and setting restrictions on movement from within the Unity project.</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/15/Project-meeting-10/" data-id="cj0cz5byt000y2g9rcuwjgyig" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Visualising-grippers" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2017/02/15/Visualising-grippers/">Visualising grippers</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2017/02/15/Visualising-grippers/" class="article-date">
-  <time datetime="2017-02-15T11:24:14.000Z" itemprop="datePublished">Wed 15/02/2017 11:24</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>The meshes for the grippers were not previously present beacuse they are in a separate folder.<br>I’m going to be using the models to show the target position for the hands.<br>The way the grippers are included in the <code>URDF</code> description is by using variables within the <code>.urdf</code> file, such as <code>${side}</code>.<br>The reason for this is because gripper parts are used (reflected) for left and right, and for each arm. The grippers can be interchanged for different types as well.<br>My importer script does not handle variables, so at first it seemed simple enough to just manually enter their locations into Unity.<br>I recall that:</p>
-<p>For position</p>
-<blockquote>
-<table>
-<thead>
-<tr>
-<th>ROS</th>
-<th>Unity</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>X +ve</td>
-<td>X -ve</td>
-</tr>
-<tr>
-<td>Y +ve</td>
-<td>Y +ve</td>
-</tr>
-<tr>
-<td>Z +ve</td>
-<td>Z +ve</td>
-</tr>
-</tbody>
-</table>
-</blockquote>
-<p>For rotation:</p>
-<blockquote>
-<table>
-<thead>
-<tr>
-<th>ROS</th>
-<th>Unity</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>X +ve</td>
-<td>X +ve</td>
-</tr>
-<tr>
-<td>Y +ve</td>
-<td>Y -ve</td>
-</tr>
-<tr>
-<td>Z +ve</td>
-<td>Z -ve</td>
-</tr>
-</tbody>
-</table>
-<p>Must be performed in order: Z, Y, X</p>
-</blockquote>
-<p>I am using the “standard narrow” grippers for now.</p>
-<p>I was running into problems with manually adding the grippers to the scene, there’s a lot of numbers in the wrong order and format.<br>It would be a reasonable task to edit my importer to support the extra files and conditional arguments in the new file.<br>The easiest thing to do was to merge the <code>.urdf</code> files into a single one manually, and then importing that.</p>
-<p>Each link creates a joint, and each joint creates a link, recursively until the bottom of the hierarchy.<br>When creating a link, if it has a <code>visual/geometry/mesh</code> node, then the current link <code>GameObject</code> is destroyed, and replaced with the related mesh (which generates its own <code>GameObject</code>).<br>The list below shows how meshes in the <code>baxter_base</code> section import, and their components:</p>
-<blockquote>
-<ul>
-<li>NAME<br>[Animator]<ul>
-<li>Camera</li>
-<li>NAME<br>[Mesh Filter]<br>[Mesh Renderer]</li>
-<li>Lamp</li>
-</ul>
-</li>
-</ul>
-</blockquote>
-<p>However, this is what the grippers import like:</p>
-<blockquote>
-<ul>
-<li>NAME<br>[Animator]<br>[Mesh Filter]<br>[Mesh Renderer]</li>
-</ul>
-</blockquote>
-<p>I’ve changed the importer to adapt.<br>I must have made some small mistakes, as I had to manually change the sign or axes of some values for the parts to be in their correct locations.</p>
-<p>I had to replace some variables, such as <code>${-pi/2}</code> and <code>${finger_length}</code>.<br><code>${reflect}</code> is used as ±1.</p>
-<p><img src="/Robotic-Telepresence/2017/02/15/Visualising-grippers/Result.png" alt="Using the standard narrow grippers for now, in slot 0"></p>
-<p><img src="/Robotic-Telepresence/2017/02/15/Visualising-grippers/Photo.jpg" alt="A photo of Baxter&#39;s wrist stub showing the slots"></p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/15/Visualising-grippers/" data-id="cj0cz5bzo001r2g9r62o2s1he" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/20/VR-improvements/" data-id="cj0i5jedb001rys9ru3iwrjy5" class="article-share-link">Share</a>
     
      
   </footer>
@@ -570,7 +502,7 @@ ga('send', 'pageview');
 
 
   <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/Robotic-Telepresence/">&laquo; Previous</a><a class="page-number" href="/Robotic-Telepresence/">1</a><span class="page-number current">2</span><a class="page-number" href="/Robotic-Telepresence/page/3/">3</a><a class="page-number" href="/Robotic-Telepresence/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/Robotic-Telepresence/page/8/">8</a><a class="extend next" rel="next" href="/Robotic-Telepresence/page/3/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/Robotic-Telepresence/">&laquo; Previous</a><a class="page-number" href="/Robotic-Telepresence/">1</a><span class="page-number current">2</span><a class="page-number" href="/Robotic-Telepresence/page/3/">3</a><a class="page-number" href="/Robotic-Telepresence/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/Robotic-Telepresence/page/9/">9</a><a class="extend next" rel="next" href="/Robotic-Telepresence/page/3/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -590,7 +522,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
     </div>
   </div>
 

@@ -82,6 +82,154 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-Project-meeting-10" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2017/02/15/Project-meeting-10/">Project meeting 10</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/02/15/Project-meeting-10/" class="article-date">
+  <time datetime="2017-02-15T16:28:45.000Z" itemprop="datePublished">Wed 15/02/2017 16:28</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>I now have access to a PC in the robot lab.<br>It’s almost ready to go, I still need local network access so that ROS data can be communicated.<br>The first thing I want to try is the joint angles, but it would be great to get the point cloud data as well.<br>In the mean time, I’ll be looking into generating the commands for moving Baxter, and setting restrictions on movement from within the Unity project.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/15/Project-meeting-10/" data-id="cj0i5jecg0013ys9rv0gkeuki" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Visualising-grippers" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2017/02/15/Visualising-grippers/">Visualising grippers</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/02/15/Visualising-grippers/" class="article-date">
+  <time datetime="2017-02-15T11:24:14.000Z" itemprop="datePublished">Wed 15/02/2017 11:24</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>The meshes for the grippers were not previously present beacuse they are in a separate folder.<br>I’m going to be using the models to show the target position for the hands.<br>The way the grippers are included in the <code>URDF</code> description is by using variables within the <code>.urdf</code> file, such as <code>${side}</code>.<br>The reason for this is because gripper parts are used (reflected) for left and right, and for each arm. The grippers can be interchanged for different types as well.<br>My importer script does not handle variables, so at first it seemed simple enough to just manually enter their locations into Unity.<br>I recall that:</p>
+<p>For position</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>ROS</th>
+<th>Unity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>X +ve</td>
+<td>X -ve</td>
+</tr>
+<tr>
+<td>Y +ve</td>
+<td>Y +ve</td>
+</tr>
+<tr>
+<td>Z +ve</td>
+<td>Z +ve</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>For rotation:</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>ROS</th>
+<th>Unity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>X +ve</td>
+<td>X +ve</td>
+</tr>
+<tr>
+<td>Y +ve</td>
+<td>Y -ve</td>
+</tr>
+<tr>
+<td>Z +ve</td>
+<td>Z -ve</td>
+</tr>
+</tbody>
+</table>
+<p>Must be performed in order: Z, Y, X</p>
+</blockquote>
+<p>I am using the “standard narrow” grippers for now.</p>
+<p>I was running into problems with manually adding the grippers to the scene, there’s a lot of numbers in the wrong order and format.<br>It would be a reasonable task to edit my importer to support the extra files and conditional arguments in the new file.<br>The easiest thing to do was to merge the <code>.urdf</code> files into a single one manually, and then importing that.</p>
+<p>Each link creates a joint, and each joint creates a link, recursively until the bottom of the hierarchy.<br>When creating a link, if it has a <code>visual/geometry/mesh</code> node, then the current link <code>GameObject</code> is destroyed, and replaced with the related mesh (which generates its own <code>GameObject</code>).<br>The list below shows how meshes in the <code>baxter_base</code> section import, and their components:</p>
+<blockquote>
+<ul>
+<li>NAME<br>[Animator]<ul>
+<li>Camera</li>
+<li>NAME<br>[Mesh Filter]<br>[Mesh Renderer]</li>
+<li>Lamp</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>However, this is what the grippers import like:</p>
+<blockquote>
+<ul>
+<li>NAME<br>[Animator]<br>[Mesh Filter]<br>[Mesh Renderer]</li>
+</ul>
+</blockquote>
+<p>I’ve changed the importer to adapt.<br>I must have made some small mistakes, as I had to manually change the sign or axes of some values for the parts to be in their correct locations.</p>
+<p>I had to replace some variables, such as <code>${-pi/2}</code> and <code>${finger_length}</code>.<br><code>${reflect}</code> is used as ±1.</p>
+<p><img src="/Robotic-Telepresence/2017/02/15/Visualising-grippers/Result.png" alt="Using the standard narrow grippers for now, in slot 0"></p>
+<p><img src="/Robotic-Telepresence/2017/02/15/Visualising-grippers/Photo.jpg" alt="A photo of Baxter&#39;s wrist stub showing the slots"></p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/15/Visualising-grippers/" data-id="cj0i5jedc001sys9rs32wmpv4" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
     <article id="post-Kinect-with-Unity" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -110,7 +258,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/14/Kinect-with-Unity/" data-id="cj0cz5bxm000j2g9rqjfjx2e2" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/14/Kinect-with-Unity/" data-id="cj0i5jebl000kys9rjp04cfc4" class="article-share-link">Share</a>
     
      
   </footer>
@@ -153,7 +301,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/12/VR-feature-Angle-snapping/" data-id="cj0cz5bzn001o2g9r5s7sqfbs" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/12/VR-feature-Angle-snapping/" data-id="cj0i5jeda001qys9rbnkq5xov" class="article-share-link">Share</a>
     
      
   </footer>
@@ -191,7 +339,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/08/Project-meeting-9/" data-id="cj0cz5bz9001b2g9remtj3l1x" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/08/Project-meeting-9/" data-id="cj0i5jed1001gys9rscya4u5g" class="article-share-link">Share</a>
     
      
   </footer>
@@ -235,7 +383,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/07/Adding-VR-to-Unity-Project/" data-id="cj0cz5bw600002g9rw5c52ckj" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/07/Adding-VR-to-Unity-Project/" data-id="cj0i5je9q0000ys9rs4ntpuym" class="article-share-link">Share</a>
     
      
   </footer>
@@ -273,7 +421,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/02/Midterm-interview/" data-id="cj0cz5byj000q2g9r8korh2ec" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/02/Midterm-interview/" data-id="cj0i5jec4000rys9rlp02btho" class="article-share-link">Share</a>
     
      
   </footer>
@@ -317,99 +465,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/01/Project-meeting-8/" data-id="cj0cz5bz700192g9rqwqcz1nj" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Final-structure" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2017/01/31/Final-structure/">Final structure</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2017/01/31/Final-structure/" class="article-date">
-  <time datetime="2017-01-31T23:17:07.000Z" itemprop="datePublished">Tue 31/01/2017 23:17</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>I’ve started to write what could be the final few files, in terms of the main data communication functionality.</p>
-<h4 id="Console-application"><a href="#Console-application" class="headerlink" title="Console application"></a>Console application</h4><p>This will be the ROS node, which connects to a serial server (socket).<br>It will subscribe to whichever topics are required and set up shared memory for each. As I can have many parallel shared spaces I think this is easier than trying to navigate a single one.<br>I’m trying a class-based approach to keep things tidy and encapsulated.<br>I had a lot of problems trying to encapsulate the callbacks (required), so in the end I’ve left some of it in <code>main()</code>.</p>
-<p>As the shared memory can only be written in integers, I’ll have to convert the joint angles (floats) back in to 4xbytes. Here’s a reason to convert bytes into floats in the Unity script (point clouds).</p>
-<h4 id="Unity-application"><a href="#Unity-application" class="headerlink" title="Unity application"></a>Unity application</h4><p>Once the data’s in the shared space, it will probably be just a block of integers. I’ll have to know how to read things in the correct order.<br>I’ve not worked out splitting work into individual threads yet, but I know it’s supported and doable.<br>I plan to have the VR in one (I think this might be automatic), point clouds in another (they will be intensive) and anything else in another? Perhaps keep a limit of 4 cores?</p>
-<h4 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h4><p>Following <a href="/2016/12/07/Point-Cloud-from-Actual-Data/">the last time I tried this</a> I ran into the same problem.<br>Even trying to send a single point cloud over the socket, the virtual machine’s CPU jumps to around 20%, never completes, no errors are displayed but the <code>rosserial_server</code> node has silently crashed.<br>I’m hoping this is due to complications with it being the same physical machine and it being virtualised, but there’s no problems with the joint angles at all.<br>I’ll have to run this in the robot lab.</p>
-<p>Using <code>std::vec</code> made sense for making a more robust program, but I had to convert it back into an array for the <code>CopyMemory()</code> function for shared memory and I ran into all sorts of endian-ness problems. They were difficult to spot as printing the contents to <code>stdout</code> didn’t show any problems.</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/31/Final-structure/" data-id="cj0cz5bxj000d2g9rryhdah9t" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Named-shared-memory-Episode-3" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2017/01/18/Named-shared-memory-Episode-3/">Named shared memory: Episode 3</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2017/01/18/Named-shared-memory-Episode-3/" class="article-date">
-  <time datetime="2017-01-18T14:40:07.000Z" itemprop="datePublished">Wed 18/01/2017 14:40</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <h4 id="Inter-process-communication"><a href="#Inter-process-communication" class="headerlink" title="Inter-process communication"></a>Inter-process communication</h4><p>Following the success of <a href="/Robotic-Telepresence/2016/12/03/Named-Shared-Memory-Episode-2/">Named Shared Memory: Episode 2</a>, it wasn’t too far to be able to see the message generated in one process in the Unity debug log.<br>As long as it’s known what data is expected at which offsets it can be reconstructed.<br>The only function data types available are:</p>
-<blockquote>
-<ul>
-<li>Byte</li>
-<li>Int16</li>
-<li>Int32</li>
-<li>Int64</li>
-<li>IntPtr</li>
-</ul>
-</blockquote>
-<p>Luckily these can be cast to whatever you like.</p>
-<p><img src="/Robotic-Telepresence/2017/01/18/Named-Shared-Memory-Episode-3/Message.png" alt="Process writing the message can be started before or after Unity starts"></p>
-<p>I’ve had trouble casting to floats from Int32s.<br>I’ve come across ‘BitConverter.ToSingle’ which does the same task as the byte/float union in my console application.<br>Perhaps I could use a <code>.dll</code> after all.</p>
-<h4 id="Project-structure"><a href="#Project-structure" class="headerlink" title="Project structure"></a>Project structure</h4><p>I’ve decided to make the console application the smallest middle-man possible, so it will only transfer the data to the shared memory.<br>Any multithreading will be solely handled by Unity.<br>I’ve managed to get this working, but it has not reduced the time yet (still at ~19 seconds for a single frame).<br>I think this is because earlier it was reading from a stream, writing to another stream and having that stream being read which could pipeline.<br>Now it’s only doint the first read from a stream.<br>I will see what it’s like by combining the <code>NamedSharedMemory</code> project and the <code>rosserial</code> projects, cutting out any streams.</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/18/Named-shared-memory-Episode-3/" data-id="cj0cz5byi000p2g9rgdo32km2" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/02/01/Project-meeting-8/" data-id="cj0i5jeco0019ys9rl327bzi6" class="article-share-link">Share</a>
     
      
   </footer>
@@ -422,7 +478,7 @@ ga('send', 'pageview');
 
 
   <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/Robotic-Telepresence/page/2/">&laquo; Previous</a><a class="page-number" href="/Robotic-Telepresence/">1</a><a class="page-number" href="/Robotic-Telepresence/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/Robotic-Telepresence/page/4/">4</a><a class="page-number" href="/Robotic-Telepresence/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/Robotic-Telepresence/page/8/">8</a><a class="extend next" rel="next" href="/Robotic-Telepresence/page/4/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/Robotic-Telepresence/page/2/">&laquo; Previous</a><a class="page-number" href="/Robotic-Telepresence/">1</a><a class="page-number" href="/Robotic-Telepresence/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/Robotic-Telepresence/page/4/">4</a><a class="page-number" href="/Robotic-Telepresence/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/Robotic-Telepresence/page/9/">9</a><a class="extend next" rel="next" href="/Robotic-Telepresence/page/4/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -442,7 +498,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
     </div>
   </div>
 

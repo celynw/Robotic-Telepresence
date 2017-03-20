@@ -82,6 +82,96 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-Named-shared-memory-Episode-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/12/03/Named-shared-memory-Episode-2/">Named shared memory: Episode 2</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/12/03/Named-shared-memory-Episode-2/" class="article-date">
+  <time datetime="2016-12-03T01:07:37.000Z" itemprop="datePublished">Sat 03/12/2016 01:07</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>I did a lot of looking around, and I could find very occasional signs that some people had been able to get named shared memory working with Unity.<br>Eventually I found <a href="http://answers.unity3d.com/questions/1249732/how-to-use-shared-memory-in-unity.html" target="_blank" rel="external">this forum question</a> which showed some example code for Unity C# and other C++.<br>The C++ code I could tell had been adapted from the <a href="https://msdn.microsoft.com/en-us/library/aa366551.aspx" target="_blank" rel="external">MSDN page</a> I got mine from, which had been adapted.<br>I adapted it some more to fit the other end and made it into a Unity Script.</p>
+<p>After learning I needed to use unsafe operations, I found out that to enable them you had to add a file in yout assets called <code>smcs.rsp</code>.<br>This turned out to be different if you enabled the full .NET 2.0 API compatibility level, being <code>gmcs.rsp</code>.<br>This also turned out to be depreceated, so I used <code>mcs.rsp</code> instead.<br>It should contain the line:<br><figure class="highlight plain"><figcaption><span>mcs.rsp</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-unsafe</div></pre></td></tr></table></figure></p>
+<p>I couldn’t get the ends to connect. I tried removing the <code>Global\\</code> from the file mapping name. Now administrator access is no longer required.<br>In the console, It showed signs of life at the other end:<br><img src="/Robotic-Telepresence/2016/12/03/Named-shared-memory-Episode-2/Life.png" alt="Although I haven&#39;t even checked what data transfer is supposed to be happening"></p>
+<p>I’ve somehow broken my Visual Studio projects which use the ROS library.<br>Including <code>&lt;windows.h&gt;</code> somehow conflicts with <code>&quot;ros.h&quot;</code>.<br>I <em>need</em> <code>windows.h</code> for <code>CreateFileMapping()</code>.<br>Fixed!<br>The solution was: <code>windows.h</code> was #defining <code>ERROR</code>, which was being used in <code>ros/Log.h</code>.<br>Adding a <code>#undef ERROR</code> at the start made it build.</p>
+<h4 id="Putting-ROS-messages-into-shared-memory"><a href="#Putting-ROS-messages-into-shared-memory" class="headerlink" title="Putting ROS messages into shared memory"></a>Putting ROS messages into shared memory</h4><p>The example uses <code>CopyMemory()</code> to put a string into shared memory.<br>I’ll need to know the size of the message.<br>Looking at <code>JointState.h</code> in the ROS library in Windows, I was able to see how the joint messages were built and how to determine their sizes</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/03/Named-shared-memory-Episode-2/" data-id="cj0i5jec6000sys9rxm7rzl5o" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Named-shared-memory" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2016/12/02/Named-shared-memory/">Named shared memory</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2016/12/02/Named-shared-memory/" class="article-date">
+  <time datetime="2016-12-02T10:56:53.000Z" itemprop="datePublished">Fri 02/12/2016 10:56</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>There seem to be more easily found resources for these.</p>
+<ul>
+<li>Memory is broken into pages, so buffer space is rounded to the next available size</li>
+</ul>
+<p>In order for the data to be accessible globally, you must set the <code>Global</code> flag in its name:<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">TCHAR szName[] = TEXT(<span class="string">"Global\\MyFileMappingObject"</span>);</div></pre></td></tr></table></figure></p>
+<p>This requires Administrator privileges (<code>SeCreateGlobalPrivilege, SE_CREATE_GLOBAL_NAME</code>).<br>Running Visual Studio as administrator is supposed to make it so that any program run in the debugger is also run with privileges.<br>This was true, as the return value from <code>GetLastError()</code> went from <code>5</code> (cannot access) to <code>2</code> (no idea).<br>I couldn’t solve this, but running the built executables outside as administrator worked as expected.</p>
+<p>While I’m on the subject of learning how Visual Studio actually works, I’ve repackaged and renamed each project and put them all into one solution, which accesses a single instance of the built <code>ros_lib</code> library for <code>rosserial_windows</code>.</p>
+<p>I was just trying to create a file mapping in a Unity script…</p>
+<blockquote>
+<p>error CS0234: The type or namespace name <code>MemoryMappedFiles</code> does not exist in the namespace <code>System.IO</code></p>
+</blockquote>
+<p>System.IO.MemoryMappedFiles is only available in .NET 4.0 or later, and Unity is still using .NET 3.5 (.NET 2.0 CLR), not likely to be updated for a long time. Bummer.</p>
+<p>It looks like there could be a wrapper, <a href="https://github.com/tomasr/filemap/tree/master" target="_blank" rel="external">filemap</a>.<br>I got it to compile, and I’m left with a <code>.dll</code>. I’m not sure how to use it (the repository has no documentation) and I’m pretty sure I’ll have to edit it to make it compaitble with Unity so I’m not very hopeful.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/02/Named-shared-memory/" data-id="cj0i5jec7000uys9rpfr2ezcz" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
     <article id="post-Named-pipe-dll" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -175,7 +265,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Named-pipe-dll/" data-id="cj0cz5byh000o2g9rm62jik1v" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Named-pipe-dll/" data-id="cj0i5jebz000oys9rqze9s8zf" class="article-share-link">Share</a>
     
      
   </footer>
@@ -225,7 +315,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/" data-id="cj0cz5bwv00072g9rfxqpix04" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Data-to-Unity-from-RAM/" data-id="cj0i5jeak0008ys9rt1acpdz3" class="article-share-link">Share</a>
     
      
   </footer>
@@ -267,7 +357,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Project-meeting-6/" data-id="cj0cz5bz600182g9rz7x8pbm6" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/01/Project-meeting-6/" data-id="cj0i5jecr001cys9rbz80ce69" class="article-share-link">Share</a>
     
      
   </footer>
@@ -327,7 +417,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/28/Rosbag-communication/" data-id="cj0cz5bzj001h2g9rwi2szv21" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/28/Rosbag-communication/" data-id="cj0i5jed5001kys9rvcs2lcjl" class="article-share-link">Share</a>
     
      
   </footer>
@@ -381,7 +471,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/23/Exploring-rosbags/" data-id="cj0cz5bx7000b2g9rrfn7huiq" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/23/Exploring-rosbags/" data-id="cj0i5jeap000cys9rmhgkqkbx" class="article-share-link">Share</a>
     
      
   </footer>
@@ -428,105 +518,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/22/Project-meeting-5/" data-id="cj0cz5bz8001a2g9rdm8una9z" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-ROS-serial-Unity-plugin" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2016/11/21/ROS-serial-Unity-plugin/">ROS serial: Unity plugin</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2016/11/21/ROS-serial-Unity-plugin/" class="article-date">
-  <time datetime="2016-11-21T21:04:48.000Z" itemprop="datePublished">Mon 21/11/2016 21:04</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>Unity managed plugins.<br>Create ‘Plugins’ folder in Unity assets, and put <code>.dll</code> files in there.<br>Try to compile <code>rosserial_hello_world</code> as a <code>.dll</code>?</p>
-<p>(Be careful with name mangling!?)</p>
-<p>Create new empty project, Win32 DLL.<br>Add new <code>.cpp</code> file, <code>main.cpp</code>.<br>Put some code in:<br><figure class="highlight cpp"><figcaption><span>main.cpp (rosserial_hello_world)</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> DLLEXPORT __declspec (dllexport)</span></div><div class="line"></div><div class="line"><span class="keyword">extern</span> <span class="string">"C"</span> &#123;</div><div class="line">	<span class="function">DLLEXPORT <span class="keyword">int</span> <span class="title">GetRandom</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> rand();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>Write a script in Unity and attach it to a <code>GameObject</code>.<br>In the script, call the function from the DLL:<br><figure class="highlight cs"><figcaption><span>TestNative.cs</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> UnityEngine;</div><div class="line"><span class="keyword">using</span> System.Collections;</div><div class="line"><span class="keyword">using</span> System.Runtime.InteropServices; <span class="comment">//For DLLImport</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">TestNative</span> : <span class="title">MonoBehaviour</span> &#123;</div><div class="line">	[DllImport (<span class="string">"rosserial_unity"</span>)]</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">extern</span> <span class="keyword">int</span> <span class="title">GetRandom</span>(<span class="params"></span>)</span>;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Start</span> (<span class="params"></span>) </span>&#123;</div><div class="line">		print(<span class="string">"Native random number: "</span>+GetRandom());</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>Run the scene.<br>I got a few errors, but the main one was:<br><figure class="highlight plain"><figcaption><span>Unity console</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Failed to load &apos;Assets/Plugins/rosserial_unity.dll&apos;, expected 64 bit architecture (IMAGE_FILE_MACHINE_AMD64), but was IMAGE_FILE_MACHINE_I386. You must recompile your plugin for 64 bit architecture.</div></pre></td></tr></table></figure></p>
-<p>Simple, will recompile.<br>It worked!<br><img src="/Robotic-Telepresence/2016/11/21/ROS-serial-Unity-plugin/Random Number.png" alt="The output from the .dll in Unity"></p>
-<p>Now. Copy the <code>ros_lib</code> folder generated from <code>rosserial_windows</code> (<a href="/Robotic-Telepresence/2016/11/21/ROS-serial/">this post</a>) into the Visual Studio project folder.<br>Add them to the project as before.<br>I also had to add <code>stdafx.cpp</code>, <code>stdafx.h</code> and <code>targetver.h</code> as they were missing. I’m not sure I need them, they were generated by Visual Studio for the console application.<br>The build succeeds with all the includes from the generated <code>rosserial_hello_world</code> code.</p>
-<p>Splitting the original code into functions, and making the scope of created objects also allows compilation.<br><figure class="highlight cpp"><figcaption><span>main.cpp (rosserial_unity)</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"stdafx.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ros.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;geometry_msgs/Twist.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> DLLEXPORT __declspec (dllexport)</span></div><div class="line"></div><div class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">string</span>;</div><div class="line"></div><div class="line"><span class="keyword">extern</span> <span class="string">"C"</span> &#123;</div><div class="line">	ros::NodeHandle nh;</div><div class="line">	geometry_msgs::Twist twist_msg;</div><div class="line">	ros::<span class="function">Publisher <span class="title">cmd_vel_pub</span><span class="params">(<span class="string">"cmd_vel"</span>, &amp;twist_msg)</span></span>;</div><div class="line"></div><div class="line">	<span class="function">DLLEXPORT <span class="keyword">void</span> <span class="title">Connect</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">char</span> *ros_master = <span class="string">"192.168.0.31"</span>;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"Connecting to server at %s\n"</span>, ros_master);</div><div class="line">		nh.initNode(ros_master);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function">DLLEXPORT <span class="keyword">void</span> <span class="title">Advertise</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"Advertising cmd_vel message\n"</span>);</div><div class="line">		<span class="comment">// geometry_msgs::Twist twist_msg;</span></div><div class="line">		<span class="comment">// ros::Publisher cmd_vel_pub("cmd_vel", &amp;twist_msg);</span></div><div class="line">		nh.advertise(cmd_vel_pub);</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"Go robot go!\n"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function">DLLEXPORT <span class="keyword">void</span> <span class="title">Print</span><span class="params">()</span> </span>&#123;</div><div class="line">		twist_msg.linear.x = <span class="number">5.1</span>;</div><div class="line">		twist_msg.linear.y = <span class="number">0</span>;</div><div class="line">		twist_msg.linear.z = <span class="number">0</span>;</div><div class="line">		twist_msg.angular.x = <span class="number">0</span>;</div><div class="line">		twist_msg.angular.y = <span class="number">0</span>;</div><div class="line">		twist_msg.angular.z = <span class="number">-1.8</span>;</div><div class="line">		cmd_vel_pub.publish(&amp;twist_msg);</div><div class="line"></div><div class="line">		nh.spinOnce();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>I made a Unity script, changed from the <code>TestNative.cs</code> script to accomodate the new functions and implement a while loop.<br>This should hopefully do near enough the same thing as the original <code>rosserial_hello_world</code> script.<br><figure class="highlight cs"><figcaption><span>rosserial.cs</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> UnityEngine;</div><div class="line"><span class="keyword">using</span> System.Collections;</div><div class="line"><span class="keyword">using</span> System.Runtime.InteropServices; <span class="comment">//For DLLImport</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">rosserial</span> : <span class="title">MonoBehaviour</span> &#123;</div><div class="line">	[DllImport (<span class="string">"rosserial_unity"</span>)]</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">extern</span> <span class="keyword">void</span> <span class="title">Connect</span>(<span class="params"></span>)</span>;</div><div class="line">	[DllImport (<span class="string">"rosserial_unity"</span>)]</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">extern</span> <span class="keyword">void</span> <span class="title">Advertise</span>(<span class="params"></span>)</span>;</div><div class="line">	[DllImport (<span class="string">"rosserial_unity"</span>)]</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">extern</span> <span class="keyword">void</span> <span class="title">Print</span>(<span class="params"></span>)</span>;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Start</span> (<span class="params"></span>) </span>&#123;</div><div class="line">		Connect();</div><div class="line">		Advertise();</div><div class="line">		<span class="keyword">while</span>(<span class="literal">true</span>) &#123;</div><div class="line">			Print();</div><div class="line">			System.Threading.Thread.Sleep(<span class="number">1000</span>); <span class="comment">//This is bad but I'm just testing</span></div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>This causes Unity to freeze, requiring a force quit with the Task Manager.<br>The play button is still depressed but not active, as if it’s preparing to start.<br>HOWEVER, in the virtual machine, we get the output!<br><img src="/Robotic-Telepresence/2016/11/21/ROS-serial-Unity-plugin/Success.png" alt="Before the game was running, only up to the &quot;Listening on port 11411&quot; was visible. The output on the right is being streamed in."><br>Moving code to the <code>Update()</code> loop, and commenting out the functions still keeps causing Unity to hang.<br>The fix turned out to be simple.<br>We don’t need a while loop in <code>Start()</code>, or in <code>Update()</code>. The <code>Update()</code> function is already a loop.<br>I set it to only <code>Print()</code> when the x component of the translation of Baxter’s torso changed.<br>After connecting, the socket node complained every second about some desynchronisation:<br><figure class="highlight plain"><figcaption><span>Console output (excerpt)</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[WARN] [1479767182.854363980]: Sync with device lost.</div></pre></td></tr></table></figure></p>
-<p>As soon as I moved baxter, it stopped.</p>
-<p>Next step: Replace the dummy data with actual values!</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/21/ROS-serial-Unity-plugin/" data-id="cj0cz5bz9001d2g9rxeunu8s9" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-ROS-serial" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2016/11/21/ROS-serial/">ROS serial</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2016/11/21/ROS-serial/" class="article-date">
-  <time datetime="2016-11-21T13:03:18.000Z" itemprop="datePublished">Mon 21/11/2016 13:03</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>Following the instructions <a href="http://wiki.ros.org/rosserial_windows/Tutorials/Hello%20World" target="_blank" rel="external">here</a> with a few edits.<br><code>apt</code> can mostly replace <code>apt-get</code> now, and I’m using version indigo, not hydro.</p>
-<p>Install rosserial_windows:<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo apt install ros-indigo-rosserial-windows ros-indigo-rosserial-server</div></pre></td></tr></table></figure></p>
-<p>Make sure I’ve set up the environment:<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> ~/catkin_ws</div><div class="line">$ . devel/setup.zsh</div></pre></td></tr></table></figure></p>
-<p>Generate ros_lib:<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ rosrun rosserial_windows make_libraries.py my_library</div></pre></td></tr></table></figure></p>
-<p>I couldn’t run this, rosserial wasn’t coming up in the tab completion for rosrun.<br>Refreshing the tree fixed it:<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ rospack profile</div></pre></td></tr></table></figure></p>
-<p>After running the installer, it failed giving the following message:<br><figure class="highlight plain"><figcaption><span>rosrun output</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">*** Warning, failed to generate libraries for the following packages: ***</div><div class="line">    baxter_sim_kinematics (missing dependency)</div><div class="line">    pr2_description (missing dependency)</div></pre></td></tr></table></figure></p>
-<p>Installing them:<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo apt install ros-indigo-baxter-sim-kinematics ros-indigo-pr2-description</div></pre></td></tr></table></figure></p>
-<p>ros-indigo-pr2-description was already installed…<br>So it wasn’t surprising when this installation didn’t help<br>Checking dependencies didn’t help:<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ rosdep check --from-paths ./src -ignore-src</div><div class="line">All system dependencies have been satisfied</div></pre></td></tr></table></figure></p>
-<p>It turns out that there were more dependencies to install:<br><figure class="highlight zsh"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo apt install ros-indigo-moveit-resources ros-indigo-convex-decomposition</div></pre></td></tr></table></figure></p>
-<p>This solved the <code>baxter-sim-kinematics</code> error.<br>After installing <code>ros-indigo-ivcon</code> it exited successfully.</p>
-<p>In Windows, I created a new Console Application in Visual Studio.<br>Copied the generated folder to the project folder.<br>Added the files not in their own folders to the project.<br>Then I added the folder to the additional includes list.<br>After copying the ‘hello world’ code, it build and began running, listening on <code>1.2.3.4</code>.</p>
-<p>As at this point I was running Xubuntu and ROS in a virtual machine, I tried to see if I could contact it.<br>I had to change the virtual machine’s network settings from NAT ro Bridged adaptor.<br>After a reboot, I could ping it at the new address.<br>I changed the <code>ros_master</code> to the new address.<br>In the guest system, I ran three terminals as the instructions said to start the server.</p>
-<p>I got a response in the built program!<br><img src="/Robotic-Telepresence/2016/11/21/ROS-serial/Visual Studio.png" alt="hello_world running on Windows"><br>I also got the correct output in the virtual machine:<br><img src="/Robotic-Telepresence/2016/11/21/ROS-serial/Terminal.png" alt="rostopic echo /cmd_vel"></p>
-<p>I’d like to try and get this to work within the Unity project.<br>This might be a little difficult, as I’m using C# in Unity, but I haven’t done the research yet.</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/21/ROS-serial/" data-id="cj0cz5bz9001c2g9rlr4xcia8" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/11/22/Project-meeting-5/" data-id="cj0i5jecq001bys9rcxj9btwl" class="article-share-link">Share</a>
     
      
   </footer>
@@ -539,7 +531,7 @@ ga('send', 'pageview');
 
 
   <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/Robotic-Telepresence/page/4/">&laquo; Previous</a><a class="page-number" href="/Robotic-Telepresence/">1</a><span class="space">&hellip;</span><a class="page-number" href="/Robotic-Telepresence/page/3/">3</a><a class="page-number" href="/Robotic-Telepresence/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/Robotic-Telepresence/page/6/">6</a><a class="page-number" href="/Robotic-Telepresence/page/7/">7</a><a class="page-number" href="/Robotic-Telepresence/page/8/">8</a><a class="extend next" rel="next" href="/Robotic-Telepresence/page/6/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/Robotic-Telepresence/page/4/">&laquo; Previous</a><a class="page-number" href="/Robotic-Telepresence/">1</a><span class="space">&hellip;</span><a class="page-number" href="/Robotic-Telepresence/page/3/">3</a><a class="page-number" href="/Robotic-Telepresence/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/Robotic-Telepresence/page/6/">6</a><a class="page-number" href="/Robotic-Telepresence/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/Robotic-Telepresence/page/9/">9</a><a class="extend next" rel="next" href="/Robotic-Telepresence/page/6/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -559,7 +551,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
     </div>
   </div>
 

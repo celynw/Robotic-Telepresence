@@ -82,6 +82,98 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-Final-structure" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2017/01/31/Final-structure/">Final structure</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/01/31/Final-structure/" class="article-date">
+  <time datetime="2017-01-31T23:17:07.000Z" itemprop="datePublished">Tue 31/01/2017 23:17</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>I’ve started to write what could be the final few files, in terms of the main data communication functionality.</p>
+<h4 id="Console-application"><a href="#Console-application" class="headerlink" title="Console application"></a>Console application</h4><p>This will be the ROS node, which connects to a serial server (socket).<br>It will subscribe to whichever topics are required and set up shared memory for each. As I can have many parallel shared spaces I think this is easier than trying to navigate a single one.<br>I’m trying a class-based approach to keep things tidy and encapsulated.<br>I had a lot of problems trying to encapsulate the callbacks (required), so in the end I’ve left some of it in <code>main()</code>.</p>
+<p>As the shared memory can only be written in integers, I’ll have to convert the joint angles (floats) back in to 4xbytes. Here’s a reason to convert bytes into floats in the Unity script (point clouds).</p>
+<h4 id="Unity-application"><a href="#Unity-application" class="headerlink" title="Unity application"></a>Unity application</h4><p>Once the data’s in the shared space, it will probably be just a block of integers. I’ll have to know how to read things in the correct order.<br>I’ve not worked out splitting work into individual threads yet, but I know it’s supported and doable.<br>I plan to have the VR in one (I think this might be automatic), point clouds in another (they will be intensive) and anything else in another? Perhaps keep a limit of 4 cores?</p>
+<h4 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h4><p>Following <a href="/2016/12/07/Point-Cloud-from-Actual-Data/">the last time I tried this</a> I ran into the same problem.<br>Even trying to send a single point cloud over the socket, the virtual machine’s CPU jumps to around 20%, never completes, no errors are displayed but the <code>rosserial_server</code> node has silently crashed.<br>I’m hoping this is due to complications with it being the same physical machine and it being virtualised, but there’s no problems with the joint angles at all.<br>I’ll have to run this in the robot lab.</p>
+<p>Using <code>std::vec</code> made sense for making a more robust program, but I had to convert it back into an array for the <code>CopyMemory()</code> function for shared memory and I ran into all sorts of endian-ness problems. They were difficult to spot as printing the contents to <code>stdout</code> didn’t show any problems.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/31/Final-structure/" data-id="cj0i5jeas000dys9rn4xmnwhm" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Named-shared-memory-Episode-3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2017/01/18/Named-shared-memory-Episode-3/">Named shared memory: Episode 3</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/01/18/Named-shared-memory-Episode-3/" class="article-date">
+  <time datetime="2017-01-18T14:40:07.000Z" itemprop="datePublished">Wed 18/01/2017 14:40</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <h4 id="Inter-process-communication"><a href="#Inter-process-communication" class="headerlink" title="Inter-process communication"></a>Inter-process communication</h4><p>Following the success of <a href="/Robotic-Telepresence/2016/12/03/Named-Shared-Memory-Episode-2/">Named Shared Memory: Episode 2</a>, it wasn’t too far to be able to see the message generated in one process in the Unity debug log.<br>As long as it’s known what data is expected at which offsets it can be reconstructed.<br>The only function data types available are:</p>
+<blockquote>
+<ul>
+<li>Byte</li>
+<li>Int16</li>
+<li>Int32</li>
+<li>Int64</li>
+<li>IntPtr</li>
+</ul>
+</blockquote>
+<p>Luckily these can be cast to whatever you like.</p>
+<p><img src="/Robotic-Telepresence/2017/01/18/Named-Shared-Memory-Episode-3/Message.png" alt="Process writing the message can be started before or after Unity starts"></p>
+<p>I’ve had trouble casting to floats from Int32s.<br>I’ve come across ‘BitConverter.ToSingle’ which does the same task as the byte/float union in my console application.<br>Perhaps I could use a <code>.dll</code> after all.</p>
+<h4 id="Project-structure"><a href="#Project-structure" class="headerlink" title="Project structure"></a>Project structure</h4><p>I’ve decided to make the console application the smallest middle-man possible, so it will only transfer the data to the shared memory.<br>Any multithreading will be solely handled by Unity.<br>I’ve managed to get this working, but it has not reduced the time yet (still at ~19 seconds for a single frame).<br>I think this is because earlier it was reading from a stream, writing to another stream and having that stream being read which could pipeline.<br>Now it’s only doint the first read from a stream.<br>I will see what it’s like by combining the <code>NamedSharedMemory</code> project and the <code>rosserial</code> projects, cutting out any streams.</p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/18/Named-shared-memory-Episode-3/" data-id="cj0i5jeca000xys9rvkzulcyy" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
     <article id="post-PCL-point-clouds" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -120,7 +212,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/03/PCL-point-clouds/" data-id="cj0cz5byq000u2g9rtbdqkrb4" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/03/PCL-point-clouds/" data-id="cj0i5jeca000yys9rpi4eqsqz" class="article-share-link">Share</a>
     
      
   </footer>
@@ -163,7 +255,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/" data-id="cj0cz5bwi00042g9rhlz9nk1e" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/01/02/Converting-point-clouds-2/" data-id="cj0i5je9y0003ys9rk12o1q11" class="article-share-link">Share</a>
     
      
   </footer>
@@ -201,7 +293,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/14/Project-meeting-7/" data-id="cj0cz5bz500172g9rkhxetmye" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/14/Project-meeting-7/" data-id="cj0i5jecp001ays9rg11e36vh" class="article-share-link">Share</a>
     
      
   </footer>
@@ -243,7 +335,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/07/Converting-point-clouds/" data-id="cj0cz5bwn00052g9r9dqy1nxq" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/07/Converting-point-clouds/" data-id="cj0i5jea80006ys9rufy5wo1v" class="article-share-link">Share</a>
     
      
   </footer>
@@ -284,7 +376,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/07/Point-cloud-from-actual-data/" data-id="cj0cz5byr000v2g9rlfmqmedg" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/07/Point-cloud-from-actual-data/" data-id="cj0i5jec8000vys9rd3xvbeih" class="article-share-link">Share</a>
     
      
   </footer>
@@ -361,97 +453,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/05/Point-clouds-in-Unity/" data-id="cj0cz5byw000z2g9rmqfzna32" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Named-shared-memory-Episode-2" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2016/12/03/Named-shared-memory-Episode-2/">Named shared memory: Episode 2</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2016/12/03/Named-shared-memory-Episode-2/" class="article-date">
-  <time datetime="2016-12-03T01:07:37.000Z" itemprop="datePublished">Sat 03/12/2016 01:07</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>I did a lot of looking around, and I could find very occasional signs that some people had been able to get named shared memory working with Unity.<br>Eventually I found <a href="http://answers.unity3d.com/questions/1249732/how-to-use-shared-memory-in-unity.html" target="_blank" rel="external">this forum question</a> which showed some example code for Unity C# and other C++.<br>The C++ code I could tell had been adapted from the <a href="https://msdn.microsoft.com/en-us/library/aa366551.aspx" target="_blank" rel="external">MSDN page</a> I got mine from, which had been adapted.<br>I adapted it some more to fit the other end and made it into a Unity Script.</p>
-<p>After learning I needed to use unsafe operations, I found out that to enable them you had to add a file in yout assets called <code>smcs.rsp</code>.<br>This turned out to be different if you enabled the full .NET 2.0 API compatibility level, being <code>gmcs.rsp</code>.<br>This also turned out to be depreceated, so I used <code>mcs.rsp</code> instead.<br>It should contain the line:<br><figure class="highlight plain"><figcaption><span>mcs.rsp</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-unsafe</div></pre></td></tr></table></figure></p>
-<p>I couldn’t get the ends to connect. I tried removing the <code>Global\\</code> from the file mapping name. Now administrator access is no longer required.<br>In the console, It showed signs of life at the other end:<br><img src="/Robotic-Telepresence/2016/12/03/Named-shared-memory-Episode-2/Life.png" alt="Although I haven&#39;t even checked what data transfer is supposed to be happening"></p>
-<p>I’ve somehow broken my Visual Studio projects which use the ROS library.<br>Including <code>&lt;windows.h&gt;</code> somehow conflicts with <code>&quot;ros.h&quot;</code>.<br>I <em>need</em> <code>windows.h</code> for <code>CreateFileMapping()</code>.<br>Fixed!<br>The solution was: <code>windows.h</code> was #defining <code>ERROR</code>, which was being used in <code>ros/Log.h</code>.<br>Adding a <code>#undef ERROR</code> at the start made it build.</p>
-<h4 id="Putting-ROS-messages-into-shared-memory"><a href="#Putting-ROS-messages-into-shared-memory" class="headerlink" title="Putting ROS messages into shared memory"></a>Putting ROS messages into shared memory</h4><p>The example uses <code>CopyMemory()</code> to put a string into shared memory.<br>I’ll need to know the size of the message.<br>Looking at <code>JointState.h</code> in the ROS library in Windows, I was able to see how the joint messages were built and how to determine their sizes</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/03/Named-shared-memory-Episode-2/" data-id="cj0cz5byn000r2g9rghmbu25x" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Named-shared-memory" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2016/12/02/Named-shared-memory/">Named shared memory</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2016/12/02/Named-shared-memory/" class="article-date">
-  <time datetime="2016-12-02T10:56:53.000Z" itemprop="datePublished">Fri 02/12/2016 10:56</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>There seem to be more easily found resources for these.</p>
-<ul>
-<li>Memory is broken into pages, so buffer space is rounded to the next available size</li>
-</ul>
-<p>In order for the data to be accessible globally, you must set the <code>Global</code> flag in its name:<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">TCHAR szName[] = TEXT(<span class="string">"Global\\MyFileMappingObject"</span>);</div></pre></td></tr></table></figure></p>
-<p>This requires Administrator privileges (<code>SeCreateGlobalPrivilege, SE_CREATE_GLOBAL_NAME</code>).<br>Running Visual Studio as administrator is supposed to make it so that any program run in the debugger is also run with privileges.<br>This was true, as the return value from <code>GetLastError()</code> went from <code>5</code> (cannot access) to <code>2</code> (no idea).<br>I couldn’t solve this, but running the built executables outside as administrator worked as expected.</p>
-<p>While I’m on the subject of learning how Visual Studio actually works, I’ve repackaged and renamed each project and put them all into one solution, which accesses a single instance of the built <code>ros_lib</code> library for <code>rosserial_windows</code>.</p>
-<p>I was just trying to create a file mapping in a Unity script…</p>
-<blockquote>
-<p>error CS0234: The type or namespace name <code>MemoryMappedFiles</code> does not exist in the namespace <code>System.IO</code></p>
-</blockquote>
-<p>System.IO.MemoryMappedFiles is only available in .NET 4.0 or later, and Unity is still using .NET 3.5 (.NET 2.0 CLR), not likely to be updated for a long time. Bummer.</p>
-<p>It looks like there could be a wrapper, <a href="https://github.com/tomasr/filemap/tree/master" target="_blank" rel="external">filemap</a>.<br>I got it to compile, and I’m left with a <code>.dll</code>. I’m not sure how to use it (the repository has no documentation) and I’m pretty sure I’ll have to edit it to make it compaitble with Unity so I’m not very hopeful.</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/02/Named-shared-memory/" data-id="cj0cz5byo000s2g9rtofy8ek4" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2016/12/05/Point-clouds-in-Unity/" data-id="cj0i5jecf0012ys9rgiks19kt" class="article-share-link">Share</a>
     
      
   </footer>
@@ -464,7 +466,7 @@ ga('send', 'pageview');
 
 
   <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/Robotic-Telepresence/page/3/">&laquo; Previous</a><a class="page-number" href="/Robotic-Telepresence/">1</a><a class="page-number" href="/Robotic-Telepresence/page/2/">2</a><a class="page-number" href="/Robotic-Telepresence/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/Robotic-Telepresence/page/5/">5</a><a class="page-number" href="/Robotic-Telepresence/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/Robotic-Telepresence/page/8/">8</a><a class="extend next" rel="next" href="/Robotic-Telepresence/page/5/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/Robotic-Telepresence/page/3/">&laquo; Previous</a><a class="page-number" href="/Robotic-Telepresence/">1</a><a class="page-number" href="/Robotic-Telepresence/page/2/">2</a><a class="page-number" href="/Robotic-Telepresence/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/Robotic-Telepresence/page/5/">5</a><a class="page-number" href="/Robotic-Telepresence/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/Robotic-Telepresence/page/9/">9</a><a class="extend next" rel="next" href="/Robotic-Telepresence/page/5/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -484,7 +486,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
     </div>
   </div>
 

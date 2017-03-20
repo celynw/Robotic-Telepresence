@@ -82,6 +82,110 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-Examining-octomap-messages" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2017/03/17/Examining-octomap-messages/">Extending rosserial size</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/03/17/Examining-octomap-messages/" class="article-date">
+  <time datetime="2017-03-17T11:05:47.000Z" itemprop="datePublished">Fri 17/03/2017 12:05</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <p>The <code>rosbag</code> I have access to contains octomap messages.<br>Using <code>rosbag info</code>, it has 55 messages. Echoing the first one shows it contains 83860 bytes.<br>The maximum I’ve been able to get using <code>rosserial</code> is 1177, although I’d expect it to be 65536.</p>
+<p>Managed to get it up to 2221 points by increasing <code>INPUT_SIZE</code> and <code>OUTPUT_SIZE</code> from 512 to 1024<br>(Repeatable):<br>1776 using 512<br>    3.46875<br>2221 using 1024<br>    2.1689453125<br>4065 using 2048<br>    1.98486328125<br>        31<br>65468 using 65536<br>    0.99896240234375<br>        68</p>
+<p>Need 9830400 every 0.1 seconds…<br>1500 Hz at this throughput!</p>
+<p>An interesting development.<br>When publishing only just over the maximum buffer, <code>rosserial_server</code> exits without hanging:<br><figure class="highlight bash"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">terminate called after throwing an instance of <span class="string">'ros::serialization::StreamOverrunException'</span></div><div class="line">  what():  Buffer Overrun</div><div class="line">Aborted (core dumped)</div></pre></td></tr></table></figure></p>
+<p>This time, the limit is ROS in linux.<br>It’s not a compatibility issue between different versions of <code>rosserial_server</code> and <code>rosserial_windows</code> (tested it).</p>
+<figure class="highlight bash"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ mkdir -p ~/catkin_ws/src</div><div class="line">$ <span class="built_in">cd</span> !$</div><div class="line">$ catkin_init_workspace</div><div class="line">$ <span class="built_in">cd</span> src/</div><div class="line">$ git <span class="built_in">clone</span> -b indigo-devel https://github.com/ros-drivers/rosserial.git</div><div class="line">$ <span class="built_in">cd</span> ../</div><div class="line">$ catkin_make</div></pre></td></tr></table></figure>
+<p>Sending 1000x largest clouds at 100Hz.<br><code>rostopic echo</code> is as expected, takes 10 seconds.<br>Windows subscriber stops at 751, takes<br>    7.499 to 37.415 = 29.916 seconds<br>    3.666 to 32.948 = 29.282</p>
+<p>Decreasing wait in spin() loop to 1ms from 5ms<br>Did 852 this time!<br>    3.733 to 30.648 = 26.915 seconds</p>
+<p>Switching to Release in Visual Stuio causes <code>rosserial_server</code> to complain:<br><figure class="highlight bash"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[ERROR] [1489763341.521603888]: Buffer overrun when attempting to parse setup message.</div><div class="line">[ERROR] [1489763341.521666993]: Is this firmware from a pre-Groovy rosserial?</div><div class="line">[ERROR] [1489763341.521753826]: Buffer overrun when attempting to parse setup message.</div></pre></td></tr></table></figure></p>
+<p>95.63% of the CPU used was in <code>WindowsSocket::read</code>.</p>
+<p>Multi-threaded spinning?! Yes please.<br><a href="http://wiki.ros.org/roscpp/Overview/Callbacks%20and%20Spinning#Multi-threaded_Spinning" target="_blank" rel="external">http://wiki.ros.org/roscpp/Overview/Callbacks%20and%20Spinning#Multi-threaded_Spinning</a></p>
+<p>It’s not a part of <code>rosserial_windows</code>…<br>There’s a <code>roscpp</code> folder but there’s not much in there.</p>
+<p>Mashed!</p>
+<ul>
+<li><a href="https://github.com/ros/ros_comm" target="_blank" rel="external">https://github.com/ros/ros_comm</a></li>
+<li><a href="https://github.com/ros/roscpp_core" target="_blank" rel="external">https://github.com/ros/roscpp_core</a></li>
+</ul>
+<p>WallTime and WallDuration replace with Time and Duration respectively.<br>Build succeeded! WOW.<br>No. No.</p>
+<p>16th of optimised point cloud = 19200<br>25.5Hz at max data size (65468), limited by CPU though (single core).<br>87Hz max like this (my CPU). Ok.</p>
+<p><a href="https://www.phoronix.com/scan.php?page=article&amp;item=steamvr-linux-beta&amp;num=4" target="_blank" rel="external">https://www.phoronix.com/scan.php?page=article&amp;item=steamvr-linux-beta&amp;num=4</a></p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/17/Examining-octomap-messages/" data-id="cj0i5jeam000ays9ra1gx70wg" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
+    <article id="post-Extending-rosserial-size" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Robotic-Telepresence/2017/03/17/Extending-rosserial-size/">Extending rosserial size</a>
+    </h1>
+  
+
+      </header>
+    
+  <div class="article-meta">
+    <a href="/Robotic-Telepresence/2017/03/17/Extending-rosserial-size/" class="article-date">
+  <time datetime="2017-03-17T11:05:47.000Z" itemprop="datePublished">Fri 17/03/2017 12:05</time>
+</a>
+    
+  </div>
+  <div class="article-entry" itemprop="articleBody">
+    
+      <h2 id="Mega-draft-notes-for-me"><a href="#Mega-draft-notes-for-me" class="headerlink" title="Mega draft notes for me"></a>Mega draft notes for me</h2><p>Managed to get it up to 2221 points by increasing <code>INPUT_SIZE</code> and <code>OUTPUT_SIZE</code> from 512 to 1024<br>(Repeatable):<br>1776 using 512<br>    3.46875<br>2221 using 1024<br>    2.1689453125<br>4065 using 2048<br>    1.98486328125<br>        31<br>65468 using 65536<br>    0.99896240234375<br>        68</p>
+<p>Need 9830400 every 0.1 seconds…<br>1500 Hz at this throughput!</p>
+<p>An interesting development.<br>When publishing only just over the maximum buffer, <code>rosserial_server</code> exits without hanging:<br><figure class="highlight bash"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">terminate called after throwing an instance of <span class="string">'ros::serialization::StreamOverrunException'</span></div><div class="line">  what():  Buffer Overrun</div><div class="line">Aborted (core dumped)</div></pre></td></tr></table></figure></p>
+<p>This time, the limit is ROS in linux.<br>It’s not a compatibility issue between different versions of <code>rosserial_server</code> and <code>rosserial_windows</code> (tested it).</p>
+<figure class="highlight bash"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ mkdir -p ~/catkin_ws/src</div><div class="line">$ <span class="built_in">cd</span> !$</div><div class="line">$ catkin_init_workspace</div><div class="line">$ <span class="built_in">cd</span> src/</div><div class="line">$ git <span class="built_in">clone</span> -b indigo-devel https://github.com/ros-drivers/rosserial.git</div><div class="line">$ <span class="built_in">cd</span> ../</div><div class="line">$ catkin_make</div></pre></td></tr></table></figure>
+<p>Sending 1000x largest clouds at 100Hz.<br><code>rostopic echo</code> is as expected, takes 10 seconds.<br>Windows subscriber stops at 751, takes<br>    7.499 to 37.415 = 29.916 seconds<br>    3.666 to 32.948 = 29.282</p>
+<p>Decreasing wait in spin() loop to 1ms from 5ms<br>Did 852 this time!<br>    3.733 to 30.648 = 26.915 seconds</p>
+<p>Switching to Release in Visual Stuio causes <code>rosserial_server</code> to complain:<br><figure class="highlight bash"><figcaption><span>Command line</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[ERROR] [1489763341.521603888]: Buffer overrun when attempting to parse setup message.</div><div class="line">[ERROR] [1489763341.521666993]: Is this firmware from a pre-Groovy rosserial?</div><div class="line">[ERROR] [1489763341.521753826]: Buffer overrun when attempting to parse setup message.</div></pre></td></tr></table></figure></p>
+<p>95.63% of the CPU used was in <code>WindowsSocket::read</code>.</p>
+<p>Multi-threaded spinning?! Yes please.<br>It’s not a part of <code>rosserial_windows</code>…<br>There’s a <code>roscpp</code> folder but there’s not much in there.<br><a href="http://wiki.ros.org/roscpp/Overview/Callbacks%20and%20Spinning#Multi-threaded_Spinning" target="_blank" rel="external">http://wiki.ros.org/roscpp/Overview/Callbacks%20and%20Spinning#Multi-threaded_Spinning</a></p>
+<p>16th of optimised point cloud = 19200<br>25.5Hz at max data size (65468), limited by CPU though (single core).<br>87Hz max like this (my CPU). Ok.</p>
+<p><a href="https://www.phoronix.com/scan.php?page=article&amp;item=steamvr-linux-beta&amp;num=4" target="_blank" rel="external">https://www.phoronix.com/scan.php?page=article&amp;item=steamvr-linux-beta&amp;num=4</a></p>
+
+    
+  </div>
+  <footer class="article-footer">
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/17/Extending-rosserial-size/" data-id="cj0i5jeao000bys9rcgbt1neu" class="article-share-link">Share</a>
+    
+     
+  </footer>
+  
+</article>
+
+
+
+  
     <article id="post-Point-cloud-problem-identified" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -140,7 +244,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/16/Point-cloud-problem-identified/" data-id="cj0cz5bys000x2g9rvk60vw9h" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/16/Point-cloud-problem-identified/" data-id="cj0i5jec9000wys9r83jm8i0s" class="article-share-link">Share</a>
     
      
   </footer>
@@ -198,7 +302,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/16/Pose-control-of-Baxter/" data-id="cj0cz5byr000w2g9rusn0goda" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/16/Pose-control-of-Baxter/" data-id="cj0i5jecb000zys9r6m6f7pgg" class="article-share-link">Share</a>
     
      
   </footer>
@@ -319,7 +423,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/15/Pose-message-from-Unity/" data-id="cj0cz5byx00102g9rmnzi86gw" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/15/Pose-message-from-Unity/" data-id="cj0i5jece0010ys9ryp61zuyd" class="article-share-link">Share</a>
     
      
   </footer>
@@ -360,7 +464,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/15/CopyMemory-bug/" data-id="cj0cz5bwp00062g9rda39i8ld" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/15/CopyMemory-bug/" data-id="cj0i5jea60005ys9rrhm4oz4f" class="article-share-link">Share</a>
     
      
   </footer>
@@ -400,7 +504,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/08/Live-joint-data/" data-id="cj0cz5by3000l2g9rztfij9d2" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/08/Live-joint-data/" data-id="cj0i5jebq000mys9rv0fbxrmg" class="article-share-link">Share</a>
     
      
   </footer>
@@ -569,87 +673,7 @@ ga('send', 'pageview');
     
   </div>
   <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/02/Memory-Structure/" data-id="cj0cz5by6000n2g9rf27q4ias" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Main-control-loop" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2017/03/02/Main-control-loop/">Main control loop</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2017/03/02/Main-control-loop/" class="article-date">
-  <time datetime="2017-03-02T21:37:29.000Z" itemprop="datePublished">Thu 02/03/2017 21:37</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <h4 id="Current-objective"><a href="#Current-objective" class="headerlink" title="Current objective"></a>Current objective</h4><p>I really need to get the main control loop sorted. Each part has been demonstrated to work separately, but it needs to work all together.<br>I need to get joint angles from the robot (using a <code>rosbag</code> for now), which are published on a linux machine running <code>roscore</code>.<br>These need to be subscribed to from a Windows machine, and the data should be put into shared memory.<br>This data needs to be read by Unity in and each corresponding joint should be rotated in real time to mirror the robot.</p>
-<p>I then also need to be able to set target positions and poses for the hands using the tracked Vive controllers in VR.<br>These targets need to be put back into some shared memory, which is read by the console application and published back to ROS.</p>
-<h4 id="After-that"><a href="#After-that" class="headerlink" title="After that"></a>After that</h4><p>I still need to know how to tell Baxter to move, I aim to do that this week.<br>I also need to implement bounds, for target positions. I can do that at home.<br>Now that the grippers are in the model, I can implement messages for those too (but they don’t move in the <code>rosbag</code>)<br>I suppose I can call the executable directly from Unity, making it more seamless. Not a priority but might be useful.</p>
-<h4 id="On-the-back-burner"><a href="#On-the-back-burner" class="headerlink" title="On the back burner"></a>On the back burner</h4><p>Point clouds, grr.<br>It will (should…) be much easier to transmit a depth image over the network, so if I can work out how to convert that into a surfacein Unity, I might be able to implement functionality for the kinect, whether it’s plugged into the Windows or ROS Linux machine.<br>This isn’t taking priority right now though.</p>
-<h4 id="Development-work"><a href="#Development-work" class="headerlink" title="Development work"></a>Development work</h4><p>I had to reinstall my virtual machine as the virtual hard disk got corrupted. Probably because I previously ran it on a RAMdisk and had to copy it over each time.<br>This was not particularly useful or sensible, and should be fine on a SATA SSD.<br>I had to redownload the <code>rosbag</code> we recorded before. This time it would sit in a shared folder on the host machine, not inside the virtual hard disk.<br>To save time I used the compressed version which I didn’t notice a problem with before (1.38GB as oppposed to 7.95GB).<br>This time, the compressed bag playback halts as soon as something tries to subscribe to a topic, even when locally running <code>rostopic echo /robot/joint_states --noarr --nostr</code>.<br>The uncompressed one plays fine.</p>
-<p>I have a lot of code files and scripts floating around in various projects and folders, so it was not straight forward to remember which ones had the working code in.<br>It took around 4 hours, but I was eventually able to get everything working for data getting from ROS to Unity<br><img src="/Robotic-Telepresence/2017/03/02/Main-control-loop/Waving.png" alt="Baxter is waving as in the video in &lt;a href=/Robotic-Telepresence/2016/11/28/Rosbag-communication&gt;this post&lt;/a&gt;, but this time using lovely OOP using shared memory, rather than janky code with pipes"></p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/02/Main-control-loop/" data-id="cj0cz5by4000m2g9rq8n34vhc" class="article-share-link">Share</a>
-    
-     
-  </footer>
-  
-</article>
-
-
-
-  
-    <article id="post-Project-meeting-12" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Robotic-Telepresence/2017/03/02/Project-meeting-12/">Project meeting 12</a>
-    </h1>
-  
-
-      </header>
-    
-  <div class="article-meta">
-    <a href="/Robotic-Telepresence/2017/03/02/Project-meeting-12/" class="article-date">
-  <time datetime="2017-03-02T10:47:16.000Z" itemprop="datePublished">Thu 02/03/2017 10:47</time>
-</a>
-    
-  </div>
-  <div class="article-entry" itemprop="articleBody">
-    
-      <p>The development and issues with point clouds were discussed.<br>It may be possible to transmit a depth image over ROS rather than a point cloud.<br>If I can get the live depth image into a point cloud on the Unity client, I may be able to swap in the ROS message.</p>
-<p>However, the focus now is on getting the simple control and feedback finished, so I will be forgetting abou point clouds for now.<br>I hope to have this part near complete over this week.</p>
-
-    
-  </div>
-  <footer class="article-footer">
-    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/02/Project-meeting-12/" data-id="cj0cz5byy00122g9r94kh2ekm" class="article-share-link">Share</a>
+    <a data-url="https://celynwalters.github.io/Robotic-Telepresence/Robotic-Telepresence/2017/03/02/Memory-Structure/" data-id="cj0i5jec1000qys9rqimlvav1" class="article-share-link">Share</a>
     
      
   </footer>
@@ -662,7 +686,7 @@ ga('send', 'pageview');
 
 
   <nav id="page-nav">
-    <span class="page-number current">1</span><a class="page-number" href="/Robotic-Telepresence/page/2/">2</a><a class="page-number" href="/Robotic-Telepresence/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/Robotic-Telepresence/page/8/">8</a><a class="extend next" rel="next" href="/Robotic-Telepresence/page/2/">Next &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/Robotic-Telepresence/page/2/">2</a><a class="page-number" href="/Robotic-Telepresence/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/Robotic-Telepresence/page/9/">9</a><a class="extend next" rel="next" href="/Robotic-Telepresence/page/2/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -682,7 +706,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/03/">March 2017</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/02/">February 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2017/01/">January 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/12/">December 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/11/">November 2016</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/Robotic-Telepresence/archives/2016/10/">October 2016</a><span class="archive-list-count">14</span></li></ul>
     </div>
   </div>
 
